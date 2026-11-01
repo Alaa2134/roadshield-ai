@@ -1,0 +1,7 @@
+11-01 13:34:22.161  2870  2870 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-01 13:34:22.178  2870  2870 I AndroidRuntime: Using default boot image
+11-01 13:34:22.178  2870  2870 I AndroidRuntime: Leaving lock profiling enabled
+11-01 13:34:22.535  2870  2870 D AndroidRuntime: Calling main entry com.android.commands.monkey.Monkey
+11-01 13:34:23.539  2870  2870 I AndroidRuntime: VM exiting with result code 0.
+11-01 13:34:25.746  3009  3145 I ReactNativeJS: Running "main"
+11-01 13:34:25.757  3009  3145 W ReactNativeJS: ImageBackground is deprecated and will be removed in a future release. Use a View with an absolutely positioned Image instead. See https://reactnative.dev/docs/imagebackground

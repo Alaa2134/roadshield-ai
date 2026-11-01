@@ -1,0 +1,2 @@
+11-01 13:34:25.746  3009  3145 I ReactNativeJS: Running "main"
+11-01 13:34:25.757  3009  3145 W ReactNativeJS: ImageBackground is deprecated and will be removed in a future release. Use a View with an absolutely positioned Image instead. See https://reactnative.dev/docs/imagebackground

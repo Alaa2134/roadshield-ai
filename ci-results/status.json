@@ -1,0 +1,5 @@
+{"run": 6, "commit": "becea2d58bea290d546b1e711689aed7c3edeb8c",
+ "build": "success", "smoke_test": "success",
+ "apk_sha256": "b6f4e5f1679e592db727fe43d9eebec4defe671b36e2a7079b830148ae3ab6a3", "apk_size": "50851819",
+ "release": "https://github.com/Alaa2134/roadshield-ai/releases/tag/android-preview-6",
+ "logs": "https://github.com/Alaa2134/roadshield-ai/actions/runs/41309519437"}
