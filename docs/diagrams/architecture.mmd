@@ -1,0 +1,50 @@
+flowchart TB
+  subgraph Phone["📱 RoadShield AI app · Expo SDK 58 · React Native 0.88 · TypeScript"]
+    direction LR
+    UI["Expo Router screens<br/>citizen · officer · admin<br/>English / Arabic (RTL)"]
+    State["TanStack Query + Zustand"]
+    Offline["SQLite drafts<br/>upload queue · map cache"]
+    Native["Maps · Location · Camera<br/>Notifications · SecureStore"]
+  end
+
+  subgraph AI["🧠 AI service · FastAPI in Docker"]
+    direction TB
+    Det["YOLOv8s road-damage model<br/>ONNX Runtime (CPU)"]
+    Priv["EXIF removal<br/>face + plate blurring"]
+    Sign["HMAC-SHA256 signature"]
+    Det --> Priv --> Sign
+  end
+
+  subgraph Supabase["☁️ Supabase · eu-central-1"]
+    direction TB
+    Auth["Auth<br/>e-mail sign-up · verification · reset"]
+    API["PostgREST RPC<br/>30 security-definer functions"]
+    DB[("Postgres 17 + PostGIS<br/>RLS on all 13 tables<br/>state machine · priority engine<br/>rate limits · audit log")]
+    Storage["Storage<br/>private buckets"]
+    RT["Realtime"]
+    PD["Edge Function<br/>push-dispatch"]
+    DA["Edge Function<br/>delete-account"]
+    API --> DB
+    DB -- "pg_net on new notification" --> PD
+    RT -.- DB
+    DA --> DB
+    DA --> Storage
+  end
+
+  subgraph Ext["External services"]
+    direction LR
+    Push["Expo Push → APNs / FCM"]
+    Route["OSRM routing"]
+    Maps["Apple / Google Maps"]
+  end
+
+  Phone -- "① photo + session JWT" --> AI
+  AI -- "② signed result" --> Phone
+  AI -. "verifies JWT (JWKS)" .-> Auth
+  Phone -- "③ photos (owner folder)" --> Storage
+  Phone -- "④ RPC + JWT · signed AI result" --> API
+  Phone <-. "live updates" .-> RT
+  Phone --> Auth
+  PD --> Push --> Phone
+  Phone --> Route
+  Phone --> Maps

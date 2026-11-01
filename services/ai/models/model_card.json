@@ -1,0 +1,18 @@
+{
+  "name": "roadshield-rdd-yolov8s",
+  "version": "YOLOv8_Small_RDD@7f2ceb8f6f3d",
+  "architecture": "YOLOv8 (Ultralytics)",
+  "imgsz": 640,
+  "class_names": [
+    "Longitudinal Crack",
+    "Transverse Crack",
+    "Alligator Crack",
+    "Potholes"
+  ],
+  "dataset": "RDD2022 / CRDDC2022 (Japan + India subsets)",
+  "source": "https://github.com/oracl4/RoadDamageDetection",
+  "license": "AGPL-3.0 (Ultralytics YOLOv8)",
+  "weights_sha256": "7f2ceb8f6f3dfcc8fffd98cb488281be725150aed0f06cf21c4db72b5cd0a62b",
+  "onnx_sha256": "50ec1f31f3d44e400ea5faf2df46bbb5b5cdb37fb4e4c6a8edbb19e18cf1f050",
+  "exported_at": "2026-10-31T13:07:01+00:00"
+}

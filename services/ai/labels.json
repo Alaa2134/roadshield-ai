@@ -1,0 +1,14 @@
+{
+  "_comment": "Maps class names emitted by the trained model to RoadShield categories. Names are matched case-insensitively. Classes not listed here are ignored rather than guessed.",
+  "categories": {
+    "longitudinal crack": "crack",
+    "transverse crack": "crack",
+    "alligator crack": "surface_damage",
+    "potholes": "pothole",
+    "pothole": "pothole",
+    "d00": "crack",
+    "d10": "crack",
+    "d20": "surface_damage",
+    "d40": "pothole"
+  }
+}

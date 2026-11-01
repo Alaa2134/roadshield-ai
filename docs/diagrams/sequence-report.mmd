@@ -1,0 +1,31 @@
+sequenceDiagram
+  autonumber
+  actor U as Citizen
+  participant App as RoadShield app
+  participant AI as AI service (FastAPI)
+  participant Auth as Supabase Auth
+  participant St as Supabase Storage
+  participant DB as Postgres (RPC + RLS)
+  participant PD as push-dispatch
+  participant EP as Expo Push → APNs/FCM
+
+  U->>App: Capture photo, confirm location
+  App->>App: Resize + strip EXIF, save draft (SQLite)
+  App->>AI: POST /v1/analyze (photo, Bearer JWT)
+  AI->>Auth: Verify JWT (JWKS, cached)
+  AI->>AI: YOLOv8 inference · blur faces/plates
+  AI-->>App: payload {detection_id, requested_by, model, detections…} + HMAC signature
+  App->>U: Show boxes, category, confidence
+  U->>App: Accept or correct category, submit
+  loop each photo (resumable)
+    App->>St: upload <uid>/<draftId>/<n>.jpg
+  end
+  App->>DB: rpc submit_hazard_report(draft id, fields, images, payload, signature)
+  DB->>DB: rate limit · validate · verify HMAC and requested_by = caller
+  DB->>DB: insert hazard (RS-YYMM-NNNNN) · status_history · ai_detections
+  DB->>DB: insert notification (report_confirmation)
+  DB--)PD: pg_net POST (x-dispatch-secret)
+  DB-->>App: {id, public_code, status: submitted, ai_verified}
+  PD->>DB: claim notification, read tokens + locale
+  PD->>EP: send localized push
+  EP--)U: "Report RS-2610-00042 received"

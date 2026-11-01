@@ -1,0 +1,131 @@
+# Builds an installable Android APK without an Expo account (local Gradle build on GitHub's
+# runner), smoke-tests it on an Android emulator, and publishes it as a GitHub Release.
+# Optional repository settings:
+#   secret   GOOGLE_MAPS_ANDROID_API_KEY  – Google Maps tiles on Android
+#   variable EXPO_PUBLIC_AI_API_URL       – HTTPS address of the AI service
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['docs/**', '**/*.md', 'ci-results/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-apk
+  cancel-in-progress: true
+
+env:
+  EXPO_PUBLIC_SUPABASE_URL: https://vdfvoxvkxicemgqrsxjh.supabase.co
+  EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_C8YpibzT5LUACU0GHM4Tkg_1cKc3PG1
+  EXPO_PUBLIC_ROUTING_URL: https://router.project-osrm.org
+  EXPO_PUBLIC_AI_API_URL: ${{ vars.EXPO_PUBLIC_AI_API_URL }}
+  GOOGLE_MAPS_ANDROID_API_KEY: ${{ secrets.GOOGLE_MAPS_ANDROID_API_KEY }}
+  APP_BUNDLE_ID: com.roadshieldai.app
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    outputs:
+      apk_sha256: ${{ steps.apk.outputs.sha256 }}
+      apk_size: ${{ steps.apk.outputs.size }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - run: npm ci
+      - name: Typecheck and tests
+        run: npm run typecheck && npx jest --ci
+      - name: Generate native Android project
+        run: npx expo prebuild --platform android --no-install --clean
+      - name: Gradle memory
+        run: printf '\norg.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g\n' >> android/gradle.properties
+      - name: Build release APK
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon -PreactNativeArchitectures=arm64-v8a,armeabi-v7a,x86_64
+      - id: apk
+        name: Collect APK
+        run: |
+          mkdir -p out
+          cp android/app/build/outputs/apk/release/app-release.apk out/roadshield-ai-preview.apk
+          echo "sha256=$(sha256sum out/roadshield-ai-preview.apk | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          echo "size=$(stat -c%s out/roadshield-ai-preview.apk)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: roadshield-ai-apk
+          path: out/roadshield-ai-preview.apk
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="android-preview-${{ github.run_number }}"
+          gh release create "$TAG" out/roadshield-ai-preview.apk \
+            --title "RoadShield AI — Android preview #${{ github.run_number }}" \
+            --notes "Installable Android APK (preview, release build) from commit ${{ github.sha }}. SHA-256: ${{ steps.apk.outputs.sha256 }}" \
+            --latest
+
+  smoke-test:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: roadshield-ai-apk
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          script: bash .github/scripts/smoke-test.sh roadshield-ai-preview.apk smoke
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-test
+          path: smoke/
+
+  report:
+    needs: [build, smoke-test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: smoke-test
+          path: smoke
+      - name: Push results to the ci-results branch
+        run: |
+          mkdir -p ci-results && cp -r smoke/* ci-results/ 2>/dev/null || true
+          cat > ci-results/status.json <<JSON
+          {"run": ${{ github.run_number }}, "commit": "${{ github.sha }}",
+           "build": "${{ needs.build.result }}", "smoke_test": "${{ needs.smoke-test.result }}",
+           "apk_sha256": "${{ needs.build.outputs.apk_sha256 }}", "apk_size": "${{ needs.build.outputs.apk_size }}",
+           "release": "https://github.com/${{ github.repository }}/releases/tag/android-preview-${{ github.run_number }}",
+           "logs": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}
+          JSON
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan ci-results-tmp
+          git rm -rf --cached . >/dev/null
+          git add -f ci-results
+          git commit -m "CI results for run ${{ github.run_number }}"
+          git push -f origin HEAD:ci-results

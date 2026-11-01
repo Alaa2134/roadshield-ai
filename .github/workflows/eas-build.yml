@@ -1,0 +1,38 @@
+# Manually triggered EAS builds. Requires the repository secret EXPO_TOKEN
+# (expo.dev → Account settings → Access tokens). iOS builds additionally need Apple
+# credentials already stored on EAS (run `eas credentials` once from a Mac or any machine).
+name: EAS Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: android | ios | all
+        default: android
+        required: true
+      profile:
+        description: preview (APK / ad hoc IPA) | production (AAB / App Store IPA)
+        default: preview
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: npm ci
+      - run: npm run typecheck && npm test -- --ci
+      - name: Build on EAS
+        run: eas build --platform ${{ inputs.platform }} --profile ${{ inputs.profile }} --non-interactive --no-wait --json > build.json && cat build.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eas-build-info
+          path: build.json

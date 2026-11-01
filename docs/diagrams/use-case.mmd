@@ -1,0 +1,32 @@
+flowchart LR
+  C(("👤 Citizen"))
+  O(("🦺 Maintenance<br/>officer"))
+  A(("🛡️ Admin"))
+  S(("🧠 AI service"))
+
+  subgraph RS["RoadShield AI"]
+    UC1(["Sign up / sign in / verify e-mail<br/>reset password"])
+    UC2(["Report hazard<br/>(photo · GPS · category · severity)"])
+    UC3(["Analyse photo with AI"])
+    UC4(["Save offline draft & auto-sync"])
+    UC5(["Browse live hazard map & filters"])
+    UC6(["Plan route & see hazards on it"])
+    UC7(["Receive hazard warnings while navigating"])
+    UC8(["Confirm hazard is still there"])
+    UC9(["Track report timeline"])
+    UC10(["Manage profile, language, theme,<br/>notifications, saved places"])
+    UC11(["Delete account"])
+    UC12(["Work priority queue<br/>claim · update · before/after photos"])
+    UC13(["Request completion"])
+    UC14(["Moderate reports<br/>verify · reject · mark duplicate"])
+    UC15(["Assign tasks & approve completion"])
+    UC16(["Manage users & roles, suspend"])
+    UC17(["View analytics & priority heatmap"])
+    UC18(["Send announcements · read audit log"])
+  end
+
+  C --- UC1 & UC2 & UC4 & UC5 & UC6 & UC7 & UC8 & UC9 & UC10 & UC11
+  UC2 -. "«include» optional" .-> UC3
+  UC3 --- S
+  O --- UC1 & UC5 & UC12 & UC13
+  A --- UC1 & UC12 & UC14 & UC15 & UC16 & UC17 & UC18

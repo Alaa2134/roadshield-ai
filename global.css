@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light theme (default) — RGB triplets so Tailwind opacity modifiers work. */
+:root {
+  --bg: 242 245 251;
+  --surface: 255 255 255;
+  --surface2: 233 239 249;
+  --border: 213 222 236;
+  --text: 10 22 40;
+  --muted: 78 98 131;
+  --faint: 138 154 181;
+  --primary: 31 108 240;
+  --cyan: 0 169 204;
+  --warning: 233 130 42;
+  --danger: 217 53 69;
+  --success: 15 166 118;
+}
+
+/* Dark theme — the RoadShield midnight identity. */
+.dark:root {
+  --bg: 7 15 30;
+  --surface: 16 29 50;
+  --surface2: 22 38 63;
+  --border: 34 53 90;
+  --text: 234 241 255;
+  --muted: 157 176 208;
+  --faint: 94 115 152;
+  --primary: 40 123 255;
+  --cyan: 0 214 255;
+  --warning: 255 155 53;
+  --danger: 240 68 82;
+  --success: 19 196 138;
+}

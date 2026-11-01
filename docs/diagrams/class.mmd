@@ -1,0 +1,112 @@
+classDiagram
+  direction LR
+  class Profile {
+    +uuid id
+    +string full_name
+    +string locale  "en | ar"
+    +bool notify_status_updates
+    +bool notify_nearby
+    +int nearby_radius_m
+    +timestamp suspended_at
+  }
+  class UserRole {
+    +uuid user_id
+    +Role role  "citizen | maintenance_officer | admin"
+    +uuid granted_by
+  }
+  class Hazard {
+    +uuid id
+    +string public_code  "RS-YYMM-NNNNN"
+    +uuid client_draft_id
+    +Category category
+    +Severity severity
+    +geography location
+    +ReportStatus status
+    +int confirmations_count
+    +smallint traffic_exposure
+    +priority() Priority
+  }
+  class HazardImage {
+    +uuid id
+    +string storage_path
+    +ImageKind kind
+    +bool privacy_blurred
+    +bool privacy_approved
+  }
+  class AiDetection {
+    +uuid id
+    +string model_name
+    +string model_version
+    +Category top_category
+    +float top_confidence
+    +json detections
+    +bool signature_verified
+  }
+  class HazardConfirmation {
+    +uuid hazard_id
+    +uuid user_id
+    +bool still_present
+  }
+  class MaintenanceTask {
+    +uuid id
+    +TaskStatus status
+    +date due_date
+    +timestamp completed_at
+  }
+  class TaskUpdate {
+    +TaskStatus status
+    +string note
+  }
+  class StatusHistory {
+    +ReportStatus from_status
+    +ReportStatus to_status
+    +string note
+  }
+  class Notification {
+    +NotificationType type
+    +string title_en / title_ar
+    +string push_status
+    +timestamp read_at
+  }
+  class DevicePushToken {
+    +string token
+    +string platform
+  }
+  class AuditLog {
+    +string action
+    +string entity_type
+    +json details
+  }
+  class PriorityEngine {
+    <<rs-priority-v1>>
+    +computePriority(severity, confirmations, age, traffic, status) Priority
+  }
+  class Draft {
+    <<on device · SQLite>>
+    +uuid id
+    +DraftStatus status
+    +int attempts
+    +submit() SubmitResult
+  }
+  class Detector {
+    <<AI service>>
+    +detect(image) Detection[]
+  }
+
+  Profile "1" -- "1" UserRole
+  Profile "1" -- "*" Hazard : reports
+  Hazard "1" -- "1..6" HazardImage
+  Hazard "1" -- "0..1" AiDetection
+  Hazard "1" -- "*" HazardConfirmation
+  Hazard "1" -- "*" StatusHistory
+  Hazard "1" -- "*" MaintenanceTask
+  Hazard "0..1" -- "*" Hazard : duplicate_of
+  MaintenanceTask "1" -- "*" TaskUpdate
+  MaintenanceTask "1" -- "*" HazardImage : before/after
+  Profile "1" -- "*" MaintenanceTask : assigned_to
+  Profile "1" -- "*" Notification
+  Profile "1" -- "*" DevicePushToken
+  Profile "1" -- "*" AuditLog : actor
+  Hazard ..> PriorityEngine : scored by
+  Draft ..> Hazard : becomes (idempotent)
+  Detector ..> AiDetection : signed result

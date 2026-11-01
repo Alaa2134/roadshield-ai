@@ -1,0 +1,1577 @@
+{
+ "summary": {
+  "model": {
+   "name": "roadshield-rdd-yolov8s",
+   "version": "YOLOv8_Small_RDD@7f2ceb8f6f3d",
+   "classes": [
+    "Longitudinal Crack",
+    "Transverse Crack",
+    "Alligator Crack",
+    "Potholes"
+   ]
+  },
+  "images": 112,
+  "conf_threshold": 0.25,
+  "images_with_detection": 42,
+  "detection_rate": 0.375,
+  "detections_by_category": {
+   "surface_damage": 13,
+   "crack": 29,
+   "pothole": 29
+  },
+  "detections_by_label": {
+   "Alligator Crack": 13,
+   "Transverse Crack": 15,
+   "Potholes": 29,
+   "Longitudinal Crack": 14
+  },
+  "top_confidence_median": 0.414,
+  "latency_ms_median": 153.0,
+  "latency_ms_p95": 185,
+  "faces_blurred": 0,
+  "plates_blurred": 0,
+  "note": "faces_blurred re-measured after switching to the ResNet-10 SSD face detector: 0 false positives on these 112 images (was 2 with the Haar cascade)."
+ },
+ "images": [
+  {
+   "file": "1616.rf.c868709931a671796794fdbb95352c5a.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 183,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1675.rf.e3aa3f8d28d0247ef0284dd46dacc29f.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 174,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1686.rf.809fb1b51c607e5cf787e44ef4ddd7b8.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "surface_damage",
+    "label": "Alligator Crack",
+    "confidence": 0.7834,
+    "box": [
+     0.0312,
+     0.0286,
+     0.9999,
+     0.9996
+    ]
+   },
+   "inference_ms": 141,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1706.rf.011d213c21ec78896c36728dcbc156f5.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 165,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1716.rf.85ea38b36008beaa72c5d8541f734eb0.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 5,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.4149,
+    "box": [
+     0.0713,
+     0.1754,
+     0.4659,
+     0.2444
+    ]
+   },
+   "inference_ms": 160,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1722.rf.38b38f2e833309a4f35bfbf0432dffff.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 3,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.5684,
+    "box": [
+     0.4739,
+     0.7657,
+     0.9957,
+     0.9765
+    ]
+   },
+   "inference_ms": 160,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1794.rf.7a03ca09d05e9e2941f768bc8570cb54.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 146,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1804.rf.7e39a73f7b0d1c4bdf8094006e0cf495.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 152,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1806.rf.8c87862452f4ce0232a666c180ec9942.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Longitudinal Crack",
+    "confidence": 0.5648,
+    "box": [
+     0.4876,
+     0.6596,
+     0.8606,
+     1.0
+    ]
+   },
+   "inference_ms": 174,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1813.rf.79f1af872f76dd8b46df4a83ed5f54c6.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.5662,
+    "box": [
+     0.0,
+     0.0023,
+     0.4342,
+     0.0934
+    ]
+   },
+   "inference_ms": 144,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1818.rf.7e52c1687bfb625e86c54c9d71a66d99.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 153,
+   "faces_blurred": 1,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1819.rf.d2d41865c85e1019dc3e8b9daf73c434.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 152,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1839.rf.3495cbba8ee9a583ed0dff8d0e5fc0f7.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 155,
+   "faces_blurred": 1,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1896.rf.e718dd26abc98c2645ea37a808039034.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 3,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.7694,
+    "box": [
+     0.0647,
+     0.3666,
+     0.3774,
+     0.5468
+    ]
+   },
+   "inference_ms": 141,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1921.rf.e704f0b0e352f4ac12f23e71ffa6d9ad.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "surface_damage",
+    "label": "Alligator Crack",
+    "confidence": 0.3891,
+    "box": [
+     0.0022,
+     0.0125,
+     0.9571,
+     0.9987
+    ]
+   },
+   "inference_ms": 143,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1957.rf.e4ee900c82e7bab356690f56f27959c6.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 2,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.4139,
+    "box": [
+     0.0984,
+     0.4113,
+     0.9862,
+     0.5077
+    ]
+   },
+   "inference_ms": 142,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1960.rf.a23272eb27c0f5ab6327f98571919ad9.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 2,
+   "top": {
+    "category": "surface_damage",
+    "label": "Alligator Crack",
+    "confidence": 0.4977,
+    "box": [
+     0.0962,
+     0.0425,
+     0.9918,
+     0.9984
+    ]
+   },
+   "inference_ms": 156,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1974.rf.c900dacf421e72dd3b10be4d3f6e4b40.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Longitudinal Crack",
+    "confidence": 0.3695,
+    "box": [
+     0.0231,
+     0.0308,
+     0.9837,
+     0.4257
+    ]
+   },
+   "inference_ms": 148,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1979.rf.d3ee9d85b659ee844d1c26680f05d419.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 168,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1979.rf.dea5db582b997afc4acb0f68d74c3b84.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 166,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "1998.rf.c310ef9093282f4e2e72be168ab5f879.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 2,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.4014,
+    "box": [
+     0.0592,
+     0.063,
+     0.217,
+     0.21
+    ]
+   },
+   "inference_ms": 150,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2015.rf.7ace4a935989f5dd884bd52642f0bcdd.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 166,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2026.rf.30a92a40e9e192eb71ac0461019aea44.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 146,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2043.rf.37ea25ead4d12143a2825d97dbb5c6a5.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 143,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2064.rf.f9f37327dfaaa571b91ccc5d25cc8039.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 165,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2067.rf.23ed68b28ea7c5e4cbfb234ffa9702ea.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 153,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2084.rf.950ff4fcd9bc177e7831cb4c9a2dd6eb.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 157,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2091.rf.ab9d969f82e8610c30ec3f7576494f44.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 161,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2137.rf.44786d7aeaf45f9497f47125a5bab284.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 206,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2147.rf.68491b477ce9af3d84c550103dd511e3.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.522,
+    "box": [
+     0.6996,
+     0.059,
+     0.9995,
+     0.1346
+    ]
+   },
+   "inference_ms": 161,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2197.rf.b97a6e0452cf8a431fdcb24bfb4d643d.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.3923,
+    "box": [
+     0.0,
+     0.5225,
+     1.0,
+     0.6478
+    ]
+   },
+   "inference_ms": 153,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2205.rf.eaf969e5ee1bad463953679d0f0a317f.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 3,
+   "top": {
+    "category": "crack",
+    "label": "Longitudinal Crack",
+    "confidence": 0.4279,
+    "box": [
+     0.25,
+     0.0,
+     0.3439,
+     0.2945
+    ]
+   },
+   "inference_ms": 146,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2222.rf.bfd72b1a6235ed53983e11289c619b4e.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 2,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.4522,
+    "box": [
+     0.3246,
+     0.3533,
+     0.7602,
+     0.549
+    ]
+   },
+   "inference_ms": 153,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2232.rf.93366df80c896bda322de47beba47441.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 3,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.4756,
+    "box": [
+     0.1274,
+     0.3889,
+     0.4932,
+     0.4871
+    ]
+   },
+   "inference_ms": 189,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2233.rf.48068254cb62ce6f233708947ac13b1c.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.3657,
+    "box": [
+     0.2706,
+     0.0,
+     0.7032,
+     0.1668
+    ]
+   },
+   "inference_ms": 183,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2240.rf.66f2163089851cb1d7874b913e592b94.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 185,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2243.rf.97ce3609d517af6979f6d5db3295814f.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 2,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.5888,
+    "box": [
+     0.0058,
+     0.6786,
+     0.6022,
+     0.775
+    ]
+   },
+   "inference_ms": 153,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2252.rf.87849e818065fa8392978ab64926d339.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 189,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2271.rf.8da6d46618460757719f6df2f8d89297.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 134,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2274.rf.5712706f169ad5ab788f546227533d28.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 141,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2275.rf.586655e669fa91476d091094ff24d359.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Longitudinal Crack",
+    "confidence": 0.2742,
+    "box": [
+     0.0012,
+     0.5132,
+     0.4911,
+     0.7017
+    ]
+   },
+   "inference_ms": 160,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2323.rf.06768caef93b3a44d3c59325a03230eb.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 148,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2339.rf.998318533e4ed9c7bcb7d32a307f3ef5.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 248,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2363.rf.66dcd237b513dd108c4b8e9ffec97d8d.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.6109,
+    "box": [
+     0.4993,
+     0.3654,
+     0.9987,
+     0.4708
+    ]
+   },
+   "inference_ms": 144,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2369.rf.a3202ed06db3bc7523390481441fb197.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 165,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2373.rf.e46190ac62dfc1db6f49d8a51cb3c7f7.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 153,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2388.rf.dd8dc351bb67d6bfc9ae331dae59cb0d.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 145,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2400.rf.e2dbfc7baf8e55f3ee71cde186d199c2.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Longitudinal Crack",
+    "confidence": 0.2993,
+    "box": [
+     0.4985,
+     0.5749,
+     0.6197,
+     0.9992
+    ]
+   },
+   "inference_ms": 143,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2412.rf.e84608f5da46f7643e7da0b7646e6db4.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 163,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2413.rf.669f2c0f7a1d89a840314907bb8be452.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 142,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2416.rf.0daa5b77c15dedd67a5b013075476db8.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.2853,
+    "box": [
+     0.0,
+     0.3718,
+     0.5263,
+     0.5014
+    ]
+   },
+   "inference_ms": 155,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2426.rf.ae04998dc00ce092b840c07229072282.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "surface_damage",
+    "label": "Alligator Crack",
+    "confidence": 0.5656,
+    "box": [
+     0.4997,
+     0.2226,
+     0.9983,
+     0.983
+    ]
+   },
+   "inference_ms": 145,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2437.rf.0d98e6b224e34447aafdf882383ea14a.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 160,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2454.rf.98ca60a89bb835f7ef56315930fdef1d.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.3541,
+    "box": [
+     0.1794,
+     0.8268,
+     0.4476,
+     0.9016
+    ]
+   },
+   "inference_ms": 162,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2470.rf.3bba055020993dc304c435353cfd1818.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 141,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2506.rf.0293f921d67e517ebc9ee35b7c32dc63.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 169,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2515.rf.ff5e3199ed1dd044ecd274b38761e272.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 169,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2531.rf.5984304ff6cfd2e3dd5c21f219d415e9.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 146,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2535.rf.1c9939260116325701f7944151a9aeb1.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 163,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2555.rf.8ce6a08bbea2d1ea1693f796bd43e9a3.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 2,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.368,
+    "box": [
+     0.0015,
+     0.5192,
+     0.6912,
+     0.627
+    ]
+   },
+   "inference_ms": 150,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2575.rf.702ecb64c7c46731d4c1896e1221bcb7.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 145,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "2584.rf.ae6d3c785f229ad271065776e4263d7f.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.3779,
+    "box": [
+     0.2604,
+     0.0,
+     0.4346,
+     0.1706
+    ]
+   },
+   "inference_ms": 140,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3018.rf.8080fab394ada475a530ab47db3dc637.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 149,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3023.rf.6e959c0e312734aaf3a0c0486fc4a906.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 149,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3049.rf.4cf26f933dc21c9d1fda9807c0b3d35d.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 182,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3063.rf.8e65e867e7dac42c2cbfcc6107ea6a5c.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 5,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.6906,
+    "box": [
+     0.0486,
+     0.1836,
+     0.1211,
+     0.2475
+    ]
+   },
+   "inference_ms": 140,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3067.rf.006b54ea05537cb110efb4e8ee046272.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.3559,
+    "box": [
+     0.0508,
+     0.6329,
+     0.999,
+     0.7875
+    ]
+   },
+   "inference_ms": 169,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3068.rf.c15cd50686e78f2840ab43aa578e1d7d.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 173,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3093.rf.842f05edf426b1584757049a52269c07.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 213,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3118.rf.c666d79c4882118c0a6142e165e3632f.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 2,
+   "top": {
+    "category": "crack",
+    "label": "Longitudinal Crack",
+    "confidence": 0.3152,
+    "box": [
+     0.5172,
+     0.002,
+     0.6245,
+     0.4225
+    ]
+   },
+   "inference_ms": 160,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3137.rf.a83bb9c7dcb0b1dab1a5bf818c423185.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 4,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.572,
+    "box": [
+     0.0046,
+     0.4118,
+     0.6759,
+     0.5886
+    ]
+   },
+   "inference_ms": 154,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3150.rf.1ca4ed4a1274c78e2030b61aa874e8ed.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 169,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3154.rf.96c992d5b0c2d0fc334a116d0ecf9330.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Longitudinal Crack",
+    "confidence": 0.3339,
+    "box": [
+     0.6282,
+     0.6702,
+     0.8162,
+     1.0
+    ]
+   },
+   "inference_ms": 145,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3159.rf.8e32d9347a6cc6090b8810e9ecf6db13.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 162,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3162.rf.c7cb7c1c601f27043c0ddb17b74edfdd.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 149,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3172.rf.cb0999cf34611fb5bbdac2a5c68b926b.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 146,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3174.rf.8ec774fc4db15af6b7d1e920c31f759c.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 156,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3202.rf.e847435a50534b2273e1e2b8177f946e.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 138,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3206.rf.ec6794d42a29e7bd3f3252073c6eed71.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 159,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3207.rf.f408ffa769bb22f0cc56b51300ed9ce1.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.477,
+    "box": [
+     0.4237,
+     0.836,
+     1.0,
+     0.973
+    ]
+   },
+   "inference_ms": 150,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3215.rf.2e19342a5e9557ad837d3b98267d1ffc.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 2,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.5903,
+    "box": [
+     0.8817,
+     0.498,
+     1.0,
+     0.5626
+    ]
+   },
+   "inference_ms": 148,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3225.rf.00490d0babc76539398c471f17b0d6e7.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 147,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3227.rf.1bfaf73652a764c8825e813c25a347a8.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 142,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3229.rf.66af8e45c447ae474773ccf8e7c50a5a.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 148,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3231.rf.4888b161d3d270231d4cc729b7348d7e.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 142,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3240.rf.a3096e02cbb77913c600a48e6673fc34.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 176,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3258.rf.1b9e5091cb3dc7fe0abf4e44dd3e0dc7.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Longitudinal Crack",
+    "confidence": 0.3183,
+    "box": [
+     0.5339,
+     0.3372,
+     0.7527,
+     1.0
+    ]
+   },
+   "inference_ms": 142,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3259.rf.a92a5f313a7c48a2a4e7973db4fb19e2.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 145,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3262.rf.c9dc3251366364177a515678a4b7deca.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 174,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3266.rf.e869e737911fd5b9235a9dcb6e297cc3.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 151,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3275.rf.f98acf5215d6730828f485c270ae7b54.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 196,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3303.rf.061ce24aaf7333b08a68618808e54a9c.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 147,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3306.rf.b72adcdf677fa01eeccf1247826ff0d8.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 149,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3313.rf.5f0a7ba195fe30e2ed30165df414b94e.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 151,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3351.rf.1c54d04ac035ecc049785b24e7435668.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.3468,
+    "box": [
+     0.0771,
+     0.6721,
+     0.2501,
+     0.8085
+    ]
+   },
+   "inference_ms": 141,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3354.rf.0a71b77956ae50ad6ea1195c2ac55cd0.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.4507,
+    "box": [
+     0.1863,
+     0.6486,
+     0.5654,
+     0.7384
+    ]
+   },
+   "inference_ms": 150,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3376.rf.06fe7c72959b6ae5c03d19165ea3d515.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 149,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3443.rf.ae3196f72376757297122e81626f6f60.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 145,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3456.rf.30895a89b64e39620e28cd70e6330319.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 145,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3481.rf.df8774688622b789d11a98521eb9ea1f.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "surface_damage",
+    "label": "Alligator Crack",
+    "confidence": 0.4271,
+    "box": [
+     0.0,
+     0.0026,
+     0.9181,
+     0.9958
+    ]
+   },
+   "inference_ms": 166,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3498.rf.d6a2177504b9a25c571a3c936d1ae1a8.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 162,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3600.rf.b7b614527ef02e79cf9bac0f01499db1.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 185,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3808.rf.493b34c335bf6a7418b971aa62b7d0fd.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 150,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3813.rf.e15af5ed48e2b7af887d08311ef9a478.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "crack",
+    "label": "Longitudinal Crack",
+    "confidence": 0.2895,
+    "box": [
+     0.6462,
+     0.0,
+     0.7307,
+     0.2646
+    ]
+   },
+   "inference_ms": 180,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3833.rf.e85ce14ff45661fe11e7d51a072cdef6.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 2,
+   "top": {
+    "category": "crack",
+    "label": "Transverse Crack",
+    "confidence": 0.3911,
+    "box": [
+     0.469,
+     0.4419,
+     0.9683,
+     0.5636
+    ]
+   },
+   "inference_ms": 164,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3836.rf.5593476e218d3458202eb55d88f70676.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 153,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3841.rf.10b7cdb473d0d68639078e98f220754a.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 185,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3848.rf.eebe99038cd40502695607594e000258.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "surface_damage",
+    "label": "Alligator Crack",
+    "confidence": 0.2611,
+    "box": [
+     0.6113,
+     0.734,
+     1.0,
+     1.0
+    ]
+   },
+   "inference_ms": 155,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3852.rf.449ecbe5cec6616321519ad9291ee6ea.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 154,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3872.rf.0e39fa77d324ee70da6d5e31e943678c.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 2,
+   "top": {
+    "category": "pothole",
+    "label": "Potholes",
+    "confidence": 0.5213,
+    "box": [
+     0.2053,
+     0.6143,
+     0.3527,
+     0.725
+    ]
+   },
+   "inference_ms": 150,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3885.rf.5d0b08090bb3c2fcd3bc8fe36db9e51a.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 1,
+   "top": {
+    "category": "surface_damage",
+    "label": "Alligator Crack",
+    "confidence": 0.4013,
+    "box": [
+     0.01,
+     0.0193,
+     1.0,
+     1.0
+    ]
+   },
+   "inference_ms": 153,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  },
+  {
+   "file": "3897.rf.94c81f86436f41e7bba4b2e66934a470.jpg",
+   "width": 416,
+   "height": 416,
+   "detections": 0,
+   "top": null,
+   "inference_ms": 150,
+   "faces_blurred": 0,
+   "plates_blurred": 0
+  }
+ ]
+}

@@ -1,0 +1,142 @@
+erDiagram
+  PROFILES ||--|| USER_ROLES : has
+  PROFILES ||--o{ HAZARDS : reports
+  PROFILES ||--o{ HAZARD_CONFIRMATIONS : confirms
+  PROFILES ||--o{ NOTIFICATIONS : receives
+  PROFILES ||--o{ DEVICE_PUSH_TOKENS : registers
+  PROFILES ||--o{ SAVED_LOCATIONS : saves
+  PROFILES ||--o{ MAINTENANCE_TASKS : "assigned_to"
+  PROFILES ||--o{ AUDIT_LOGS : "actor"
+  HAZARDS ||--o{ HAZARD_IMAGES : has
+  HAZARDS ||--o| AI_DETECTIONS : "analysed by"
+  HAZARDS ||--o{ HAZARD_CONFIRMATIONS : gets
+  HAZARDS ||--o{ STATUS_HISTORY : logs
+  HAZARDS ||--o{ MAINTENANCE_TASKS : "repaired by"
+  HAZARDS |o--o{ HAZARDS : "duplicate_of"
+  MAINTENANCE_TASKS ||--o{ TASK_UPDATES : has
+  MAINTENANCE_TASKS ||--o{ HAZARD_IMAGES : "before/after"
+
+  PROFILES {
+    uuid id PK "= auth.users.id"
+    text full_name
+    text avatar_path
+    text locale "en|ar"
+    text home_city
+    bool notify_status_updates
+    bool notify_nearby
+    bool notify_announcements
+    int nearby_radius_m
+    timestamptz suspended_at
+  }
+  USER_ROLES {
+    uuid user_id PK,FK
+    user_role role "citizen|maintenance_officer|admin"
+    uuid granted_by FK
+    timestamptz granted_at
+  }
+  HAZARDS {
+    uuid id PK
+    text public_code UK "RS-YYMM-NNNNN"
+    uuid reporter_id FK
+    uuid client_draft_id "idempotency key"
+    hazard_category category
+    hazard_severity severity
+    text description
+    float latitude
+    float longitude
+    geography location "PostGIS point"
+    text address
+    text city
+    report_status status
+    uuid duplicate_of FK
+    smallint traffic_exposure "1..5 or null"
+    int confirmations_count
+    uuid ai_detection_id FK
+    uuid reviewed_by FK
+    timestamptz verified_at
+    timestamptz resolved_at
+  }
+  HAZARD_IMAGES {
+    uuid id PK
+    uuid hazard_id FK
+    uuid task_id FK
+    uuid uploader_id FK
+    text storage_path
+    image_kind kind "report|additional|before|after"
+    bool privacy_blurred
+    bool privacy_approved
+  }
+  AI_DETECTIONS {
+    uuid id PK "signed detection_id"
+    uuid requested_by FK
+    uuid hazard_id FK
+    text model_name
+    text model_version
+    text image_sha256
+    hazard_category top_category
+    real top_confidence
+    jsonb detections
+    int inference_ms
+    bool signature_verified
+    bool user_accepted_category
+  }
+  HAZARD_CONFIRMATIONS {
+    uuid hazard_id PK,FK
+    uuid user_id PK,FK
+    bool still_present
+  }
+  STATUS_HISTORY {
+    bigint id PK
+    uuid hazard_id FK
+    report_status from_status
+    report_status to_status
+    uuid changed_by FK
+    text note
+  }
+  MAINTENANCE_TASKS {
+    uuid id PK
+    uuid hazard_id FK
+    uuid assigned_to FK
+    uuid assigned_by FK
+    task_status status
+    date due_date
+    timestamptz completed_at
+  }
+  TASK_UPDATES {
+    uuid id PK
+    uuid task_id FK
+    uuid author_id FK
+    task_status status
+    text note
+  }
+  NOTIFICATIONS {
+    uuid id PK
+    uuid user_id FK
+    notification_type type
+    text title_en
+    text title_ar
+    jsonb data
+    text push_status
+    timestamptz read_at
+  }
+  DEVICE_PUSH_TOKENS {
+    uuid id PK
+    uuid user_id FK
+    text token UK
+    text platform
+    timestamptz disabled_at
+  }
+  SAVED_LOCATIONS {
+    uuid id PK
+    uuid user_id FK
+    text label
+    geography location
+  }
+  AUDIT_LOGS {
+    bigint id PK
+    uuid actor_id FK
+    text action
+    text entity_type
+    text entity_id
+    jsonb details
+  }

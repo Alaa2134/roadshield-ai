@@ -1,0 +1,49 @@
+RoadShield AI — database security & workflow test run
+Project: roadshield-ai (Supabase, eu-central-1, Postgres 17)
+Executed: 2026-10-31 against the live database after migration 20261031125036_bind_ai_result_to_user;
+the test block raises at the end, so every change it makes is rolled back.
+Script: supabase/tests/database_security_tests.sql
+
+ROADSHIELD_TESTS passed=42 failed=0
+PASS T01 signup trigger creates profile+role (locale ar)
+PASS T02 submit report -> RS-2610-00009
+PASS T03 idempotent resubmission
+PASS T04a signed AI result stored
+PASS T04b tampered AI payload not trusted (report still accepted)
+PASS T04c AI result issued to another user not trusted
+PASS T05 foreign image path rejected
+PASS T06a direct hazard insert denied
+PASS T06b direct status update denied
+PASS T07a suspended_at not writable by user
+PASS T07b own name editable
+PASS T08a citizen cannot moderate
+PASS T08b citizen cannot read admin metrics
+PASS T08c audit log hidden from citizen
+PASS T09 report confirmation notifications
+PASS T10 unverified report hidden from other citizens
+PASS T11 cannot confirm unverified hazard
+PASS T12 admin verifies; status history recorded
+PASS T13 state machine rejects verified->submitted
+PASS T14 reporter notified of verification
+PASS T15 verified hazard public
+PASS T16 privacy-approved image visible
+PASS T17 nearby_hazards returns verified hazard
+PASS T18 independent confirmation counted
+PASS T19 citizens only see their own profile
+PASS T20 cannot confirm own report
+PASS T21 verified hazard in officer unassigned queue
+PASS T22 officer claims task; hazard assigned
+PASS T23 officer cannot change roles
+PASS T24 task progress drives hazard status
+PASS T25 only admin approves completion
+PASS T26 admin approval resolves hazard; reporter notified
+PASS T27 reporter reopens resolved hazard
+PASS T28 last admin cannot be demoted
+PASS T29 admin metrics computed from stored data
+PASS T30 audit trail written
+PASS T31 priority high/2 conf/10 days/no traffic = 62 medium
+PASS T32 priority maximum = 100 high
+PASS T33 priority low/in progress/traffic 1 = 13 low
+PASS T34 rate limit enforced on 3rd call (max 2)
+PASS T35 anon cannot read hazards
+PASS T36 anon cannot call RPCs

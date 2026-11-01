@@ -1,0 +1,8 @@
+models/*.pt
+models/*.onnx
+models/face_ssd/*.caffemodel
+.venv/
+datasets/
+.env
+__pycache__/
+.pytest_cache/

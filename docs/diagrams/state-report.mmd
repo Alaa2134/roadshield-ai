@@ -1,0 +1,32 @@
+stateDiagram-v2
+  [*] --> submitted : citizen submits
+  submitted --> under_review : admin
+  submitted --> verified : admin
+  submitted --> rejected : admin
+  submitted --> duplicate : admin
+  under_review --> verified
+  under_review --> rejected
+  under_review --> duplicate
+  verified --> assigned : officer claims / admin assigns
+  verified --> resolved
+  verified --> rejected
+  verified --> duplicate
+  assigned --> in_progress : officer starts work
+  assigned --> verified : unassigned
+  assigned --> resolved
+  in_progress --> resolved : admin approves completion
+  in_progress --> assigned
+  in_progress --> verified
+  resolved --> reopened : reporter / staff
+  reopened --> under_review
+  reopened --> verified
+  reopened --> assigned
+  reopened --> resolved
+  reopened --> rejected
+  reopened --> duplicate
+  rejected --> under_review : appeal
+  duplicate --> under_review : appeal
+  note right of verified
+    Public map shows only
+    verified · assigned · in_progress · reopened
+  end note

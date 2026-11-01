@@ -1,0 +1,29 @@
+flowchart TD
+  Start([Citizen taps Quick Report]) --> Driving{Safety notice confirmed<br/>recently?}
+  Driving -- no --> Warn["Full-screen notice: never use the<br/>camera while driving — stop safely first"] --> Ack[User confirms they are not driving] --> Photo
+  Driving -- yes --> Photo[Take photo or pick from gallery]
+  Photo --> Prep[Resize to 1600 px · re-encode JPEG<br/>EXIF metadata removed]
+  Prep --> Loc[Attach GPS fix or drop a manual pin]
+  Loc --> Online{Online and AI<br/>service configured?}
+  Online -- no --> Manual["Show: AI analysis unavailable —<br/>continue manually"]
+  Online -- yes --> Analyse[Send photo to AI service]
+  Analyse --> Res{Result}
+  Res -- "503 / error / timeout" --> Manual
+  Res -- "no damage found" --> Manual
+  Res -- detections --> Review[Show boxes, category, confidence,<br/>model version · faces/plates blurred]
+  Review --> Low{Confidence < 50%?}
+  Low -- yes --> Check[Ask user to double-check] --> Cat
+  Low -- no --> Cat
+  Manual --> Cat[User confirms or corrects<br/>category, severity, description]
+  Cat --> Dup{Similar active report<br/>within 50 m?}
+  Dup -- yes --> Confirm{Is it the same hazard?}
+  Confirm -- yes --> AddConf[Confirm existing hazard instead] --> End([Done])
+  Confirm -- no --> Validate
+  Dup -- no --> Validate[Validate: 1–6 photos, location,<br/>category, severity, ≤1000 chars]
+  Validate --> Net{Connected?}
+  Net -- no --> Queue[Save to offline queue] --> Retry[Retry with backoff<br/>when connectivity returns] --> Upload
+  Net -- yes --> Upload[Upload photos to private bucket<br/>with progress]
+  Upload --> RPC[submit_hazard_report<br/>idempotent on draft id]
+  RPC -- retryable error --> Queue
+  RPC -- permanent error --> Failed[Mark draft failed for review] --> End
+  RPC -- ok --> Success[Success screen with report code<br/>status = Submitted] --> Notify[In-app + push confirmation] --> End

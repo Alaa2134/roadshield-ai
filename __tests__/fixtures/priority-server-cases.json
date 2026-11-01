@@ -1,0 +1,341 @@
+{
+ "_source": "Computed by public.compute_priority() in the live Supabase database on 2026-10-31. The app mirror must reproduce every row exactly.",
+ "cases": [
+  {
+   "severity": "low",
+   "confirmations": 0,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": null,
+   "status": "submitted",
+   "at": "2026-02-01T00:00:00.000Z",
+   "expected": {
+    "score": 24,
+    "level": "low"
+   }
+  },
+  {
+   "severity": "low",
+   "confirmations": 3,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 1,
+   "status": "under_review",
+   "at": "2026-02-01T05:00:00.000Z",
+   "expected": {
+    "score": 32,
+    "level": "low"
+   }
+  },
+  {
+   "severity": "low",
+   "confirmations": 6,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 3,
+   "status": "verified",
+   "at": "2026-02-01T23:00:00.000Z",
+   "expected": {
+    "score": 48,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "low",
+   "confirmations": 2,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 5,
+   "status": "assigned",
+   "at": "2026-02-10T11:00:00.000Z",
+   "expected": {
+    "score": 44,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "low",
+   "confirmations": 5,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": null,
+   "status": "in_progress",
+   "at": "2026-03-02T00:00:00.000Z",
+   "expected": {
+    "score": 56,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "low",
+   "confirmations": 1,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 1,
+   "status": "reopened",
+   "at": "2026-03-04T00:00:00.000Z",
+   "expected": {
+    "score": 39,
+    "level": "low"
+   }
+  },
+  {
+   "severity": "low",
+   "confirmations": 4,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 3,
+   "status": "resolved",
+   "at": "2026-03-18T00:00:00.000Z",
+   "expected": {
+    "score": 0,
+    "level": "none"
+   }
+  },
+  {
+   "severity": "medium",
+   "confirmations": 0,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 5,
+   "status": "submitted",
+   "at": "2026-02-01T00:00:00.000Z",
+   "expected": {
+    "score": 45,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "medium",
+   "confirmations": 3,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": null,
+   "status": "under_review",
+   "at": "2026-02-01T05:00:00.000Z",
+   "expected": {
+    "score": 49,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "medium",
+   "confirmations": 6,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 1,
+   "status": "verified",
+   "at": "2026-02-01T23:00:00.000Z",
+   "expected": {
+    "score": 50,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "medium",
+   "confirmations": 2,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 3,
+   "status": "assigned",
+   "at": "2026-02-10T11:00:00.000Z",
+   "expected": {
+    "score": 46,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "medium",
+   "confirmations": 5,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 5,
+   "status": "in_progress",
+   "at": "2026-03-02T00:00:00.000Z",
+   "expected": {
+    "score": 73,
+    "level": "high"
+   }
+  },
+  {
+   "severity": "medium",
+   "confirmations": 1,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": null,
+   "status": "reopened",
+   "at": "2026-03-04T00:00:00.000Z",
+   "expected": {
+    "score": 58,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "medium",
+   "confirmations": 4,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 1,
+   "status": "resolved",
+   "at": "2026-03-18T00:00:00.000Z",
+   "expected": {
+    "score": 0,
+    "level": "none"
+   }
+  },
+  {
+   "severity": "high",
+   "confirmations": 0,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 3,
+   "status": "submitted",
+   "at": "2026-02-01T00:00:00.000Z",
+   "expected": {
+    "score": 48,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "high",
+   "confirmations": 3,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 5,
+   "status": "under_review",
+   "at": "2026-02-01T05:00:00.000Z",
+   "expected": {
+    "score": 67,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "high",
+   "confirmations": 6,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": null,
+   "status": "verified",
+   "at": "2026-02-01T23:00:00.000Z",
+   "expected": {
+    "score": 71,
+    "level": "high"
+   }
+  },
+  {
+   "severity": "high",
+   "confirmations": 2,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 1,
+   "status": "assigned",
+   "at": "2026-02-10T11:00:00.000Z",
+   "expected": {
+    "score": 49,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "high",
+   "confirmations": 5,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 3,
+   "status": "in_progress",
+   "at": "2026-03-02T00:00:00.000Z",
+   "expected": {
+    "score": 75,
+    "level": "high"
+   }
+  },
+  {
+   "severity": "high",
+   "confirmations": 1,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 5,
+   "status": "reopened",
+   "at": "2026-03-04T00:00:00.000Z",
+   "expected": {
+    "score": 74,
+    "level": "high"
+   }
+  },
+  {
+   "severity": "high",
+   "confirmations": 4,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": null,
+   "status": "resolved",
+   "at": "2026-03-18T00:00:00.000Z",
+   "expected": {
+    "score": 0,
+    "level": "none"
+   }
+  },
+  {
+   "severity": "critical",
+   "confirmations": 0,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 1,
+   "status": "submitted",
+   "at": "2026-02-01T00:00:00.000Z",
+   "expected": {
+    "score": 50,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "critical",
+   "confirmations": 3,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 3,
+   "status": "under_review",
+   "at": "2026-02-01T05:00:00.000Z",
+   "expected": {
+    "score": 70,
+    "level": "high"
+   }
+  },
+  {
+   "severity": "critical",
+   "confirmations": 6,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 5,
+   "status": "verified",
+   "at": "2026-02-01T23:00:00.000Z",
+   "expected": {
+    "score": 85,
+    "level": "high"
+   }
+  },
+  {
+   "severity": "critical",
+   "confirmations": 2,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": null,
+   "status": "assigned",
+   "at": "2026-02-10T11:00:00.000Z",
+   "expected": {
+    "score": 69,
+    "level": "medium"
+   }
+  },
+  {
+   "severity": "critical",
+   "confirmations": 5,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 1,
+   "status": "in_progress",
+   "at": "2026-03-02T00:00:00.000Z",
+   "expected": {
+    "score": 78,
+    "level": "high"
+   }
+  },
+  {
+   "severity": "critical",
+   "confirmations": 1,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 3,
+   "status": "reopened",
+   "at": "2026-03-04T00:00:00.000Z",
+   "expected": {
+    "score": 77,
+    "level": "high"
+   }
+  },
+  {
+   "severity": "critical",
+   "confirmations": 4,
+   "createdAt": "2026-02-01T00:00:00Z",
+   "trafficExposure": 5,
+   "status": "resolved",
+   "at": "2026-03-18T00:00:00.000Z",
+   "expected": {
+    "score": 0,
+    "level": "none"
+   }
+  }
+ ]
+}
