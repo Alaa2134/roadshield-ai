@@ -40,11 +40,21 @@ let started = false;
 export function startSessionListener() {
   if (started) return;
   started = true;
-  void supabase.auth.getSession().then(async ({ data }) => {
-    useSession.setState({ session: data.session });
-    if (data.session) await useSession.getState().refreshProfile();
-    useSession.setState({ ready: true });
-  });
+  // Start-up must always finish: if the stored session cannot be read (or the network hangs
+  // while refreshing it) the app continues signed out instead of staying on the splash screen.
+  const markReady = () => useSession.setState({ ready: true });
+  const safety = setTimeout(markReady, 8000);
+  void supabase.auth
+    .getSession()
+    .then(async ({ data }) => {
+      useSession.setState({ session: data.session });
+      if (data.session) await useSession.getState().refreshProfile();
+    })
+    .catch((error: unknown) => console.warn('[session] could not restore session', error))
+    .finally(() => {
+      clearTimeout(safety);
+      markReady();
+    });
   supabase.auth.onAuthStateChange((event, session) => {
     useSession.setState({ session });
     if (event === 'PASSWORD_RECOVERY') useSession.setState({ recovering: true });

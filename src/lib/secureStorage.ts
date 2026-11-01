@@ -10,7 +10,21 @@ import * as SecureStore from 'expo-secure-store';
 const CHUNK = 1800;
 const safe = (key: string) => key.replace(/[^A-Za-z0-9._-]/g, '_');
 
-export const chunkedSecureStorage = {
+/**
+ * The Keychain can be unavailable (device still locked after a reboot, missing entitlements in
+ * an unsigned build). Storage failures must never block start-up: reads fall back to
+ * "no stored session" and writes are skipped, so the user is simply asked to sign in again.
+ */
+async function guard<T>(op: string, fallback: T, run: () => Promise<T>): Promise<T> {
+  try {
+    return await run();
+  } catch (error) {
+    console.warn(`[secure-storage] ${op} failed`, error);
+    return fallback;
+  }
+}
+
+const store = {
   async getItem(key: string): Promise<string | null> {
     const base = safe(key);
     const countRaw = await SecureStore.getItemAsync(`${base}.n`);
@@ -47,4 +61,10 @@ export const chunkedSecureStorage = {
     for (let i = 0; i < count; i++) await SecureStore.deleteItemAsync(`${base}.${i}`);
     await SecureStore.deleteItemAsync(`${base}.n`);
   },
+};
+
+export const chunkedSecureStorage = {
+  getItem: (key: string) => guard('getItem', null, () => store.getItem(key)),
+  setItem: (key: string, value: string) => guard('setItem', undefined, () => store.setItem(key, value)),
+  removeItem: (key: string) => guard('removeItem', undefined, () => store.removeItem(key)),
 };

@@ -13,11 +13,12 @@ import * as SecureStore from 'expo-secure-store';
 
 let mockAuthCallback: ((event: string, session: Session | null) => void) | null = null;
 const mockSession = { user: { id: 'u-1' }, access_token: 't' } as unknown as Session;
+let mockGetSession: () => Promise<unknown> = async () => ({ data: { session: mockSession } });
 
 jest.mock('@/lib/supabase', () => ({
   supabase: {
     auth: {
-      getSession: jest.fn(async () => ({ data: { session: mockSession } })),
+      getSession: jest.fn(() => mockGetSession()),
       onAuthStateChange: jest.fn((cb: typeof mockAuthCallback) => {
         mockAuthCallback = cb;
         return { data: { subscription: { unsubscribe: jest.fn() } } };
@@ -75,6 +76,23 @@ describe('session lifecycle', () => {
   });
 });
 
+describe('start-up never hangs on the splash screen', () => {
+  it('becomes ready, signed out, when the stored session cannot be read', async () => {
+    mockGetSession = () => Promise.reject(new Error('keychain unavailable'));
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    let store!: typeof import('@/stores/session');
+    jest.isolateModules(() => {
+      store = require('@/stores/session');
+    });
+    store.startSessionListener();
+    await flush();
+    await flush();
+    expect(store.useSession.getState()).toMatchObject({ ready: true, session: null });
+    warn.mockRestore();
+    mockGetSession = async () => ({ data: { session: mockSession } });
+  });
+});
+
 describe('role-based route guards', () => {
   const as = (role: 'citizen' | 'maintenance_officer' | 'admin' | null) =>
     useSession.setState({ session: role ? mockSession : null, role: role ?? 'citizen' });
@@ -110,6 +128,17 @@ describe('secure session storage', () => {
     expect(await SecureStore.getItemAsync('k.2')).toBeNull();
     await chunkedSecureStorage.removeItem('k');
     expect(await chunkedSecureStorage.getItem('k')).toBeNull();
+  });
+
+  it('a failing Keychain never throws: reads return no session, writes are skipped', async () => {
+    const get = SecureStore.getItemAsync as jest.Mock;
+    const set = SecureStore.setItemAsync as jest.Mock;
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    get.mockRejectedValueOnce(new Error('errSecMissingEntitlement'));
+    await expect(chunkedSecureStorage.getItem('locked')).resolves.toBeNull();
+    set.mockRejectedValueOnce(new Error('errSecInteractionNotAllowed'));
+    await expect(chunkedSecureStorage.setItem('locked', 'x')).resolves.toBeUndefined();
+    warn.mockRestore();
   });
 
   it('a missing chunk is treated as no session rather than a corrupted one', async () => {

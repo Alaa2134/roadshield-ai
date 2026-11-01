@@ -62,7 +62,8 @@ jobs:
           set -o pipefail
           xcodebuild -workspace ios/RoadShieldAI.xcworkspace -scheme RoadShieldAI -configuration Release \
             -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath build/sim \
-            CODE_SIGNING_ALLOWED=NO build | tail -40
+            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= PROVISIONING_PROFILE_SPECIFIER= build | tail -40
+          # Ad-hoc ("sign to run locally") signing embeds the entitlements, so the Keychain works in the simulator.
           (cd build/sim/Build/Products/Release-iphonesimulator && zip -qry "$GITHUB_WORKSPACE/out/roadshield-ai-simulator.app.zip" RoadShieldAI.app)
       - name: Smoke test on an iPhone simulator
         run: bash .github/scripts/ios-smoke.sh build/sim/Build/Products/Release-iphonesimulator/RoadShieldAI.app smoke-ios
