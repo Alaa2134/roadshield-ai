@@ -33,8 +33,12 @@ export default function Onboarding() {
   const { t } = useTranslation();
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const { isDark, isRTL } = useTheme();
+  const { isDark, isRTL, reduceMotion } = useTheme();
   const [index, setIndex] = useState(0);
+  // The first slide's text is shown immediately; only slides reached by swiping animate in.
+  // (An entering animation on the very first frame can stay invisible on some devices, e.g.
+  // with system animations turned off.)
+  const [moved, setMoved] = useState(false);
   const list = useRef<FlatList<(typeof SLIDES)[number]>>(null);
   const finish = useSettings((s) => s.setOnboardingDone);
 
@@ -46,7 +50,10 @@ export default function Onboarding() {
 
   const onViewable = useRef(({ viewableItems }: { viewableItems: ListViewToken[] }) => {
     const i = viewableItems[0]?.index;
-    if (typeof i === 'number') setIndex(i);
+    if (typeof i === 'number') {
+      setIndex(i);
+      if (i > 0) setMoved(true);
+    }
   }).current;
 
   const last = index === SLIDES.length - 1;
@@ -82,7 +89,10 @@ export default function Onboarding() {
           <View style={{ width, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 28, gap: 26 }}>
             <item.Art size={Math.min(300, width * 0.78)} />
             {i === index ? (
-              <Animated.View entering={FadeInDown.duration(450)} style={{ gap: 10, alignItems: 'center' }}>
+              <Animated.View
+                entering={moved && !reduceMotion ? FadeInDown.duration(450) : undefined}
+                style={{ gap: 10, alignItems: 'center' }}
+              >
                 <Text variant="display" center>
                   {t(`onboarding.${item.key}Title`)}
                 </Text>
