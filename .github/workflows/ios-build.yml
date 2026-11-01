@@ -1,0 +1,95 @@
+# Builds the iOS app on a GitHub macOS runner WITHOUT Apple signing credentials:
+#  - an unsigned .ipa (install on your own iPhone by signing it with your Apple ID, e.g.
+#    Sideloadly or AltStore, or use EAS / an Apple Developer account for signed builds)
+#  - a Release simulator build that is launched on an iPhone simulator as a smoke test.
+# Signed ad hoc / App Store IPAs need an Apple Developer account: see docs/DEPLOYMENT.md §4–5.
+name: iOS build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths-ignore: ['docs/**', '**/*.md', 'services/**', 'supabase/**', 'render.yaml', '.github/workflows/android-apk.yml', '.github/workflows/ai-models.yml', '.github/workflows/ci.yml', '.github/workflows/eas-build.yml', '.github/scripts/smoke-test.sh']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ios-build
+  cancel-in-progress: false
+
+env:
+  EXPO_PUBLIC_SUPABASE_URL: https://vdfvoxvkxicemgqrsxjh.supabase.co
+  EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_C8YpibzT5LUACU0GHM4Tkg_1cKc3PG1
+  EXPO_PUBLIC_ROUTING_URL: https://router.project-osrm.org
+  EXPO_PUBLIC_AI_API_URL: ${{ vars.EXPO_PUBLIC_AI_API_URL }}
+  APP_BUNDLE_ID: com.roadshieldai.app
+
+jobs:
+  ios:
+    runs-on: macos-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Select the newest Xcode
+        run: |
+          ls -d /Applications/Xcode*.app
+          XC=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$XC"
+          xcodebuild -version
+      - run: npm ci
+      - name: Generate native iOS project
+        run: npx expo prebuild --platform ios --no-install --clean
+      - name: Install pods
+        working-directory: ios
+        run: pod install
+      - name: Build unsigned device app (Release)
+        run: |
+          set -o pipefail
+          xcodebuild -workspace ios/RoadShieldAI.xcworkspace -scheme RoadShieldAI -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build/device \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build | tail -40
+          mkdir -p out/Payload
+          cp -R build/device/Build/Products/Release-iphoneos/RoadShieldAI.app out/Payload/
+          (cd out && zip -qry roadshield-ai-unsigned.ipa Payload && rm -rf Payload)
+          ls -la out
+      - name: Build simulator app (Release)
+        run: |
+          set -o pipefail
+          xcodebuild -workspace ios/RoadShieldAI.xcworkspace -scheme RoadShieldAI -configuration Release \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath build/sim \
+            CODE_SIGNING_ALLOWED=NO build | tail -40
+          (cd build/sim/Build/Products/Release-iphonesimulator && zip -qry "$GITHUB_WORKSPACE/out/roadshield-ai-simulator.app.zip" RoadShieldAI.app)
+      - name: Smoke test on an iPhone simulator
+        run: bash .github/scripts/ios-smoke.sh build/sim/Build/Products/Release-iphonesimulator/RoadShieldAI.app smoke-ios
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-build
+          path: |
+            out/
+            smoke-ios/
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "ios-preview-${{ github.run_number }}" out/roadshield-ai-unsigned.ipa out/roadshield-ai-simulator.app.zip \
+            --title "RoadShield AI — iOS preview #${{ github.run_number }} (unsigned)" --prerelease --latest=false \
+            --notes "Unsigned iOS build from commit ${{ github.sha }}. roadshield-ai-unsigned.ipa must be signed before it can be installed on an iPhone (e.g. Sideloadly/AltStore with your Apple ID, or a signed EAS build with an Apple Developer account). roadshield-ai-simulator.app.zip runs in the Xcode iOS Simulator."
+      - name: Push smoke-test screenshots to the ci-results-ios branch
+        if: always()
+        run: |
+          mkdir -p /tmp/res && cp -r smoke-ios/* /tmp/res/ 2>/dev/null || true
+          echo '{"run": ${{ github.run_number }}, "commit": "${{ github.sha }}", "logs": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}' > /tmp/res/status.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan ci-results-ios-tmp
+          git rm -rf --cached . >/dev/null
+          rm -rf ci-results-ios && mkdir ci-results-ios && cp -r /tmp/res/* ci-results-ios/
+          git add -f ci-results-ios
+          git commit -m "iOS CI results for run ${{ github.run_number }}"
+          git push -f origin HEAD:ci-results-ios
