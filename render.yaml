@@ -1,0 +1,21 @@
+# One-click deploy of the AI service on Render:
+#   https://render.com/deploy?repo=https://github.com/Alaa2134/roadshield-ai
+# You will be asked for AI_SIGNING_SECRET (the value of app_private.settings.ai_signing_secret).
+services:
+  - type: web
+    name: roadshield-ai-service
+    runtime: docker
+    rootDir: services/ai
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: AI_SUPABASE_URL
+        value: https://vdfvoxvkxicemgqrsxjh.supabase.co
+      - key: AI_SUPABASE_PUBLISHABLE_KEY
+        value: sb_publishable_C8YpibzT5LUACU0GHM4Tkg_1cKc3PG1
+      - key: AI_SIGNING_SECRET
+        sync: false
+      - key: WEB_CONCURRENCY
+        value: "1"

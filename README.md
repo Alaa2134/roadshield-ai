@@ -47,8 +47,9 @@ reports, and maintenance crews work them by priority. English and Arabic (right-
 | ✅ Supabase backend live | project `roadshield-ai` (`vdfvoxvkxicemgqrsxjh`), 14 migrations, 42/42 security tests passing on the live database |
 | ✅ App code | typecheck clean · 106 Jest tests · Android and iOS bundles build · `expo prebuild` generates both native projects |
 | ✅ AI service | 33 tests · real YOLOv8s model verified on real photos · signed result accepted by the live database |
-| ⏳ APK / AAB / IPA | needs your Expo account (and Apple Developer account for iOS). Follow [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) §3–5. No binary has been built yet. |
-| ⏳ AI hosting | deploy `services/ai` (Docker) and set `EXPO_PUBLIC_AI_API_URL` |
+| 🤖 Android APK | built by GitHub Actions on every push (no Expo account needed) and published under [Releases](https://github.com/Alaa2134/roadshield-ai/releases/latest); see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#quick-path-no-expo-account-needed) |
+| ⏳ Store builds (AAB / IPA) | need your Expo account (and Apple Developer account for iOS): [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) §3–5 |
+| ⏳ AI hosting | one-click Render deploy (`render.yaml`), then set `EXPO_PUBLIC_AI_API_URL` |
 
 ## Quick start (development)
 

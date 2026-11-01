@@ -8,7 +8,7 @@ name: Android APK
 on:
   push:
     branches: [main]
-    paths-ignore: ['docs/**', '**/*.md', 'ci-results/**']
+    paths-ignore: ['docs/**', '**/*.md', 'ci-results/**', 'services/**', 'supabase/**', 'render.yaml', '.github/workflows/ai-models.yml', '.github/workflows/ci.yml', '.github/workflows/eas-build.yml']
   workflow_dispatch:
 
 permissions:
@@ -16,7 +16,7 @@ permissions:
 
 concurrency:
   group: android-apk
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
   EXPO_PUBLIC_SUPABASE_URL: https://vdfvoxvkxicemgqrsxjh.supabase.co

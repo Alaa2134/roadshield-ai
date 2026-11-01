@@ -1,0 +1,47 @@
+# Builds the AI service's model files and publishes them as the `ai-models` GitHub Release,
+# so the Docker image (and Render) can download them without storing binaries in git.
+name: AI models
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['services/ai/scripts/**', 'services/ai/labels.json', '.github/workflows/ai-models.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  models:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: services/ai
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install export tools (CPU PyTorch)
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements-train.txt -r requirements-dev.txt
+      - name: Fetch weights, export ONNX, fetch face detector
+        run: bash scripts/fetch_models.sh
+      - name: Test the service with the real model
+        run: |
+          python -m pytest -q
+          python -c "from app.config import get_settings as g; from app.detector import Detector; s=g(); d=Detector.load(s.model_path, s.model_card_path, s.labels_path); print(d.name, d.version, d.class_names)"
+      - name: Publish release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp models/face_ssd/* models/
+          FILES="models/roadshield-rdd.onnx models/model_card.json models/deploy.prototxt models/res10_300x300_ssd_iter_140000.caffemodel"
+          if gh release view ai-models >/dev/null 2>&1; then
+            gh release upload ai-models $FILES --clobber
+          else
+            gh release create ai-models $FILES --title "AI service model files" --prerelease --latest=false \
+              --notes "YOLOv8s road-damage detector (RDD2022, AGPL-3.0, from oracl4/RoadDamageDetection) exported to ONNX, plus the OpenCV ResNet-10 SSD face detector. Downloaded automatically by services/ai/Dockerfile."
+          fi

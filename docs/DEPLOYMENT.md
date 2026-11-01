@@ -6,6 +6,41 @@ secrets in place. The app bundles and prebuilds for both platforms. What remains
 accounts: Expo (EAS builds), Apple Developer (iOS), Google (Maps key, FCM, Play Console), and a host
 for the AI container.
 
+## Quick path: no Expo account needed
+
+The repository builds an installable Android APK on GitHub's own servers:
+
+1. Every push to `main` (or **Actions → Android APK → Run workflow**) runs
+   `.github/workflows/android-apk.yml`. It runs the typecheck and tests, generates the native
+   Android project, builds a release APK with Gradle, installs and launches it on an Android
+   emulator, and publishes it as a GitHub Release.
+2. Download it on the phone from **Releases → latest → `roadshield-ai-preview.apk`**
+   (`https://github.com/Alaa2134/roadshield-ai/releases/latest`) and install it. Allow
+   "install unknown apps" for the browser.
+3. Results of the emulator smoke test (screenshots, crash log) are pushed to the `ci-results` branch.
+
+Optional repository settings (Settings → Secrets and variables → Actions):
+
+| Name | Kind | Effect |
+|---|---|---|
+| `GOOGLE_MAPS_ANDROID_API_KEY` | secret | Real Google map on Android. Without it the map screens show the same hazards as a list, because Google's SDK cannot start without a key. |
+| `EXPO_PUBLIC_AI_API_URL` | variable | Enables AI detection in the app (see "AI service on Render" below). |
+
+The APK is signed with the project's debug keystore, which is fine for testing and sharing, but
+the Play Store needs the EAS production build below. Push notifications need an EAS project ID and
+Firebase, so in this APK they report "not configured". In-app notifications still work.
+
+### AI service on Render (free, one click)
+1. Open `https://render.com/deploy?repo=https://github.com/Alaa2134/roadshield-ai` and sign in with GitHub.
+2. When asked for `AI_SIGNING_SECRET`, paste the value of
+   `select value from app_private.settings where key = 'ai_signing_secret';` (Supabase SQL editor).
+3. When it is live, `https://<service>.onrender.com/health` shows `"model_loaded": true`. Put that
+   address in the `EXPO_PUBLIC_AI_API_URL` variable and re-run **Android APK**.
+
+The model files are downloaded during the Docker build from the `ai-models` release (built by
+`.github/workflows/ai-models.yml`). Render's free plan sleeps after 15 minutes idle, so the
+first request can take about a minute.
+
 ## 0. Accounts you need
 
 | For | Account | Cost |
