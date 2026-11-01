@@ -104,9 +104,13 @@ def _face_net() -> object | None:
     import cv2
 
     proto, weights = FACE_MODEL_DIR / "deploy.prototxt", FACE_MODEL_DIR / "res10_300x300_ssd_iter_140000.caffemodel"
-    if not (proto.is_file() and weights.is_file()):
+    # OpenCV 5 removed the Caffe importer; fall back to the Haar cascade instead of failing.
+    if not (proto.is_file() and weights.is_file()) or not hasattr(cv2.dnn, "readNetFromCaffe"):
         return None
-    return cv2.dnn.readNetFromCaffe(str(proto), str(weights))
+    try:
+        return cv2.dnn.readNetFromCaffe(str(proto), str(weights))
+    except cv2.error:
+        return None
 
 
 def face_detector_name() -> str:
