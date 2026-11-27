@@ -46,7 +46,62 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Install Claude Code and isolate action marker variables
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://claude.ai/install.sh | bash
+          cat > "$RUNNER_TEMP/claude-action-launcher" <<'SH'
+          #!/bin/sh
+          unset CLAUDE_CODE_ENTRYPOINT CLAUDE_CODE_ACTION
+          exec "$HOME/.local/bin/claude" "$@"
+          SH
+          chmod 700 "$RUNNER_TEMP/claude-action-launcher"
+
+      # Issue #4 only: safely classify OAuth failures without publishing raw
+      # model output, prompts, or credential values to GitHub Actions logs.
+      - name: Diagnose OAuth authorization (issue 4 only)
+        if: github.event_name == 'issue_comment' && github.event.issue.number == 4
+        shell: bash
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          set +e
+          timeout 90s "$RUNNER_TEMP/claude-action-launcher" -p 'Reply exactly: ROADSHIELD_AUTH_OK' --output-format json > "$RUNNER_TEMP/claude-auth-probe.json" 2> "$RUNNER_TEMP/claude-auth-probe.err"
+          probe_rc=$?
+          set -e
+          export PROBE_RC="$probe_rc"
+          python3 - <<'PY'
+          import json, os, pathlib
+          t = pathlib.Path(os.environ['RUNNER_TEMP'])
+          raw = (t / 'claude-auth-probe.json').read_text(errors='replace')
+          stderr = (t / 'claude-auth-probe.err').read_text(errors='replace')
+          try:
+              report = json.loads(raw)
+          except (ValueError, TypeError):
+              report = {}
+          content = str(report.get('result', '')) + ' ' + stderr
+          code = os.environ.get('PROBE_RC', '?')
+          if code == '0' and report.get('is_error') is False:
+              classification = 'AUTH_SUCCESS'
+          elif '401' in content or 'authentication_failed' in content or 'Not logged in' in content:
+              classification = 'AUTH_401_REJECTED'
+          elif '429' in content or 'rate limit' in content.lower():
+              classification = 'AUTH_429_RATE_LIMIT'
+          elif 'Credit balance is too low' in content:
+              classification = 'BILLING_REJECTED'
+          elif code == '124':
+              classification = 'PROBE_TIMEOUT'
+          else:
+              classification = 'OTHER_CLI_ERROR'
+          print('Claude OAuth probe classification:', classification)
+          print('Claude OAuth probe process exit code:', code)
+          print('Claude OAuth probe had model response:', report.get('is_error') is False)
+          PY
+          rm -f "$RUNNER_TEMP/claude-auth-probe.json" "$RUNNER_TEMP/claude-auth-probe.err"
+
       - name: Ask Claude Code
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          path_to_claude_code_executable: ${{ runner.temp }}/claude-action-launcher
