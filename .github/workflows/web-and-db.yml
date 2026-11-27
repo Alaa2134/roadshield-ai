@@ -28,6 +28,8 @@ jobs:
           supabase/local/reset_local_db.sh roadshield_ci | tee db.log
           grep -q "ROADSHIELD_TESTS passed=[0-9]* failed=0" db.log
           grep -q "ENTERPRISE_TESTS passed=[0-9]* failed=0" db.log
+      - name: Verify owner-safety under two simultaneous DB sessions
+        run: bash supabase/tests/last_owner_concurrency.sh roadshield_ci
 
   web:
     runs-on: ubuntu-latest
