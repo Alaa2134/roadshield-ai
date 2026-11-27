@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Logo } from '@/components/brand/Logo';
 import { LanguageSwitcher } from '@/components/ui/client';
-import { MapArt } from '@/components/marketing/visuals';
+import Image from 'next/image';
 import { getDict } from '@/lib/i18n/server';
 import { marketing } from '@/lib/i18n/marketing';
 
@@ -19,12 +19,13 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
         <p className="text-center text-xs text-ink-3">{t.brand.slogan}</p>
       </div>
       <aside className="hero-glow relative hidden overflow-hidden lg:block">
-        <MapArt className="absolute inset-0 h-full w-full opacity-60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
+        <Image src="/photos/field-road-ua.webp" alt="" fill sizes="50vw" className="object-cover" priority />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/50 to-navy/10" />
         <div className="absolute inset-x-12 bottom-14 text-white">
           <p className="t-eyebrow text-cyan">{t.brand.os}</p>
           <h2 className="t-display mt-3 max-w-md">{m.hero.title}</h2>
           <p className="mt-4 max-w-md text-[#B9C6D8]">{m.hero.lead}</p>
+          <p className="mt-8 text-[10.5px] text-white/40">Photo: kosun · CC BY-SA 3.0 · Wikimedia Commons</p>
         </div>
       </aside>
     </div>

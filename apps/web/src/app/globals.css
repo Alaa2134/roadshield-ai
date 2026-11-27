@@ -217,7 +217,7 @@ html[lang='ar'] .t-eyebrow {
   font-size: 0.8125rem;
 }
 .t-metric {
-  font-size: 1.625rem;
+  font-size: clamp(1.2rem, 0.9rem + 0.9vw, 1.625rem);
   line-height: 1.1;
   font-weight: 640;
   letter-spacing: -0.025em;
@@ -440,6 +440,35 @@ html[lang='ar'] .t-eyebrow {
 .hero-glow {
   background: radial-gradient(60% 50% at 70% 0%, rgba(40, 120, 255, 0.28), transparent 70%),
     radial-gradient(40% 40% at 10% 30%, rgba(0, 184, 169, 0.14), transparent 70%), var(--rs-navy);
+}
+
+/* Hand-made textures (no stock gradients): asphalt grain, survey contour lines, lane markings */
+.asphalt {
+  background-color: #0b1420;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.contours {
+  background-image: url('/textures/contours.svg');
+  background-size: 600px 600px;
+}
+.lane-divider {
+  height: 6px;
+  background: repeating-linear-gradient(90deg, #f5c542 0 46px, transparent 46px 82px);
+  opacity: 0.9;
+}
+.lane-edge {
+  background-image: linear-gradient(90deg, transparent calc(50% - 2px), rgba(255, 255, 255, 0.18) calc(50% - 2px) calc(50% + 2px), transparent calc(50% + 2px));
+}
+.hud-panel {
+  background: rgba(8, 14, 24, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  border-radius: 10px;
+  color: #e8eef7;
+}
+.photo-grade {
+  filter: saturate(0.92) contrast(1.04);
 }
 
 /* MapLibre controls in theme */

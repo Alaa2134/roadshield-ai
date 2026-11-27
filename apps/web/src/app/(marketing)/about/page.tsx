@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { getLocale } from '@/lib/i18n/server';
 import { marketing } from '@/lib/i18n/marketing';
 import { CtaBand } from '@/components/marketing/FeaturePageView';
-import { MapArt } from '@/components/marketing/visuals';
+import { PlainPhoto } from '@/components/marketing/Photos';
 
 export async function generateMetadata(): Promise<Metadata> {
   const a = marketing[await getLocale()].about;
@@ -20,7 +20,7 @@ export default async function About() {
             <h1 className="t-display">{a.title}</h1>
             <p className="mt-5 text-lg leading-relaxed text-ink-2">{a.lead}</p>
           </div>
-          <div className="overflow-hidden rounded-3xl border border-line shadow-float"><MapArt className="block h-72 w-full" /></div>
+          <PlainPhoto k="field-road-ua" alt="" className="shadow-float" ratio="16/10" />
         </div>
         <div className="mt-16 grid gap-5 md:grid-cols-3">
           {a.sections.map((s) => (

@@ -93,7 +93,7 @@ export default async function ProjectDetail({ params, searchParams }: { params: 
       {tab === 'overview' ? (
         <>
           {f ? (
-            <section className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6" aria-label="Financials" data-testid="project-kpis">
+            <section className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-6" aria-label="Financials" data-testid="project-kpis">
               <Kpi label={t.money.approved_budget} value={money(f.approved_budget, cur, locale, { compact: true })} hint={f.pending_budget ? `+${money(f.pending_budget, cur, locale, { compact: true })} ${t.common.pendingReview}` : undefined} icon={Landmark} />
               <Kpi label={t.money.approved_estimate} value={f.approved_estimate !== null ? money(f.approved_estimate, cur, locale, { compact: true }) : '—'} hint={f.estimate_version ? `v${f.estimate_version}` : t.common.notRecorded} icon={Calculator} tone="violet" />
               <Kpi label={t.money.committed} value={money(f.committed, cur, locale, { compact: true })} icon={FileCheck2} tone="blue" />

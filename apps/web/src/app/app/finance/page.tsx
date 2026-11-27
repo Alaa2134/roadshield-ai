@@ -40,7 +40,7 @@ export default async function Finance() {
     <>
       <PageHeader title={p.finance.title} subtitle={p.finance.subtitle} />
       {f ? (
-        <section className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-5">
+        <section className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
           <Kpi label={t.money.approved_budget} value={money(f.approved_budget_total, cur, locale, { compact: true })} icon={Landmark} />
           <Kpi label={t.money.committed} value={money(f.committed, cur, locale, { compact: true })} icon={FileCheck2} />
           <Kpi label={t.money.verified_actual} value={money(f.verified_actual, cur, locale, { compact: true })} icon={BadgeCheck} tone="teal" />

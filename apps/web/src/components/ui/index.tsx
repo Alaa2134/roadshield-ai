@@ -70,12 +70,12 @@ export function Kpi({ label, value, hint, icon: Icon, tone = 'blue', footer, tes
   label: string; value: ReactNode; hint?: ReactNode; icon?: LucideIcon; tone?: Tone; footer?: ReactNode; testId?: string;
 }) {
   return (
-    <div className="card card-pad flex min-w-0 flex-col" data-testid={testId}>
+    <div className="card flex min-w-0 flex-col p-4 sm:p-5" data-testid={testId}>
       <div className="flex items-start justify-between gap-2">
         <span className="t-label line-clamp-2 leading-snug">{label}</span>
         {Icon ? <span className={clsx('grid size-7 place-items-center rounded-lg', toneClass[tone])}><Icon size={15} strokeWidth={2} /></span> : null}
       </div>
-      <div className="t-metric mt-3 break-words text-ink">{value}</div>
+      <div className="t-metric mt-3 overflow-hidden text-ellipsis whitespace-nowrap text-ink" title={typeof value === 'string' ? value : undefined}>{value}</div>
       {hint ? <div className="mt-1 truncate text-xs text-ink-2">{hint}</div> : null}
       {footer ? <div className="mt-3 border-t border-line pt-3 text-xs text-ink-2">{footer}</div> : null}
     </div>

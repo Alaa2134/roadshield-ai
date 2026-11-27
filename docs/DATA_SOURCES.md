@@ -74,6 +74,21 @@ Public sources to investigate per country (to be entered as cited unit rates, no
 * World Bank ROCKS (Road Costs Knowledge System) historical unit costs — historical benchmarks,
   to be labelled as such with their year and currency.
 
+## Website photography
+
+Real photographs from Wikimedia Commons, fetched with `scripts/assets/fetch-commons-photos.py`.
+The script keeps only CC0, public-domain, CC BY and CC BY-SA files and records author, licence and
+source. Photos are cropped, colour-graded and re-encoded. Adapted CC BY-SA photos are shared under
+the same licence. All credits are listed on the website's **/credits** page and in
+`apps/web/src/lib/vision-samples.json`.
+
+The boxes and scores drawn on these photos are the **real output** of the production detector
+(`roadshield-rdd-yolov8s`, ONNX SHA-256 `9eb29882…`), produced by `scripts/assets/run-vision-samples.py`
+and stored in `docs/test-results/website-vision-samples.json`. This includes a misclassification:
+a crack close-up labelled pothole at 0.71, which the website shows as a known limitation.
+
+Product screenshots on the website come from the real application, using a local demo workspace.
+
 ## Citizen reports
 
 Photos and reports come from RoadShield app users under the app's privacy notice. EXIF/GPS

@@ -1,6 +1,7 @@
 import type { Locale } from './i18n/dict';
 
-const tag = (l: Locale) => (l === 'ar' ? 'ar-EG' : 'en-GB');
+// Arabic UI uses Latin digits (common in Egyptian business software; Arabic-Indic ٠ reads as a dot).
+const tag = (l: Locale) => (l === 'ar' ? 'ar-EG-u-nu-latn' : 'en-GB');
 
 /** Display-only money formatting. All arithmetic happens in Postgres numeric. */
 export function money(value: number | string | null | undefined, currency: string, locale: Locale, opts: { compact?: boolean } = {}) {

@@ -55,7 +55,7 @@ export default async function OverviewPage() {
           action={can.engineer(org.role) ? <ButtonLink href="/app/roads/import" icon={Upload}>{t.overview.importRoads}</ButtonLink> : undefined} /></Card>
       ) : null}
 
-      <section aria-label="Network" className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+      <section aria-label="Network" className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-6">
         <Kpi testId="kpi-managed-km" label={t.overview.managedKm} value={<>{num(n.managed_km, locale, 1)} <span className="text-base text-ink-2">{t.common.km}</span></>} hint={`${num(n.road_segments, locale)} ${p.roads.segments}`} icon={Route} />
         <Kpi label={t.overview.inspectedKm} value={<>{num(n.inspected_km, locale, 1)} <span className="text-base text-ink-2">{t.common.km}</span></>} hint={n.managed_km ? `${num((n.inspected_km / n.managed_km) * 100, locale, 0)}% · ${num(n.inspected_segments, locale)} ${p.roads.segments}` : undefined} icon={ScanSearch} tone="teal" />
         <Kpi label={t.overview.defects} value={num(n.verified_defects, locale)} hint={n.pending_inspections ? `${n.pending_inspections} ${t.common.pendingReview}` : undefined} icon={TriangleAlert} tone="amber" />
@@ -65,7 +65,7 @@ export default async function OverviewPage() {
       </section>
 
       {f ? (
-        <section aria-label="Finance" className="mt-4 grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        <section aria-label="Finance" className="mt-4 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-6">
           <Kpi testId="kpi-budget" label={`${t.money.approved_budget} · FY${f.fiscal_year}`} value={money(f.approved_budget_fy, cur, locale, { compact: true })} hint={`${t.common.total}: ${money(f.approved_budget_total, cur, locale, { compact: true })}`} icon={Landmark} />
           <Kpi label={t.money.committed} value={money(f.committed, cur, locale, { compact: true })} icon={FileCheck2} tone="blue" />
           <Kpi label={t.money.verified_actual} value={money(f.verified_actual, cur, locale, { compact: true })} icon={BadgeCheck} tone="teal" />

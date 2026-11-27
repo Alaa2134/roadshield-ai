@@ -649,8 +649,8 @@ select 'damage_detector', 'roadshield-rdd-yolov8s', 'YOLOv8_Small_RDD@7f2ceb8f6f
     'images_with_detection_pct', 37.5, 'median_top_confidence', 0.41,
     'latency_ms_median_cpu', 153, 'latency_ms_p95_cpu', 185)),
   'docs/test-results/ai-service-results.md (2026-10-31)',
-  'services/ai/models/roadshield-rdd.onnx',
-  '50ec1f31f3d44e400ea5faf2df46bbb5b5cdb37fb4e4c6a8edbb19e18cf1f050', 'production', null
+  'github release ai-models/roadshield-rdd.onnx (weights 7f2ceb8f…)',
+  '9eb29882b45d757d5fe58e85687f4d54b49412b30448188feb96116ed70e8ae7', 'production', null
 from public.ml_datasets d where d.name = 'RDD2022';
 
 grant execute on function

@@ -8,8 +8,8 @@ test('money shows ISO currency code and two decimals', () => {
   assert.equal(money(null, 'EGP', 'en'), '—');
   assert.equal(n(money('29276.66', 'USD', 'en')), 'USD 29,276.66');
 });
-test('Arabic locale uses Arabic-Indic digits', () => {
-  assert.match(num(120, 'ar'), /[٠-٩]/);
+test('Arabic locale uses Latin digits', () => {
+  assert.equal(num(1234.5, 'ar', 1), '1,234.5'); // Latin digits in the Arabic UI
 });
 test('percent formatting', () => {
   assert.equal(pct(12.345, 'en'), '12.3%');

@@ -9,7 +9,7 @@ type L = { funding: string; strategy: string; run: string; save: string; strateg
 
 export function Studio({ org, currency, locale, labels, errors }: { org: string; currency: string; locale: 'en' | 'ar'; labels: L; errors: Record<string, string> }) {
   const [state, action] = useActionState<StudioState, FormData>(runScenario, null);
-  const fmt = (v: number) => new Intl.NumberFormat(locale === 'ar' ? 'ar-EG' : 'en-GB', { style: 'currency', currency, currencyDisplay: 'code', maximumFractionDigits: 0 }).format(v);
+  const fmt = (v: number) => new Intl.NumberFormat(locale === 'ar' ? 'ar-EG-u-nu-latn' : 'en-GB', { style: 'currency', currency, currencyDisplay: 'code', maximumFractionDigits: 0 }).format(v);
   const r = state?.result;
   return (
     <div className="grid gap-5 xl:grid-cols-[360px_1fr]">
@@ -33,7 +33,7 @@ export function Studio({ org, currency, locale, labels, errors }: { org: string;
       <div className="grid content-start gap-5" aria-live="polite">
         {r ? (
           <>
-            <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-4" data-testid="studio-result">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4" data-testid="studio-result">
               {[[labels.allocated, fmt(r.allocated)], [labels.unallocated, fmt(r.unallocated)], [labels.coverage, `${r.totals.road_km} ${labels.km}`], [labels.candidates, String(r.candidates)]].map(([k, v]) => (
                 <div key={k} className="card card-pad"><p className="t-label">{k}</p><p className="t-metric mt-2">{v}</p></div>
               ))}

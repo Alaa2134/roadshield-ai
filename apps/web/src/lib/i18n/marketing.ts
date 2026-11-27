@@ -22,8 +22,14 @@ type Copy = {
     globalTitle: string; globalLead: string; globalPoints: Feature[];
     trustTitle: string; trustLead: string; trustPoints: Feature[];
     ctaTitle: string; ctaLead: string;
+    streetEyebrow: string; streetTitle: string; streetLead: string;
+    shots: { key: string; caption: string }[];
+    limitTitle: string; limitBody: string;
+    productEyebrow: string; productTitle: string; productLead: string; productNote: string;
+    repairTitle: string; repairBody: string;
   };
-  footer: { tagline: string; rights: string; dataNote: string };
+  footer: { tagline: string; rights: string; dataNote: string; credits: string };
+  creditsPage: { title: string; lead: string; photo: string; author: string; licence: string; changes: string; detections: string; none: string };
   pages: Record<string, FeaturePage>;
   pricing: { title: string; lead: string; plans: { name: string; for: string; features: string[]; cta: string }[]; note: string };
   about: { title: string; lead: string; sections: Feature[] };
@@ -95,12 +101,30 @@ const enCopy: Copy = {
     ],
     ctaTitle: 'See RoadShield on your own road network',
     ctaLead: 'We will import your service area from OpenStreetMap and walk through the workflow with your team.',
+    streetEyebrow: 'From the street',
+    streetTitle: 'Real roads. Real model output.',
+    streetLead: 'These are actual photos run through the RoadShield Vision model in production. The boxes and scores are exactly what it returned — including where it gets things wrong.',
+    shots: [
+      { key: 'alligator-cracking', caption: 'Fatigue cracking around a worn turn arrow' },
+      { key: 'pothole', caption: 'Pothole breaking through an old patch' },
+      { key: 'wheelpath-damage', caption: 'Damage along the lane marking and wheel path' },
+    ],
+    limitTitle: 'Where the model is wrong',
+    limitBody: 'On this close-up the model calls a wide crack a pothole with 0.71 confidence. Close-ups are not what it was trained on. That is why every AI result is a suggestion, and an engineer confirms the class, size and severity on site.',
+    productEyebrow: 'The product',
+    productTitle: 'Built for the people who actually fix roads',
+    productLead: 'A dashboard for the office, a field app for the road. Same records, same permissions, in Arabic and English.',
+    productNote: 'Product screenshots from a demo workspace.',
+    repairTitle: 'From report to repair to payment',
+    repairBody: 'Crews log progress and before/after photos from the site. Engineers accept the work, finance approves the costs, and every step stays on the record.',
   },
   footer: {
     tagline: 'Detect. Predict. Budget. Repair. Optimize.',
     rights: 'RoadShield AI',
     dataNote: 'Map data © OpenStreetMap contributors (ODbL). Detection model trained on RDD2022 (CC BY-SA 4.0).',
+    credits: 'Photo credits',
   },
+  creditsPage: { title: 'Photo credits', lead: 'Photographs on this website come from Wikimedia Commons under the licences below. We cropped, colour-graded and re-encoded them; adapted CC BY-SA photos are shared under the same licence.', photo: 'Photo', author: 'Author', licence: 'Licence', changes: 'Changes', detections: 'RoadShield Vision output', none: 'No detection' },
   pages: {
     platform: {
       slug: 'platform', icon: 'layers', visual: 'map', eyebrow: 'RoadShield OS', title: 'The platform',
@@ -302,12 +326,30 @@ const arCopy: Copy = {
     ],
     ctaTitle: 'شاهد رود شيلد على شبكة طرقك',
     ctaLead: 'سنستورد منطقة خدمتك من OpenStreetMap ونستعرض سير العمل مع فريقك.',
+    streetEyebrow: 'من الشارع',
+    streetTitle: 'طرق حقيقية. نتائج حقيقية.',
+    streetLead: 'هذه صور حقيقية مرّت على نموذج رود شيلد فيجن المستخدم فعليًا. المربعات والدرجات هي بالضبط ما أعاده — بما في ذلك أخطاؤه.',
+    shots: [
+      { key: 'alligator-cracking', caption: 'تشققات إجهاد حول سهم اتجاه متآكل' },
+      { key: 'pothole', caption: 'حفرة تخترق ترقيعًا قديمًا' },
+      { key: 'wheelpath-damage', caption: 'تلف على امتداد خط الحارة ومسار العجلات' },
+    ],
+    limitTitle: 'حين يخطئ النموذج',
+    limitBody: 'في هذه الصورة القريبة يصف النموذج شرخًا عريضًا بأنه حفرة بثقة 0.71، لأنه لم يُدرَّب على الصور القريبة. لذلك تبقى كل نتيجة ذكاء اصطناعي مجرد اقتراح، ويؤكد المهندس النوع والمقاس والشدة في الموقع.',
+    productEyebrow: 'المنتج',
+    productTitle: 'مصمَّم لمن يُصلحون الطرق فعلًا',
+    productLead: 'لوحة تحكم للمكتب وتطبيق ميداني للطريق. نفس السجلات ونفس الصلاحيات، بالعربية والإنجليزية.',
+    productNote: 'لقطات من المنتج داخل مساحة عمل تجريبية.',
+    repairTitle: 'من البلاغ إلى الإصلاح إلى الدفع',
+    repairBody: 'يسجل فريق التنفيذ التقدم وصور قبل وبعد من الموقع، ويقبل المهندس العمل، ويعتمد الفريق المالي التكاليف، وتبقى كل خطوة مسجلة.',
   },
   footer: {
     tagline: 'اكتشف. تنبّأ. خطّط الميزانية. أصلِح. حسِّن.',
     rights: 'رود شيلد AI',
     dataNote: 'بيانات الخرائط © مساهمو OpenStreetMap (ODbL). نموذج الكشف مدرَّب على RDD2022 (CC BY-SA 4.0).',
+    credits: 'حقوق الصور',
   },
+  creditsPage: { title: 'حقوق الصور', lead: 'الصور في هذا الموقع من ويكيميديا كومنز وفق التراخيص أدناه. قمنا بقصّها وتعديل ألوانها وإعادة ترميزها؛ وتُشارك الصور المعدلة المرخصة بـ CC BY-SA بالترخيص نفسه.', photo: 'الصورة', author: 'المصوّر', licence: 'الترخيص', changes: 'التعديلات', detections: 'مخرجات رود شيلد فيجن', none: 'لا يوجد رصد' },
   pages: {
     platform: {
       slug: 'platform', icon: 'layers', visual: 'map', eyebrow: 'RoadShield OS', title: 'المنصة',

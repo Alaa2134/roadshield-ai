@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| Version | `YOLOv8_Small_RDD@7f2ceb8f6f3d` (weights SHA-256 `7f2ceb8f…0a62b`, ONNX SHA-256 `50ec1f31…1f050`) |
+| Version | `YOLOv8_Small_RDD@7f2ceb8f6f3d` (weights SHA-256 `7f2ceb8f…0a62b`; served ONNX from the `ai-models` release, SHA-256 `9eb29882…8ae7`) |
 | Provenance | **Third-party pretrained.** Trained on the RDD2022 Japan + India subsets by [oracl4/RoadDamageDetection](https://github.com/oracl4/RoadDamageDetection). Not trained or fine-tuned by RoadShield |
 | Architecture | YOLOv8s (Ultralytics), exported to ONNX opset 12, served with ONNX Runtime on CPU |
 | Licence | AGPL-3.0 (Ultralytics weights). `services/ai` is therefore AGPL-3.0. Proprietary closed-source deployment of these weights needs an Ultralytics Enterprise licence or a replacement model (see §2) |

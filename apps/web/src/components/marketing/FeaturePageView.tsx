@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { ArrowRight, Check, Layers, ScanLine, Wallet, TrendingUp, Building2, Landmark, HardHat, Cpu, ShieldCheck } from 'lucide-react';
 import { marketing } from '@/lib/i18n/marketing';
 import type { Locale } from '@/lib/i18n/dict';
-import { VisionVisual, FinanceVisual, PredictVisual, SecurityVisual, WorkflowVisual, MapArt } from './visuals';
+import { DetectedPhoto } from './Photos';
+import { FinanceVisual, PredictVisual, SecurityVisual, WorkflowVisual, MapArt } from './visuals';
 
 const icons = { layers: Layers, scan: ScanLine, wallet: Wallet, trending: TrendingUp, building: Building2, landmark: Landmark, hardhat: HardHat, cpu: Cpu, shield: ShieldCheck };
 
@@ -10,7 +11,7 @@ export function FeaturePageView({ locale, pageKey }: { locale: Locale; pageKey: 
   const m = marketing[locale];
   const p = m.pages[pageKey]!;
   const Icon = icons[p.icon as keyof typeof icons] ?? Layers;
-  const visual = p.visual === 'vision' ? <VisionVisual />
+  const visual = p.visual === 'vision' ? <div className="grid gap-4"><DetectedPhoto k="pothole" locale={locale} caption={m.home.shots[1]!.caption} /><DetectedPhoto k="alligator-cracking" locale={locale} caption={m.home.shots[0]!.caption} /></div>
     : p.visual === 'finance' ? <FinanceVisual labels={m.home.financePoints} />
     : p.visual === 'predict' ? <PredictVisual />
     : p.visual === 'security' ? <SecurityVisual />
@@ -18,10 +19,10 @@ export function FeaturePageView({ locale, pageKey }: { locale: Locale; pageKey: 
     : <div className="overflow-hidden rounded-2xl border border-line shadow-float"><MapArt className="block h-72 w-full" /></div>;
   return (
     <>
-      <section className="hero-glow relative overflow-hidden text-white">
-        <div className="grid-bg absolute inset-0 opacity-60" aria-hidden />
+      <section className="asphalt relative overflow-hidden text-white">
+        <div className="contours absolute inset-0 opacity-70" aria-hidden />
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
-          <span className="t-eyebrow inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-cyan"><Icon size={14} />{p.eyebrow}</span>
+          <span className="t-eyebrow inline-flex items-center gap-2.5 text-[#F5C542]"><Icon size={15} />{p.eyebrow}</span>
           <h1 className="t-display mt-5 max-w-3xl">{p.title}</h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[#B9C6D8]">{p.lead}</p>
           <div className="mt-8 flex flex-wrap gap-3">

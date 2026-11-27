@@ -48,7 +48,7 @@ export function EstimateBuilder({ currency, rates, labels, categories, locale }:
       ))}
       <div className="flex items-center justify-between">
         <button type="button" className="btn btn-sm btn-secondary" onClick={() => setLines([...lines, blank()])}><Plus size={14} />{labels.add}</button>
-        <span className="text-sm text-ink-2">{labels.total} ≈ <span className="font-[620] text-ink tabular">{new Intl.NumberFormat(locale === 'ar' ? 'ar-EG' : 'en-GB', { style: 'currency', currency, currencyDisplay: 'code' }).format(preview)}</span></span>
+        <span className="text-sm text-ink-2">{labels.total} ≈ <span className="font-[620] text-ink tabular">{new Intl.NumberFormat(locale === 'ar' ? 'ar-EG-u-nu-latn' : 'en-GB', { style: 'currency', currency, currencyDisplay: 'code' }).format(preview)}</span></span>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ export function MarketingFooter({ locale }: { locale: Locale }) {
     { title: n.product, links: [['/platform', n.platform], ['/vision', n.vision], ['/finance', n.finance], ['/predictive-maintenance', n.predictive], ['/technology', n.technology]] },
     { title: n.solutions, links: [['/solutions', n.solutions], ['/solutions/government', n.government], ['/solutions/contractors', n.contractors], ['/pricing', n.pricing]] },
     { title: n.company, links: [['/about', n.about], ['/contact', n.contact], ['/demo', n.demo], ['/sign-in', n.signIn]] },
-    { title: n.legal, links: [['/security', n.security]] },
+    { title: n.legal, links: [['/security', n.security], ['/credits', m.footer.credits]] },
   ];
   return (
     <footer className="border-t border-white/8 bg-navy text-[#A9B6C9]">

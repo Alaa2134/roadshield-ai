@@ -3,7 +3,7 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContaine
 import type { Locale } from '@/lib/i18n/dict';
 
 const fmt = (locale: Locale, currency?: string, compact = true) => (v: number) =>
-  new Intl.NumberFormat(locale === 'ar' ? 'ar-EG' : 'en-GB', currency
+  new Intl.NumberFormat(locale === 'ar' ? 'ar-EG-u-nu-latn' : 'en-GB', currency
     ? { style: 'currency', currency, currencyDisplay: 'code', notation: compact ? 'compact' : 'standard', maximumFractionDigits: compact ? 1 : 2 }
     : { notation: compact ? 'compact' : 'standard', maximumFractionDigits: 1 }).format(v);
 
