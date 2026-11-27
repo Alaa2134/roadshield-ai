@@ -30,6 +30,8 @@ jobs:
           grep -q "ENTERPRISE_TESTS passed=[0-9]* failed=0" db.log
       - name: Verify owner-safety under two simultaneous DB sessions
         run: bash supabase/tests/last_owner_concurrency.sh roadshield_ci
+      - name: Verify invoice commitment cap under two simultaneous finance reviews
+        run: bash supabase/tests/invoice_concurrency.sh roadshield_ci
 
   web:
     runs-on: ubuntu-latest
