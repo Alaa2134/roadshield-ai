@@ -1,5 +1,35 @@
 # RoadShield AI — Deployment & release builds
 
+> **Update 27 Nov 2026 — enterprise platform.** Five new migrations
+> (`20261127100000` … `20261127100500`) add RoadShield OS (organizations, road network, finance,
+> model registry) and the website contact form. The Supabase project `roadshield-ai` was
+> **paused** when this was written, so these migrations are **not applied yet**. Steps:
+>
+> 1. Supabase dashboard → project `roadshield-ai` → **Restore project** (free-tier projects pause
+>    after inactivity).
+> 2. Apply the new migrations in order: `supabase db push` with the Supabase CLI linked to the
+>    project, or paste each file into the SQL editor.
+> 3. Run `supabase/tests/database_security_tests.sql` and `supabase/tests/enterprise_tests.sql`
+>    in the SQL editor. Both roll back and must report `failed=0`.
+> 4. Auth → URL configuration: add the web domain (e.g. `https://app.example.com`) as the site URL
+>    and add `https://app.example.com/auth/callback` to the redirect URLs.
+>
+> ### Web (apps/web) — Vercel or any Node 22 host
+> * Vercel: import the repository, set **Root Directory** to `apps/web`, and set the environment
+>   variables `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`,
+>   `NEXT_PUBLIC_SITE_URL`, and optionally `NEXT_PUBLIC_MAP_STYLE_URL`, `NEXT_PUBLIC_MAP_STYLE_URL_DARK`
+>   and `CONTACT_WEBHOOK_URL` (server-only). Build command `npm run build`.
+> * Self-hosted: `cd apps/web && npm ci && npm run build && npm start` behind HTTPS (the app sends
+>   HSTS). The `postinstall` step copies MapLibre's worker into `public/maplibre/`.
+> * Map tiles: OpenFreeMap by default (no key). For heavy production traffic, use a paid tile
+>   provider or self-hosted tiles and set the style URL variables.
+>
+> ### Android builds from a branch
+> `Actions → Android APK → Run workflow` on any branch builds the APKs and runs the emulator smoke
+> test. Only runs on `main` publish a GitHub Release and update `ci-results`. Branch runs keep the
+> APK as a downloadable workflow artifact.
+
+
 Status on 31 Oct 2026: the **Supabase backend is live** (project `roadshield-ai`,
 `vdfvoxvkxicemgqrsxjh`, eu-central-1) with all 14 migrations, RLS, both Edge Functions and the
 secrets in place. The app bundles and prebuilds for both platforms. What remains needs **your**
