@@ -19,3 +19,6 @@ services/ai/datasets/
 __pycache__/
 services/
 docs/
+apps/
+scripts/
+supabase/

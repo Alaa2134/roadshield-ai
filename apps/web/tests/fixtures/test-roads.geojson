@@ -1,0 +1,6 @@
+{"type":"FeatureCollection","metadata":{"source":"RoadShield TEST FIXTURE (synthetic, not real roads)","license":"CC0-1.0 (test data)","retrieved_at":"2026-11-27T00:00:00Z"},
+"features":[
+{"type":"Feature","properties":{"osm_way_id":9900000001,"name":"Test Fixture Avenue A","highway":"primary","lanes":"2"},"geometry":{"type":"LineString","coordinates":[[31.640,31.430],[31.650,31.431],[31.660,31.432]]}},
+{"type":"Feature","properties":{"osm_way_id":9900000002,"name":"Test Fixture Street B","highway":"residential"},"geometry":{"type":"LineString","coordinates":[[31.650,31.425],[31.650,31.435]]}},
+{"type":"Feature","properties":{"osm_way_id":9900000003,"name":"Test Fixture Road C","highway":"secondary","surface":"asphalt"},"geometry":{"type":"LineString","coordinates":[[31.640,31.440],[31.655,31.441],[31.670,31.439]]}}
+]}

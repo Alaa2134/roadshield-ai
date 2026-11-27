@@ -106,7 +106,12 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/services/",
-      "/__tests__/(utils|mocks|fixtures)/"
+      "/__tests__/(utils|mocks|fixtures)/",
+      "/apps/"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/apps/",
+      "<rootDir>/supabase/local/"
     ]
   },
   "expo": {
