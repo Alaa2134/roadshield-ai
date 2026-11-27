@@ -59,7 +59,7 @@ export default function FieldHome() {
   const name = org ? (i18n.language === 'ar' && org.name_ar ? org.name_ar : org.name) : '';
 
   return (
-    <Screen title={t('field.title')} subtitle={org ? t('field.subtitle', { org: name }) : undefined}
+    <Screen back title={t('field.title')} subtitle={org ? t('field.subtitle', { org: name }) : undefined}
       refreshing={wos.isRefetching} onRefresh={() => { void wos.refetch(); void flushOutbox(true); }}>
       {orgs.error ? <Notice tone="danger" text={errorMessage(orgs.error)} /> : null}
       {fieldOrgs.length > 1 ? (

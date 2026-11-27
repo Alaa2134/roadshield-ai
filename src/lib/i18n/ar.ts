@@ -112,8 +112,12 @@ const ar: Translation = {
     v_name: 'أدخل اسمك (من ٢ إلى ٨٠ حرفًا).',
     linkInvalid: 'هذا الرابط غير صالح أو منتهي الصلاحية. اطلب رابطًا جديدًا.',
   },
-  tabs: { home: 'الرئيسية', map: 'الخريطة', report: 'إبلاغ', reports: 'بلاغاتي', profile: 'حسابي', work: 'الصيانة', admin: 'الإدارة', field: 'الميدان' },
+  tabs: { scan: 'فحص', home: 'الرئيسية', map: 'الخريطة', report: 'إبلاغ', reports: 'بلاغاتي', profile: 'حسابي', work: 'الصيانة', admin: 'الإدارة', field: 'الميدان' },
   home: {
+    scanRoad: 'افحص الطريق',
+    verifiedCount: '{{count}} مُتحقق منها',
+    highCount: '{{count}} عالية',
+    myReportsTitle: 'بلاغاتي',
     greetingMorning: 'صباح الخير',
     greetingAfternoon: 'نهارك سعيد',
     greetingEvening: 'مساء الخير',
@@ -221,6 +225,8 @@ const ar: Translation = {
     verifiedOnly: 'تُعرض المخاطر المؤكدة فقط للعامة.',
   },
   report: {
+    torch: 'الكشاف',
+    gpsSearching: 'جارٍ تحديد الموقع…',
     title: 'الإبلاغ عن خطر',
     drivingWarning: 'هل تقود الآن؟ توقف في مكان آمن قبل استخدام الكاميرا.',
     imSafe: 'أنا متوقف بأمان',

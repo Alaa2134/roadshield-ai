@@ -13,6 +13,7 @@ import { HazardMap } from '@/components/map/HazardMap';
 import { HazardRow } from '@/components/report/HazardBits';
 import { CategoryIcon, Chip, PriorityBadge, SeverityBadge, StatusBadge, categoryIcon } from '@/components/ui/Badges';
 import { Button, IconButton } from '@/components/ui/Button';
+import { GlassButton, GlassSurface } from '@/components/ui/Glass';
 import { BottomSheet } from '@/components/ui/Controls';
 import { Notice } from '@/components/ui/Feedback';
 import { Text } from '@/components/ui/Text';
@@ -130,20 +131,7 @@ export default function MapScreen() {
       {/* Top overlay: search, filters */}
       <View style={{ position: 'absolute', top: insets.top + 8, left: 14, right: 14, gap: 10 }} pointerEvents="box-none">
         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 8,
-              height: 48,
-              paddingHorizontal: 14,
-              borderRadius: 24,
-              backgroundColor: p.glass,
-              borderWidth: 1,
-              borderColor: p.border,
-            }}
-          >
+          <GlassSurface radius={24} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8, height: 48, paddingHorizontal: 14 }}>
             <Ionicons name="search" size={18} color={p.textMuted} />
             <TextInput
               value={query}
@@ -159,13 +147,10 @@ export default function MapScreen() {
               style={{ flex: 1, color: p.text, fontFamily: font.regular, fontSize: 15, textAlign: lang === 'ar' ? 'right' : 'left' }}
             />
             {searching ? <ActivityIndicator color={p.primary} /> : null}
-          </View>
-          <IconButton
-            tone="glass"
-            icon={mapType === 'standard' ? 'earth' : 'map'}
-            label={t('map.layers')}
-            onPress={() => setMapType(mapType === 'standard' ? 'satellite' : 'standard')}
-          />
+          </GlassSurface>
+          <GlassButton label={t('map.layers')} onPress={() => setMapType(mapType === 'standard' ? 'satellite' : 'standard')}>
+            <Ionicons name={mapType === 'standard' ? 'earth' : 'map'} size={21} color={p.text} />
+          </GlassButton>
         </View>
 
         {results ? (
@@ -212,7 +197,9 @@ export default function MapScreen() {
       </View>
 
       <View style={{ position: 'absolute', right: 14, bottom: 260, gap: 10 }}>
-        <IconButton tone="glass" icon="locate" label={t('map.recenter')} onPress={recenter} size={48} />
+        <GlassButton label={t('map.recenter')} onPress={recenter}>
+          <Ionicons name="locate" size={21} color={p.primary} />
+        </GlassButton>
       </View>
 
       <BottomSheet peek={selected ? 250 : 150}>

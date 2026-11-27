@@ -110,8 +110,12 @@ const en = {
     v_name: 'Enter your name (2–80 characters).',
     linkInvalid: 'This link is invalid or has expired. Request a new one.',
   },
-  tabs: { home: 'Home', map: 'Map', report: 'Report', reports: 'My reports', profile: 'Profile', work: 'Work', admin: 'Admin', field: 'Field' },
+  tabs: { scan: 'Scan', home: 'Home', map: 'Map', report: 'Report', reports: 'My reports', profile: 'Profile', work: 'Work', admin: 'Admin', field: 'Field' },
   home: {
+    scanRoad: 'Scan Road',
+    verifiedCount: '{{count}} verified',
+    highCount: '{{count}} high',
+    myReportsTitle: 'My reports',
     greetingMorning: 'Good morning',
     greetingAfternoon: 'Good afternoon',
     greetingEvening: 'Good evening',
@@ -219,6 +223,8 @@ const en = {
     verifiedOnly: 'Only verified hazards are shown publicly.',
   },
   report: {
+    torch: 'Torch',
+    gpsSearching: 'Finding GPS…',
     title: 'Report a hazard',
     drivingWarning: 'Are you driving? Please stop somewhere safe before using the camera.',
     imSafe: "I'm stopped safely",

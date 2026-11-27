@@ -133,3 +133,20 @@ export async function findDuplicates(lat: number, lng: number, category: HazardC
     }),
   ) as DuplicateCandidate[] | null) ?? []);
 }
+
+/** First photo of each of the user's reports, as short-lived signed URLs (RLS: own uploads). */
+export async function myReportCovers(hazardIds: string[]): Promise<Record<string, string>> {
+  if (hazardIds.length === 0) return {};
+  const res = await supabase.from('hazard_images').select('hazard_id, storage_path, created_at')
+    .in('hazard_id', hazardIds).eq('kind', 'report').order('created_at', { ascending: true });
+  const rows = (unwrap(res) as { hazard_id: string; storage_path: string }[] | null) ?? [];
+  const first = new Map<string, string>();
+  for (const r of rows) if (!first.has(r.hazard_id)) first.set(r.hazard_id, r.storage_path);
+  if (first.size === 0) return {};
+  const { signedUrls } = await import('./storage');
+  const { HAZARD_BUCKET } = await import('../supabase');
+  const urls = await signedUrls(HAZARD_BUCKET, [...first.values()]).catch(() => ({}) as Record<string, string>);
+  const out: Record<string, string> = {};
+  for (const [id, path] of first) if (urls[path]) out[id] = urls[path]!;
+  return out;
+}

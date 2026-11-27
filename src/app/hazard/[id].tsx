@@ -9,6 +9,8 @@ import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native
 import { HazardPin } from '@/components/map/HazardMap';
 import { PriorityExplainer, StatusTimeline } from '@/components/report/HazardBits';
 import { AnnotatedImage } from '@/components/report/AiResultView';
+import { BeforeAfter } from '@/components/media/BeforeAfter';
+import { ExpandableImage } from '@/components/media/ZoomableImage';
 import { CategoryIcon, Pill, SeverityBadge, StatusBadge } from '@/components/ui/Badges';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -132,6 +134,9 @@ export default function HazardDetail() {
   const repairImages = (images.data ?? []).filter((i) => i.kind === 'before' || i.kind === 'after');
   const place = [h.address, h.city].filter(Boolean).join(' · ') || t('common.unknownPlace');
   const firstImage = reportImages[0];
+  // Before/after slider only when the repair task has real evidence of both kinds.
+  const beforeImg = repairImages.find((i) => i.kind === 'before');
+  const afterImg = [...repairImages].reverse().find((i) => i.kind === 'after');
   const openTask = (tasks.data ?? []).find((tk) => ['assigned', 'in_progress', 'completion_requested'].includes(tk.status));
 
   return (
@@ -194,7 +199,9 @@ export default function HazardDetail() {
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10 }}>
             {reportImages.slice(ai.data ? 1 : 0).map((img) =>
               img.url ? (
-                <Image key={img.id} source={{ uri: img.url }} style={{ width: 220, height: 160, borderRadius: 18 }} contentFit="cover" transition={200} accessibilityLabel={t('hazard.photos')} />
+                <View key={img.id} style={{ width: 220 }}>
+                  <ExpandableImage uri={img.url} aspect={(img.width ?? 4) / Math.max(1, img.height ?? 3)} height={160} />
+                </View>
               ) : null,
             )}
           </ScrollView>
@@ -273,11 +280,14 @@ export default function HazardDetail() {
       {/* Repair photos */}
       {repairImages.length > 0 ? (
         <Section title={`${t('officer.before')} / ${t('officer.after')}`}>
+          {beforeImg?.url && afterImg?.url ? (
+            <BeforeAfter before={beforeImg.url} after={afterImg.url} beforeLabel={t('officer.before')} afterLabel={t('officer.after')} />
+          ) : null}
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10 }}>
             {repairImages.map((img) =>
               img.url ? (
-                <View key={img.id} style={{ gap: 4 }}>
-                  <Image source={{ uri: img.url }} style={{ width: 180, height: 130, borderRadius: 16 }} contentFit="cover" />
+                <View key={img.id} style={{ gap: 4, width: 180 }}>
+                  <ExpandableImage uri={img.url} aspect={(img.width ?? 4) / Math.max(1, img.height ?? 3)} height={130} />
                   <Text variant="label" tone="muted">
                     {img.kind === 'before' ? t('officer.before') : t('officer.after')}
                   </Text>
