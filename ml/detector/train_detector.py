@@ -8,8 +8,11 @@ services/ai/scripts/train_rdd2022.py if you accept those terms.)
       --epochs 24 --batch 8 --out runs/rs-frcnn-mbv3 [--pretrained] [--onnx]
 
 Smoke test (CPU, minutes):  ... --epochs 1 --max-images 16 --no-pretrained --out runs/smoke
-Outputs in --out: model.pt, history.json, metrics.json (test set: P/R/F1, mAP50, mAP50-95,
-per class, per country, confusion matrix, latency), and model.onnx with --onnx.
+Outputs in --out: model.pt (best candidate), last.pt (resumable epoch checkpoint),
+history.json, metrics.json (test set: P/R/F1, mAP50, mAP50-95, per class,
+per country, confusion matrix, latency), and model.onnx with --onnx.
+Resume an interrupted training session using the same arguments and --resume; persist the
+--out directory across notebook sessions (e.g. Google Drive or a mounted Kaggle dataset).
 """
 from __future__ import annotations
 
@@ -98,6 +101,7 @@ def main() -> None:
     ap.add_argument("--pretrained", action=argparse.BooleanOptionalAction, default=True)
     ap.add_argument("--onnx", action="store_true")
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--resume", action="store_true", help="resume from --out/last.pt (same configuration and data)")
     args = ap.parse_args()
 
     torch.manual_seed(args.seed)
@@ -109,14 +113,37 @@ def main() -> None:
     manifest = json.loads((data / "MANIFEST.json").read_text()) if (data / "MANIFEST.json").exists() else {}
     print(f"device={device} train={len(train_items)} val={len(val_items)} test={len(test_items)} dataset_version={manifest.get('version')}")
 
-    model = build_model(args.pretrained).to(device)
+    # Checkpoint resume must not re-download pretrained COCO weights.
+    model = build_model(args.pretrained and not args.resume).to(device)
     params = [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.SGD(params, lr=args.lr, momentum=0.9, weight_decay=1e-4)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=max(1, args.epochs))
     loader = torch.utils.data.DataLoader(RDD(train_items, raw, True), batch_size=args.batch, shuffle=True, collate_fn=collate, num_workers=2)
 
-    history, best = [], -1.0
-    for epoch in range(1, args.epochs + 1):
+    history, best, start_epoch = [], -1.0, 1
+    latest_path = out / "last.pt"
+    config = {"dataset_version": manifest.get("version"), "seed": args.seed,
+              "lr": args.lr, "batch": args.batch, "epochs": args.epochs,
+              "max_images": args.max_images, "pretrained": args.pretrained,
+              "classes": CLASSES}
+    if args.resume:
+        if not latest_path.is_file():
+            raise SystemExit(f"No resumable checkpoint found: {latest_path}. Start a new run without --resume.")
+        checkpoint = torch.load(latest_path, map_location=device, weights_only=True)
+        if checkpoint.get("config") != config:
+            raise SystemExit("Checkpoint config/dataset mismatch: refusing to resume with different split, seed, or hyperparameters.")
+        model.load_state_dict(checkpoint["model"])
+        opt.load_state_dict(checkpoint["optimizer"])
+        sched.load_state_dict(checkpoint["scheduler"])
+        history = checkpoint["history"]
+        best = float(checkpoint["best"])
+        start_epoch = int(checkpoint["epoch"]) + 1
+        torch.set_rng_state(checkpoint["rng_cpu"].cpu())
+        if device.type == "cuda" and checkpoint.get("rng_cuda"):
+            torch.cuda.set_rng_state_all(checkpoint["rng_cuda"])
+        print(f"Resuming from completed epoch {start_epoch - 1} (next epoch: {start_epoch})")
+
+    for epoch in range(start_epoch, args.epochs + 1):
         model.train()
         losses, t0 = [], time.time()
         for imgs, targets, _ in loader:
@@ -136,6 +163,15 @@ def main() -> None:
         if score >= best:
             best = score
             torch.save({"model": model.state_dict(), "classes": CLASSES, "epoch": epoch}, out / "model.pt")
+        # Atomic per-epoch snapshot: keep last valid checkpoint if the runtime stops mid-save.
+        snapshot = {"model": model.state_dict(), "optimizer": opt.state_dict(),
+                    "scheduler": sched.state_dict(), "history": history,
+                    "epoch": epoch, "best": best, "config": config,
+                    "rng_cpu": torch.get_rng_state(),
+                    "rng_cuda": torch.cuda.get_rng_state_all() if device.type == "cuda" else []}
+        tmp_checkpoint = out / "last.pt.part"
+        torch.save(snapshot, tmp_checkpoint)
+        tmp_checkpoint.replace(latest_path)
 
     model.load_state_dict(torch.load(out / "model.pt", map_location=device)["model"])
     test_ds = RDD(test_items, raw, False)
