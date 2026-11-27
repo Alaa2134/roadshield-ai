@@ -7,7 +7,7 @@ name: Android APK
 
 on:
   push:
-    branches: [main]
+    branches: [main, claude/roadshield-ai-production-u7mtac]
     paths-ignore: ['docs/**', '**/*.md', 'ci-results/**', 'services/**', 'supabase/**', 'render.yaml', '.github/workflows/ai-models.yml', '.github/workflows/ci.yml', '.github/workflows/eas-build.yml']
   workflow_dispatch:
 
