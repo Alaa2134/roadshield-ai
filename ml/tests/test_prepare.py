@@ -35,7 +35,9 @@ def test_parse_voc_maps_and_drops(tmp_path):
 
 
 def test_near_duplicates_never_span_splits():
-    items = [{"sha256": f"{i:064d}", "dhash": (i // 2) << 50} for i in range(40)]  # pairs share a hash
+    # Duplicate pairs are exact; distinct pair-hashes are deliberately >4 bits apart.
+    # The former fixture accidentally made many groups transitively near-identical.
+    items = [{"sha256": f"{i:064d}", "dhash": ((i // 2) * 0x9E3779B97F4A7C15) & ((1 << 64) - 1)} for i in range(40)]
     groups = group_duplicates(items)
     assert all(len(g) == 2 for g in groups)
     s = split_groups(groups, seed=1)
