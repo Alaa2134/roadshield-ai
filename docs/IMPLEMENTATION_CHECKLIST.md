@@ -4,7 +4,7 @@ Legend: ✅ done and tested · 🟡 done, partially verified · ⏳ blocked / pe
 
 ## Platform & data
 - ✅ Multi-tenant schema: organizations, six roles, invitations, plans/quotas, usage, per-org audit
-- ✅ Tenant isolation via RLS + role-checked RPCs (66 enterprise SQL tests)
+- ✅ Tenant isolation via RLS + role-checked RPCs (70 enterprise SQL tests)
 - ✅ Road network model with OSM provenance; geodesic length; unknowns stay unknown
 - ✅ Inspections and measured defects; approval updates road condition
 - ✅ Projects, contractors, contracts, change orders, work orders, work logs
@@ -24,11 +24,22 @@ Legend: ✅ done and tested · 🟡 done, partially verified · ⏳ blocked / pe
   finance, procurement, predictions, budget studio, contractors, analytics, predictive, exports,
   model center, organization, members, settings, search)
 - ✅ 30-check E2E, 120-combination responsive matrix, production build, CI workflow
+- ✅ Interactive map: road search with fly-to, hover highlight, clustered verified defects,
+  colour by condition or verified spend (from approved cost items only)
+- ✅ Finance explorer: period filter (3/6/12/24 months) and click-a-month drill-down into the exact
+  approved cost items, invoices and payments (`org_month_records`, tests E67–E70)
+- ✅ Website: real-photo galleries with lightbox/zoom, before/after compare slider (keyboard + drag),
+  illustrative 3D pavement-layer model (Three.js; labelled approximate; reduced-motion aware)
 - ⬜ Document upload UI (storage bucket, policies and `register_document` RPC exist; UI pending)
 - ⬜ Billing provider integration (plan column + quotas ready)
 
 ## Mobile
-- ✅ Citizen app and officer queue (existing; 108 Jest tests; bundles)
+- ✅ Citizen app and officer queue (existing; 110 Jest tests; bundles)
+- 🟡 Native tab bar (Expo Router NativeTabs: SF Symbols / Material icons), Liquid Glass controls
+  (`expo-glass-effect` on iOS 26+, system blur below, solid Material surface on Android), map hero,
+  swipeable report previews with progress, camera glass controls + torch + GPS pill, pinch-zoom
+  lightbox, before/after slider: typecheck + Jest pass; **visual behaviour not verified on a real
+  iPhone/Android device or simulator** (none available in the build sandbox)
 - 🟡 Field mode (inspections, work orders, logs with photos, costs, offline outbox): typecheck,
   Jest i18n parity and bundle pass; **not yet exercised on a device or simulator**
 - ⏳ APK with Field mode: built by GitHub Actions on `main` (or a manual dispatch on this branch)

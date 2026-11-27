@@ -9,7 +9,7 @@ Chromium/Playwright (end-to-end tests). Optional: a GPU for detector training.
 sudo apt-get install -y postgresql-16 postgresql-16-postgis-3   # or postgis/postgis:16-3.4 image
 export PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres
 supabase/local/reset_local_db.sh roadshield_local
-# → migrations applied: 19 · ROADSHIELD_TESTS passed=42 failed=0 · ENTERPRISE_TESTS passed=66 failed=0
+# → migrations applied: 20 · ROADSHIELD_TESTS passed=42 failed=0 · ENTERPRISE_TESTS passed=70 failed=0
 ```
 
 `supabase/local/supabase_stub.sql` provides the `auth`, `storage` and `net` schemas and roles

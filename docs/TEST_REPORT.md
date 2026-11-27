@@ -8,13 +8,13 @@ commands are in `SETUP.md`.
 | Suite | Where | Result |
 |---|---|---|
 | Database security & citizen workflow (`supabase/tests/database_security_tests.sql`) | local PostGIS 16 with all 19 migrations; GitHub Actions *Web + database* | **42 / 42 passed** |
-| Enterprise database (`supabase/tests/enterprise_tests.sql`) | same | **66 / 66 passed** |
+| Enterprise database (`supabase/tests/enterprise_tests.sql`) | same | **70 / 70 passed** |
 | Web end-to-end (Playwright, Chromium, real UI → dev gateway → Postgres with RLS) | local | **30 / 30 passed** |
 | Web responsive matrix (12 pages × 1440/1280/1024/768/390 px × EN/AR; no horizontal overflow) | local | **120 / 120 passed** |
 | Web unit (i18n parity, no invented claims, money/number formatting) | local + GitHub Actions | **8 / 8 passed** |
 | Web typecheck + production build (51 routes) | local + GitHub Actions | **passed** |
 | Mobile typecheck (strict) | local | **passed** |
-| Mobile Jest (unit, component, integration, i18n parity incl. Field mode keys) | local | **108 / 108 passed** |
+| Mobile Jest (unit, component, integration, i18n parity incl. Field mode keys) | local | **110 / 110 passed** |
 | Mobile bundle export (Hermes, Android + iOS) | local | **passed** |
 | AI inference service (`services/ai`, pytest) | local | **33 / 33 passed** |
 | ML dataset + metrics (`ml/tests`) | local | **9 / 9 passed** |
@@ -23,7 +23,7 @@ commands are in `SETUP.md`.
 
 ## What the suites cover
 
-**Enterprise SQL (E01–E66):** verified-e-mail gate; org creation and slug uniqueness; hashed,
+**Enterprise SQL (E01–E70):** verified-e-mail gate; org creation and slug uniqueness; hashed,
 single-use, e-mail-bound invitations; owner-only invites; last-owner protection; contractor-record
 requirement; OSM import (invalid geometry skipped, geodesic length, unknowns stay unknown,
 idempotent re-import, provenance required); tenant isolation for roads, road detail, imports, cost
@@ -37,7 +37,15 @@ cost; invoices capped by commitment; payments only on approved invoices and capp
 roll-up correctness (all six amounts, remaining, variance); role-based overview (finance block
 hidden from inspectors); read-only executives; prediction refusal with < 5 comparables and the exact
 IQR result with 5; budget-optimiser strategies and saved scenarios; audit trail; model registry
-rules (admin-only training, metrics-before-deploy, provenance transparency); anonymous access denied.
+rules (admin-only training, metrics-before-deploy, provenance transparency); anonymous access denied; month
+drill-down limited to finance readers of the same tenant, approved records only, totals equal to
+the spending trend, malformed month rejected.
+
+**Interactive checks (Playwright, EN light + AR dark, 27 Nov 2026):** finance period filter updates
+the URL and chart; clicking a month lists its real records (3 records in the test tenant, totals
+matching the chart; empty month shows an empty state; RTL chart mirrored correctly); map search
+finds road segments, flies to one and opens its panel; spend colouring toggles with legend; website
+compare slider (keyboard and drag), lightbox zoom and close, 3D model mode switch. No browser errors.
 
 **E2E journeys (web):** public homepage; `/app` redirect; contact form persisted; sign-up →
 onboarding → create org; GeoJSON road import; KPI from geometry; contractor registration; project

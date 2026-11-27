@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Inbox, BookOpen, Landmark, FileCheck2, BadgeCheck, Banknote, PiggyBank, ShieldCheck } from 'lucide-react';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
+import { SpendingExplorer } from '@/components/app/SpendingExplorer';
 import { requireOrg, can } from '@/lib/session';
 import { getAppDict } from '@/lib/i18n/server';
 import { supabaseServer } from '@/lib/supabase/server';
@@ -12,13 +14,15 @@ import { RpcForm, ReviewButtons } from '@/components/app/RpcForm';
 export const metadata = { title: 'Finance & Budgets' };
 type R = Record<string, string | number | boolean | null>;
 
-export default async function Finance() {
+export default async function Finance({ searchParams }: { searchParams: Promise<{ months?: string }> }) {
+  const sp = await searchParams;
+  const months = [3, 6, 12, 24].includes(Number(sp.months)) ? Number(sp.months) : 12;
   const { org, user } = await requireOrg();
   if (!can.readFinance(org.role)) redirect('/app');
   const { t, p, locale } = await getAppDict();
   const sb = await supabaseServer();
   const cur = org.default_currency;
-  const [ov, b, e, c, i, rates, prj] = await Promise.all([
+  const [ov, b, e, c, i, rates, prj, trend] = await Promise.all([
     sb.rpc('org_overview', { p_org: org.org_id }),
     sb.from('budgets').select('*').eq('org_id', org.org_id).eq('status', 'submitted'),
     sb.from('cost_estimates').select('*').eq('org_id', org.org_id).eq('status', 'submitted'),
@@ -26,7 +30,10 @@ export default async function Finance() {
     sb.from('invoices').select('*').eq('org_id', org.org_id).eq('status', 'submitted'),
     sb.from('unit_rates').select('*').eq('org_id', org.org_id).order('created_at', { ascending: false }),
     sb.from('maintenance_projects').select('id, code').eq('org_id', org.org_id),
+    sb.rpc('org_spending_trend', { p_org: org.org_id, p_months: months }),
   ]);
+  const trendRows = ((trend.data ?? []) as { month: string; verified_actual: number; invoiced_approved: number; paid: number }[])
+    .map((r) => ({ month: r.month, verified_actual: Number(r.verified_actual), invoiced_approved: Number(r.invoiced_approved), paid: Number(r.paid) }));
   const f = (ov.data as { finance: Record<string, number> | null } | null)?.finance;
   const code = new Map(((prj.data ?? []) as { id: string; code: string }[]).map((x) => [x.id, x.code]));
   const approver = can.approveFinance(org.role);
@@ -48,6 +55,13 @@ export default async function Finance() {
           <Kpi label={t.money.remaining_available} value={money(f.remaining_available, cur, locale, { compact: true })} icon={PiggyBank} tone={(f.remaining_available ?? 0) < 0 ? 'red' : 'green'} />
         </section>
       ) : null}
+      <Card className="mt-5"><CardHeader title={p.finance.trend} />
+        <Suspense>
+          <SpendingExplorer org={org.org_id} rows={trendRows} months={months} currency={cur} locale={locale} labels={{
+            verified: t.money.verified_actual, invoiced: t.money.invoiced_approved, paid: t.money.paid, period: p.finance.period, months: p.finance.months,
+            click: p.finance.click, costs: p.finance.recCosts, invoices: p.finance.recInvoices, payments: p.finance.recPayments, none: p.finance.none, close: p.finance.close, empty: p.finance.trendEmpty }} />
+        </Suspense>
+      </Card>
       <div className="mt-5 grid gap-5 xl:grid-cols-[1.5fr_1fr]">
         <TableCard title={p.finance.queue} subtitle={`${queue.length}`}>
           <div className="px-5 pt-4"><Notice tone="blue" icon={ShieldCheck}>{p.finance.fourEyes}</Notice></div>

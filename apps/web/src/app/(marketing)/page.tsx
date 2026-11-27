@@ -4,7 +4,11 @@ import { ArrowRight, Check, ScanLine, TrendingUp, Wallet, Wrench, Sparkles, Lang
 import { getLocale } from '@/lib/i18n/server';
 import { marketing } from '@/lib/i18n/marketing';
 import { ScanHud } from '@/components/marketing/ScanHud';
-import { DetectedPhoto, PlainPhoto, BrowserFrame, PhoneFrame, sample } from '@/components/marketing/Photos';
+import { DetectedPhoto, PlainPhoto, BrowserFrame, PhoneFrame, sample, FillPhoto, photoRatio } from '@/components/marketing/Photos';
+import { CompareSlider } from '@/components/interactive/CompareSlider';
+import { Lightbox } from '@/components/interactive/Lightbox';
+import { Reveal } from '@/components/interactive/Reveal';
+import { RoadLayersLazy } from '@/components/three/RoadLayersLazy';
 import { FinanceVisual, PredictVisual } from '@/components/marketing/visuals';
 import { CtaBand } from '@/components/marketing/FeaturePageView';
 
@@ -86,11 +90,11 @@ export default async function Home() {
             <p className="mt-4 text-[17px] leading-relaxed text-[#A9B6C9]">{h.streetLead}</p>
           </div>
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <DetectedPhoto k={h.shots[0]!.key} locale={locale} caption={h.shots[0]!.caption} />
-            <DetectedPhoto k={h.shots[1]!.key} locale={locale} caption={h.shots[1]!.caption} />
-            <DetectedPhoto k={h.shots[2]!.key} locale={locale} caption={h.shots[2]!.caption} />
+            <Lightbox label={h.shots[0]!.caption} ratio="4/3"><DetectedPhoto k={h.shots[0]!.key} locale={locale} caption={h.shots[0]!.caption} /></Lightbox>
+            <Lightbox label={h.shots[1]!.caption} ratio="4/3"><DetectedPhoto k={h.shots[1]!.key} locale={locale} caption={h.shots[1]!.caption} /></Lightbox>
+            <Lightbox label={h.shots[2]!.caption} ratio="4/3"><DetectedPhoto k={h.shots[2]!.key} locale={locale} caption={h.shots[2]!.caption} /></Lightbox>
             <div className="grid gap-4 sm:col-span-2 lg:col-span-3 lg:grid-cols-3">
-              <DetectedPhoto k="cracks-closeup" locale={locale} frame={16 / 9} />
+              <Lightbox label={h.limitTitle} ratio="16/9"><DetectedPhoto k="cracks-closeup" locale={locale} frame={16 / 9} /></Lightbox>
               <div className="flex flex-col justify-center rounded-2xl border border-[#F5A524]/30 bg-[#F5A524]/[0.07] p-6 lg:col-span-2">
                 <div className="flex items-center gap-2.5"><TriangleAlert size={20} className="text-[#F5A524]" /><h3 className="text-[18px] font-[620]">{h.limitTitle}</h3></div>
                 <p className="mt-3 max-w-2xl text-[14.5px] leading-relaxed text-[#C9D3E0]">{h.limitBody}</p>
@@ -101,6 +105,19 @@ export default async function Home() {
             {h.detectPoints.map((p) => <li key={p} className="flex gap-3"><Check size={17} className="mt-0.5 shrink-0 text-[#3fd6c8]" />{p}</li>)}
           </ul>
         </div>
+      </section>
+
+      {/* 3b. Compare: photo vs real model output */}
+      <section className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[1fr_1.4fr] lg:px-8">
+        <Reveal>
+          <Eyebrow>{h.compareEyebrow}</Eyebrow>
+          <h2 className="t-display mt-4">{h.compareTitle}</h2>
+          <p className="mt-4 text-[17px] leading-relaxed text-ink-2">{h.compareLead}</p>
+        </Reveal>
+        <Reveal delay={80}>
+          <CompareSlider ratio={photoRatio('pothole')} leftLabel={h.comparePhoto} rightLabel={h.compareAi}
+            left={<FillPhoto k="pothole" locale={locale} />} right={<FillPhoto k="pothole" locale={locale} boxes />} />
+        </Reveal>
       </section>
 
       {/* 4. Product — real screenshots */}
@@ -150,6 +167,19 @@ export default async function Home() {
           <div className="mt-8 grid gap-2 sm:grid-cols-2">
             {h.predictPoints.map((p) => <div key={p} className="flex items-center gap-2.5 rounded-xl border border-line bg-surface px-3.5 py-3 text-sm"><Check size={16} className="text-accent" />{p}</div>)}
           </div>
+        </div>
+      </section>
+
+      {/* 6b. Inside the road — interactive 3D (illustrative) */}
+      <section className="asphalt relative overflow-hidden text-white">
+        <div className="contours absolute inset-0 opacity-50" aria-hidden />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[1fr_1.6fr] lg:px-8">
+          <Reveal>
+            <Eyebrow dark>{h.layersEyebrow}</Eyebrow>
+            <h2 className="t-display mt-4">{h.layersTitle}</h2>
+            <p className="mt-4 text-[17px] leading-relaxed text-[#A9B6C9]">{h.layersLead}</p>
+          </Reveal>
+          <RoadLayersLazy labels={h.layers} />
         </div>
       </section>
 

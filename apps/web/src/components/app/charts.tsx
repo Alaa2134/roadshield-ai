@@ -1,5 +1,5 @@
 'use client';
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import type { Locale } from '@/lib/i18n/dict';
 
 const fmt = (locale: Locale, currency?: string, compact = true) => (v: number) =>
@@ -24,7 +24,7 @@ function TipBox({ active, payload, label, locale, currency, unit }: { active?: b
 
 export type Series = { key: string; label: string; color: string };
 
-export function TrendChart({ data, series, locale, currency, height = 240 }: { data: Record<string, number | string>[]; series: Series[]; locale: Locale; currency: string; height?: number }) {
+export function TrendChart({ data, series, locale, currency, height = 240, onSelect, selected }: { data: Record<string, number | string>[]; series: Series[]; locale: Locale; currency: string; height?: number; onSelect?: (month: string) => void; selected?: string | null }) {
   const rtl = locale === 'ar';
   return (
     <figure>
@@ -33,7 +33,7 @@ export function TrendChart({ data, series, locale, currency, height = 240 }: { d
       </div>
       <div style={{ height }} dir="ltr">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 4, right: 4, left: 4, bottom: 0 }}>
+          <AreaChart data={data} margin={{ top: 4, right: 4, left: 4, bottom: 0 }} onClick={onSelect ? (st: { activeLabel?: string | number; activeIndex?: number | string | null } | null) => { const i = st?.activeIndex != null ? Number(st.activeIndex) : -1; const m = i >= 0 && data[i] ? data[i].month : st?.activeLabel; if (m != null) onSelect(String(m)); } : undefined} style={onSelect ? { cursor: 'pointer' } : undefined}>
             <defs>
               {series.map((s) => (
                 <linearGradient key={s.key} id={`g-${s.key}`} x1="0" y1="0" x2="0" y2="1">
@@ -45,6 +45,7 @@ export function TrendChart({ data, series, locale, currency, height = 240 }: { d
             <XAxis dataKey="month" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: 'var(--rs-text-3)' }} reversed={rtl} />
             <YAxis tickLine={false} axisLine={false} width={64} tick={{ fontSize: 11, fill: 'var(--rs-text-3)' }} tickFormatter={fmt(locale, currency)} orientation={rtl ? 'right' : 'left'} />
             <Tooltip content={<TipBox locale={locale} currency={currency} />} cursor={{ stroke: 'var(--rs-border-strong)' }} />
+            {selected ? <ReferenceLine x={selected} stroke="var(--rs-accent)" strokeDasharray="4 3" /> : null}
             {series.map((s) => <Area key={s.key} isAnimationActive={false} type="linear" dataKey={s.key} name={s.label} stroke={s.color} strokeWidth={2} fill={`url(#g-${s.key})`} activeDot={{ r: 4, strokeWidth: 2, stroke: 'var(--rs-surface)' }} />)}
           </AreaChart>
         </ResponsiveContainer>

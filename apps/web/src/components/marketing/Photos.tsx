@@ -72,3 +72,15 @@ export function PhoneFrame({ src, alt, className = '' }: { src: string; alt: str
     </div>
   );
 }
+
+/** Photo filling its parent (parent sets the aspect ratio = the photo's own ratio). */
+export function FillPhoto({ k, locale, boxes = false }: { k: string; locale: Locale; boxes?: boolean }) {
+  const s = sample(k);
+  return (
+    <div className="relative h-full w-full" dir="ltr">
+      <Image src={s.src} alt="" fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
+      {boxes ? <div className="absolute inset-0"><Boxes dets={s.detections} locale={locale} /></div> : null}
+    </div>
+  );
+}
+export const photoRatio = (k: string) => `${sample(k).width}/${sample(k).height}`;

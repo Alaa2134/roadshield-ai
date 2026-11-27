@@ -78,7 +78,7 @@ npm ci && npx expo start --dev-client
 
 ## Tests (27 Nov 2026)
 
-SQL 42/42 + 66/66 · web E2E 30/30 · responsive matrix 120/120 · web unit 8/8 · mobile Jest 108/108 ·
+SQL 42/42 + 70/70 · web E2E 30/30 · responsive matrix 120/120 · web unit 8/8 · mobile Jest 110/110 ·
 AI service 33/33 · ML 9/9 · cost pipeline 3/3 · GitHub Actions *CI* and *Web + database* green.
 Details: [docs/TEST_REPORT.md](docs/TEST_REPORT.md).
 

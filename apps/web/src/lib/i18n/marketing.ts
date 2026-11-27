@@ -27,6 +27,10 @@ type Copy = {
     limitTitle: string; limitBody: string;
     productEyebrow: string; productTitle: string; productLead: string; productNote: string;
     repairTitle: string; repairBody: string;
+    compareEyebrow: string; compareTitle: string; compareLead: string; comparePhoto: string; compareAi: string;
+    layersEyebrow: string; layersTitle: string; layersLead: string;
+    layers: { title: string; note: string; explode: string; thickness: string; hint: string; newLayer: string;
+      surface: string; binder: string; base: string; subbase: string; subgrade: string; modes: { damaged: string; patch: string; overlay: string } };
   };
   footer: { tagline: string; rights: string; dataNote: string; credits: string };
   creditsPage: { title: string; lead: string; photo: string; author: string; licence: string; changes: string; detections: string; none: string };
@@ -115,6 +119,18 @@ const enCopy: Copy = {
     productTitle: 'Built for the people who actually fix roads',
     productLead: 'A dashboard for the office, a field app for the road. Same records, same permissions, in Arabic and English.',
     productNote: 'Product screenshots from a demo workspace.',
+    compareEyebrow: 'Inspect it yourself',
+    compareTitle: 'Drag to see what the model sees',
+    compareLead: 'Left: the photograph. Right: the same photograph with the boxes and confidence the production model returned. Click any photo to zoom.',
+    comparePhoto: 'Photo',
+    compareAi: 'RoadShield Vision',
+    layersEyebrow: 'Inside the road',
+    layersTitle: 'Understand the repair before you pay for it',
+    layersLead: 'A pothole is a surface symptom; the repair depends on the layers below. Explore a typical pavement, separate its layers and compare a patch with mill-and-overlay.',
+    layers: { title: 'Typical flexible pavement — illustrative model', note: 'Not a scan of a real road. Typical thicknesses; confirm real structures by coring.',
+      explode: 'Separate layers', thickness: 'Typical thickness', hint: 'Hover a layer · drag to rotate', newLayer: 'New asphalt',
+      surface: 'Surface course (asphalt)', binder: 'Binder course', base: 'Base course (crushed stone)', subbase: 'Sub-base (granular)', subgrade: 'Subgrade (natural soil)',
+      modes: { damaged: 'Damaged', patch: 'Patch repair', overlay: 'Mill & overlay' } },
     repairTitle: 'From report to repair to payment',
     repairBody: 'Crews log progress and before/after photos from the site. Engineers accept the work, finance approves the costs, and every step stays on the record.',
   },
@@ -340,6 +356,18 @@ const arCopy: Copy = {
     productTitle: 'مصمَّم لمن يُصلحون الطرق فعلًا',
     productLead: 'لوحة تحكم للمكتب وتطبيق ميداني للطريق. نفس السجلات ونفس الصلاحيات، بالعربية والإنجليزية.',
     productNote: 'لقطات من المنتج داخل مساحة عمل تجريبية.',
+    compareEyebrow: 'افحصها بنفسك',
+    compareTitle: 'اسحب لترى ما يراه النموذج',
+    compareLead: 'على اليسار الصورة الأصلية، وعلى اليمين نفس الصورة بالمربعات ونسبة الثقة التي أعادها النموذج الفعلي. اضغط على أي صورة لتكبيرها.',
+    comparePhoto: 'الصورة',
+    compareAi: 'رود شيلد فيجن',
+    layersEyebrow: 'داخل الطريق',
+    layersTitle: 'افهم الإصلاح قبل أن تدفع ثمنه',
+    layersLead: 'الحفرة عَرَض على السطح، والإصلاح يعتمد على الطبقات تحتها. استكشف رصفًا نموذجيًا، وافصل طبقاته، وقارن بين الترقيع والكشط وإعادة الرصف.',
+    layers: { title: 'رصف مرن نموذجي — نموذج توضيحي', note: 'ليس مسحًا لطريق حقيقي. السماكات نموذجية؛ تُؤكد البنية الفعلية بأخذ العينات.',
+      explode: 'فصل الطبقات', thickness: 'السماكة النموذجية', hint: 'مرّر على طبقة · اسحب للتدوير', newLayer: 'أسفلت جديد',
+      surface: 'الطبقة السطحية (أسفلت)', binder: 'الطبقة الرابطة', base: 'طبقة الأساس (حجر مكسر)', subbase: 'طبقة ما تحت الأساس', subgrade: 'التربة الطبيعية',
+      modes: { damaged: 'متضرر', patch: 'ترقيع', overlay: 'كشط وإعادة رصف' } },
     repairTitle: 'من البلاغ إلى الإصلاح إلى الدفع',
     repairBody: 'يسجل فريق التنفيذ التقدم وصور قبل وبعد من الموقع، ويقبل المهندس العمل، ويعتمد الفريق المالي التكاليف، وتبقى كل خطوة مسجلة.',
   },

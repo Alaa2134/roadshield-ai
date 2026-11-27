@@ -318,6 +318,21 @@ begin
   perform pg_temp.check('E53 tenant isolation: Org B cannot read Org A cost items', v_n = 0);
   v_txt := pg_temp.err(format($$select public.review_cost_item(%L, false)$$, v_cost2));
   perform pg_temp.check('E54 tenant isolation: Org B cannot review Org A records', v_txt = 'FORBIDDEN', v_txt);
+  v_txt := pg_temp.err(format($$select public.org_month_records(%L, '2026-01')$$, v_org));
+  perform pg_temp.check('E67 tenant isolation: Org B cannot drill into Org A month records', v_txt = 'FORBIDDEN', v_txt);
+  perform pg_temp.act_as(u_insp);
+  v_txt := pg_temp.err(format($$select public.org_month_records(%L, '2026-01')$$, v_org));
+  perform pg_temp.check('E68 field inspectors cannot read month financial records', v_txt = 'FORBIDDEN', v_txt);
+  perform pg_temp.act_as(u_fin);
+  select to_char(cost_date, 'YYYY-MM') into v_txt from public.cost_items where id = v_cost2;
+  v_res := public.org_month_records(v_org, v_txt);
+  perform pg_temp.check('E69 month drill-down lists only approved records and matches the trend',
+    (select coalesce(sum((x ->> 'amount')::numeric), 0) from jsonb_array_elements(v_res -> 'cost_items') x)
+      = (select verified_actual from public.org_spending_trend(v_org, 60) t where t.month = v_txt)
+    and not exists (select 1 from jsonb_array_elements(v_res -> 'cost_items') x join public.cost_items c on c.id = (x ->> 'id')::uuid where c.status <> 'approved'), v_res::text);
+  v_txt := pg_temp.err(format($$select public.org_month_records(%L, '2026-1')$$, v_org));
+  perform pg_temp.check('E70 malformed month is rejected', v_txt = 'INVALID_INPUT', v_txt);
+  perform pg_temp.act_as_owner();
 
   perform pg_temp.act_as(u_adm);
   select count(*) into v_n from public.invoices;

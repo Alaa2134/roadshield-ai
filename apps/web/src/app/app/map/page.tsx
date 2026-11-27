@@ -17,8 +17,8 @@ export default async function MapPage() {
     <>
       <PageHeader title={p.map.title} subtitle={p.map.tilesNote} />
       <NetworkMap roads={(roads.data as GeoJSON.FeatureCollection) ?? empty} defects={(defects.data as GeoJSON.FeatureCollection) ?? empty}
-        center={[31.67, 31.44]}
-        labels={{ ...p.map, conditions: t.condition, km: t.common.km, inspections: p.inspections.title.split(' ')[0] ?? 'Inspections', defectsCount: p.inspections.defects, hazards: p.reports.title }} />
+        center={[31.67, 31.44]} orgId={org.org_id}
+        labels={{ ...p.map, search: p.roads.searchPlaceholder, currency: org.default_currency, conditions: t.condition, km: t.common.km, inspections: p.inspections.title.split(' ')[0] ?? 'Inspections', defectsCount: p.inspections.defects, hazards: p.reports.title }} />
     </>
   );
 }

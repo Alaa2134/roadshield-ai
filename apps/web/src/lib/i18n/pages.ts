@@ -21,6 +21,7 @@ const en = {
     title: 'Interactive Map', layers: 'Layers', roads: 'Road condition', defects: 'Verified defects', hazards: 'Citizen reports', projects: 'Active projects',
     filterCondition: 'Condition', legend: 'Legend', select: 'Select a road segment to open its intelligence panel.', open: 'Open road detail',
     tilesNote: 'Basemap: OpenFreeMap / © OpenStreetMap contributors', noBasemap: 'Basemap unavailable — showing your road network only.',
+    colorBy: 'Colour roads by', byCondition: 'Condition', bySpend: 'Verified spend', spendLegend: 'Verified actual cost of projects on the road', noSpend: 'none recorded',
   },
   inspections: {
     title: 'AI & Field Inspections', subtitle: 'Inspections from engineers and inspectors. Approval by a second engineer updates the road condition.',
@@ -57,6 +58,7 @@ const en = {
     effective: 'Effective date', sourceTitle: 'Source title', sourceUrl: 'Source URL', verify: 'Verify', verified: 'Verified', unverified: 'Awaiting verification',
     kinds: { historical_benchmark: 'Historical benchmark', current_market: 'Current market price', contract_rate: 'Contract rate' }, fy: 'FY',
     project: 'Project', type: 'Type', fourEyes: 'Four-eyes rule active: you cannot approve records you submitted.',
+    trend: 'Spending over time', months: 'mo', period: 'Period', click: 'Click a month to see its records', recCosts: 'Verified costs', recInvoices: 'Approved invoices', recPayments: 'Payments', none: 'None this month', close: 'Close', trendEmpty: 'No approved costs, invoices or payments in this period.',
   },
   procurement: { title: 'Procurement', subtitle: 'Contracts, change orders and invoices.', contracts: 'Contracts', changeOrders: 'Change orders', commitment: 'Commitment' },
   predictions: {
@@ -122,6 +124,7 @@ const ar: Pages = {
     title: 'الخريطة التفاعلية', layers: 'الطبقات', roads: 'حالة الطرق', defects: 'عيوب مُتحقق منها', hazards: 'بلاغات المواطنين', projects: 'مشروعات نشطة',
     filterCondition: 'الحالة', legend: 'مفتاح الخريطة', select: 'اختر مقطع طريق لفتح لوحة ذكاء الطريق.', open: 'فتح تفاصيل الطريق',
     tilesNote: 'الخريطة الأساسية: OpenFreeMap / © مساهمو OpenStreetMap', noBasemap: 'الخريطة الأساسية غير متاحة — تُعرض شبكة طرقك فقط.',
+    colorBy: 'تلوين الطرق حسب', byCondition: 'الحالة', bySpend: 'الإنفاق المُتحقق منه', spendLegend: 'التكلفة الفعلية المُتحقق منها لمشروعات الطريق', noSpend: 'لا يوجد',
   },
   inspections: {
     title: 'الفحوص الميدانية والذكية', subtitle: 'فحوص المهندسين والمفتشين. اعتماد مهندس ثانٍ يحدّث حالة الطريق.',
@@ -158,6 +161,7 @@ const ar: Pages = {
     effective: 'تاريخ السريان', sourceTitle: 'عنوان المصدر', sourceUrl: 'رابط المصدر', verify: 'تحقق', verified: 'مُتحقق منه', unverified: 'بانتظار التحقق',
     kinds: { historical_benchmark: 'مرجع تاريخي', current_market: 'سعر سوق حالي', contract_rate: 'سعر تعاقدي' }, fy: 'س.م',
     project: 'المشروع', type: 'النوع', fourEyes: 'مبدأ الأعين الأربع مفعّل: لا يمكنك اعتماد ما قدّمته بنفسك.',
+    trend: 'الإنفاق عبر الزمن', months: 'شهر', period: 'الفترة', click: 'اضغط على شهر لعرض سجلاته', recCosts: 'التكاليف المُتحقق منها', recInvoices: 'الفواتير المعتمدة', recPayments: 'الدفعات', none: 'لا يوجد في هذا الشهر', close: 'إغلاق', trendEmpty: 'لا توجد تكاليف أو فواتير أو دفعات معتمدة في هذه الفترة.',
   },
   procurement: { title: 'المشتريات والعقود', subtitle: 'العقود وأوامر التغيير والفواتير.', contracts: 'العقود', changeOrders: 'أوامر التغيير', commitment: 'الالتزام' },
   predictions: {

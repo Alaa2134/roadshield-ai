@@ -486,3 +486,6 @@ html[lang='ar'] .t-eyebrow {
 .maplibregl-ctrl-attrib {
   font-size: 10px;
 }
+
+/* Recharts 3 makes the chart surface focusable; keep keyboard focus visible but drop the click outline. */
+.recharts-wrapper:focus:not(:focus-visible), .recharts-surface:focus:not(:focus-visible) { outline: none; }
