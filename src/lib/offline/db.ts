@@ -6,6 +6,8 @@ import * as SQLite from 'expo-sqlite';
  *  - hazard_cache:    last downloaded verified hazards, for the map/home while offline
  *  - meta:            small key/value facts (e.g. when the cache was refreshed)
  *  - warning_log:     de-duplicates hazard warnings so users are not spammed
+ *  - field_outbox:    engineer/contractor submissions (inspections, work logs, costs) queued
+ *                     offline and replayed with their client id (server-side idempotent)
  */
 let dbPromise: Promise<SQLite.SQLiteDatabase> | null = null;
 
@@ -34,6 +36,19 @@ const MIGRATIONS: string[] = [
    CREATE INDEX IF NOT EXISTS hazard_cache_lat_lng ON hazard_cache (latitude, longitude);
    CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL);
    CREATE TABLE IF NOT EXISTS warning_log (hazard_id TEXT PRIMARY KEY NOT NULL, warned_at INTEGER NOT NULL);`,
+  `CREATE TABLE IF NOT EXISTS field_outbox (
+     id TEXT PRIMARY KEY NOT NULL,
+     user_id TEXT NOT NULL,
+     kind TEXT NOT NULL,
+     label TEXT NOT NULL,
+     payload TEXT NOT NULL,
+     status TEXT NOT NULL DEFAULT 'queued',
+     attempts INTEGER NOT NULL DEFAULT 0,
+     last_error TEXT,
+     next_attempt_at INTEGER NOT NULL DEFAULT 0,
+     created_at INTEGER NOT NULL
+   );
+   CREATE INDEX IF NOT EXISTS field_outbox_user ON field_outbox (user_id, status);`,
 ];
 
 async function migrate(db: SQLite.SQLiteDatabase) {

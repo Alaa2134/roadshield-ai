@@ -6,6 +6,8 @@ import { Platform, View, type ColorValue } from 'react-native';
 import { useTheme } from '@/theme/ThemeProvider';
 import { isStaff, useSession } from '@/stores/session';
 import type { IconName } from '@/components/ui/Button';
+import { useQuery } from '@tanstack/react-query';
+import { FIELD_ROLES, myOrganizations } from '@/lib/api/field';
 
 function TabIcon({ name, color, focused, center }: { name: IconName; color: ColorValue; focused: boolean; center?: boolean }) {
   const { p } = useTheme();
@@ -41,6 +43,10 @@ export default function TabsLayout() {
   const { p, isDark, font } = useTheme();
   const session = useSession((s) => s.session);
   const role = useSession((s) => s.role);
+  // Field mode appears for members of an organization with a field role (engineer, inspector,
+  // contractor, owner). Hooks run before the redirect check to keep hook order stable.
+  const orgs = useQuery({ queryKey: ['field-orgs'], queryFn: myOrganizations, enabled: !!session, staleTime: 5 * 60_000 });
+  const fieldMember = (orgs.data ?? []).some((m) => FIELD_ROLES.includes(m.role));
   if (!session) return <Redirect href="/(auth)/sign-in" />;
 
   const staff = isStaff(role);
@@ -99,6 +105,14 @@ export default function TabsLayout() {
           title: t('tabs.work'),
           href: staff ? '/(tabs)/work' : null,
           tabBarIcon: (s) => <TabIcon name="construct" {...s} />,
+        }}
+      />
+      <Tabs.Screen
+        name="field"
+        options={{
+          title: t('tabs.field'),
+          href: fieldMember ? '/(tabs)/field' : null,
+          tabBarIcon: (s) => <TabIcon name="clipboard" {...s} />,
         }}
       />
       <Tabs.Screen
