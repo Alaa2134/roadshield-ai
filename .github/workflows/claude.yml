@@ -97,6 +97,20 @@ jobs:
           print('Claude OAuth probe classification:', classification)
           print('Claude OAuth probe process exit code:', code)
           print('Claude OAuth probe had model response:', report.get('is_error') is False)
+          # Debug only the error message, never full CLI output or secrets.
+          import re
+          token = os.environ.get('CLAUDE_CODE_OAUTH_TOKEN', '')
+          print('Claude OAuth secret is present:', bool(token))
+          print('Claude OAuth secret has setup-token prefix:', token.startswith('sk-ant-oat'))
+          if report.get('is_error') is not False:
+              reason = str(report.get('result') or report.get('error') or stderr or raw)
+              if token:
+                  reason = reason.replace(token, '[REDACTED]')
+              reason = re.sub(r'sk-ant-[A-Za-z0-9_-]+', '[REDACTED]', reason)
+              reason = re.sub(r'Bearer\\s+\\S+', 'Bearer [REDACTED]', reason, flags=re.IGNORECASE)
+              reason = re.sub(r'[\\w.+-]+@[\\w.-]+\\.[A-Za-z]{2,}', '[EMAIL REDACTED]', reason)
+              reason = reason.replace('\\n', ' ')[:300]
+              print('Claude OAuth probe redacted error:', reason)
           PY
           rm -f "$RUNNER_TEMP/claude-auth-probe.json" "$RUNNER_TEMP/claude-auth-probe.err"
 
