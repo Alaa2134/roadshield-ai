@@ -1,7 +1,7 @@
 """Download RDD2022 from its OFFICIAL source (Figshare article 21431547) with licence and
 integrity verification. Nothing is downloaded from mirrors.
 
-  python ml/datasets/download_rdd2022.py --out datasets/raw/rdd2022 [--countries Japan,India]
+  python ml/datasets/download_rdd2022.py --out datasets/raw/rdd2022 [--match India]
 
 Steps
  1. Reads the article metadata from the Figshare API (title, licence, citation, file list
@@ -32,6 +32,19 @@ def fetch_json(url: str) -> dict:
 
 
 def download(url: str, dest: Path, expected_md5: str | None, size: int | None) -> str:
+    # A resumed free-GPU notebook should not download verified gigabyte archives again.
+    # Reuse only when the official MD5 (and size, if available) match.
+    if dest.is_file() and expected_md5 and (size is None or dest.stat().st_size == size):
+        existing_md5 = hashlib.md5()  # noqa: S324 - checksum verification
+        existing_sha = hashlib.sha256()
+        with dest.open("rb") as source:
+            while chunk := source.read(1 << 20):
+                existing_md5.update(chunk)
+                existing_sha.update(chunk)
+        if existing_md5.hexdigest().lower() == expected_md5.lower():
+            print(f"  Reusing verified archive {dest.name} (MD5 OK)")
+            return existing_sha.hexdigest()
+        print(f"  Existing {dest.name} failed checksum; re-downloading.")
     md5 = hashlib.md5()  # noqa: S324 - integrity check against Figshare's published MD5
     sha = hashlib.sha256()
     tmp = dest.with_suffix(dest.suffix + ".part")
