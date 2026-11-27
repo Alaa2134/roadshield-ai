@@ -54,6 +54,12 @@ jobs:
           cat > "$RUNNER_TEMP/claude-action-launcher" <<'SH'
           #!/bin/sh
           unset CLAUDE_CODE_ENTRYPOINT CLAUDE_CODE_ACTION
+          # Tokens copied from a wrapped terminal can contain CR/LF or spaces.
+          # Normalize in the child process, not in GitHub logs or action outputs.
+          if [ -n "${CLAUDE_CODE_OAUTH_TOKEN:-}" ]; then
+            CLAUDE_CODE_OAUTH_TOKEN="$(printf '%s' "$CLAUDE_CODE_OAUTH_TOKEN" | tr -d '[:space:]')"
+            export CLAUDE_CODE_OAUTH_TOKEN
+          fi
           exec "$HOME/.local/bin/claude" "$@"
           SH
           chmod 700 "$RUNNER_TEMP/claude-action-launcher"
