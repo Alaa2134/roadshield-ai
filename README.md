@@ -47,8 +47,8 @@ budget, commitment, invoiced, verified actual cost and payments strictly apart. 
     work orders, progress logs with evidence photos, and cost submission, through an idempotent
     offline outbox.
 
-Not yet done, and stated plainly in the docs: the live Supabase project is paused, so the new
-migrations aren't applied there yet. The real New Damietta OSM import, RDD2022 training on a GPU,
+Not yet done, and stated plainly in the docs: the web app is not deployed to a public URL yet, and
+no iOS build exists. The real New Damietta OSM import, RDD2022 training on a GPU,
 and on-device testing of Field mode are pending. See
 [docs/TEST_REPORT.md](docs/TEST_REPORT.md) and [docs/IMPLEMENTATION_CHECKLIST.md](docs/IMPLEMENTATION_CHECKLIST.md).
 

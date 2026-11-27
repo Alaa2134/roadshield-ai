@@ -63,7 +63,7 @@ export; Arabic RTL + dark theme; 390 px without horizontal scroll; no uncaught b
 
 | Item | Status | Why |
 |---|---|---|
-| Live Supabase project | **not run** against the new migrations | Project paused; restore and apply (see `DEPLOYMENT.md`) |
+| Live Supabase project | migrations applied; anonymous call to `org_overview` returns `permission denied` | SQL suites not run against live data (they create and roll back test users) |
 | E2E against real Supabase Auth/Storage | **not run** | Uses the test-only dev gateway (PostgREST/GoTrue subset, no Storage) |
 | Mobile on device / simulator (iOS, Android) for the new Field mode | **not run** | No macOS/Xcode or Android emulator in this sandbox. Android emulator smoke tests run in GitHub Actions on `main`; a branch dispatch could not be triggered from this session (integration lacks Actions write permission) |
 | Real New Damietta road import | **not run** | `overpass-api.de` refused by the session proxy |

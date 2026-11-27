@@ -1,9 +1,11 @@
 # RoadShield AI — Deployment & release builds
 
-> **Update 27 Nov 2026 — enterprise platform.** Five new migrations
-> (`20261127100000` … `20261127100500`) add RoadShield OS (organizations, road network, finance,
-> model registry) and the website contact form. The Supabase project `roadshield-ai` was
-> **paused** when this was written, so these migrations are **not applied yet**. Steps:
+> **Update 27 Nov 2026 — applied.** The project was restored and all eight enterprise migrations
+> (`20261127100000` … `20261127100700`) are applied to the live project `roadshield-ai`
+> (each file fetched from GitHub at commit `44a7775` and checked against its SHA-256 before running;
+> `100700` applied directly). The Supabase security advisor reports no anonymous access to the
+> finance/analytics RPCs. The SQL test suites were run on the local stack, not against live data.
+> For another project, the steps were:
 >
 > 1. Supabase dashboard → project `roadshield-ai` → **Restore project** (free-tier projects pause
 >    after inactivity).

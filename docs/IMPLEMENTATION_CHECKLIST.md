@@ -13,7 +13,7 @@ Legend: ✅ done and tested · 🟡 done, partially verified · ⏳ blocked / pe
 - ✅ Cost prediction (comparables, honest refusal) and budget optimiser (4 strategies)
 - ✅ AI dataset/model registry with metrics-before-deploy
 - ✅ Public contact/demo requests (anonymous, rate-limited)
-- ⏳ Apply the migrations to the live Supabase project (project paused, needs owner action)
+- ✅ Migrations applied to the live Supabase project (27 Nov 2026; security advisor checked)
 - ⏳ Real New Damietta OSM import (`overpass-api.de` blocked in the build sandbox; scripts ready)
 
 ## Web
