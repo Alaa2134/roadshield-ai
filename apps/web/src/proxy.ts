@@ -5,6 +5,10 @@ import { NextResponse, type NextRequest } from 'next/server';
 // redirect for the authenticated app. Real authorization happens in Postgres (RLS + RPC checks).
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
+  // Public, sign-in and callback pages must never wait for an auth network call.
+  // Protected /app routes still refresh/validate the session below.
+  const pathname = request.nextUrl.pathname;
+  if (pathname !== '/app' && !pathname.startsWith('/app/')) return response;
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return response;
