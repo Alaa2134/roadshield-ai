@@ -54,16 +54,44 @@ export async function refreshCount() {
   useOutbox.getState().set({ pending: (await listOutbox()).length });
 }
 
+/**
+ * Uploads every referenced evidence photo and returns the storage paths in order.
+ * A referenced photo that no longer exists locally is NEVER skipped: the entry fails with
+ * EVIDENCE_PHOTO_MISSING (checked before any upload) and stays in the outbox as `failed` until
+ * staff restore the file and retry, or explicitly call `removeMissingPhotos`.
+ * Paths are `<org>/<uid>/<item>-<n>.jpg` (upsert), so retries reuse the same objects.
+ */
 async function uploadPhotos(item: OutboxItem, uid: string): Promise<string[]> {
   const photos = (item.payload.photos as string[] | undefined) ?? [];
   const org = String(item.payload.org_id);
+  if (photos.some((uri) => !fileExists(uri))) throw new AppError('EVIDENCE_PHOTO_MISSING');
   const paths: string[] = [];
   for (let i = 0; i < photos.length; i++) {
-    const uri = photos[i]!;
-    if (!fileExists(uri)) continue;
-    paths.push(await uploadJpeg(ORG_BUCKET, `${org}/${uid}/${item.id}-${i}.jpg`, uri));
+    paths.push(await uploadJpeg(ORG_BUCKET, `${org}/${uid}/${item.id}-${i}.jpg`, photos[i]!));
   }
   return paths;
+}
+
+/**
+ * User-visible recovery for EVIDENCE_PHOTO_MISSING: drops only attachments whose local file is
+ * gone and re-queues the entry. Returns how many attachments were removed.
+ */
+export async function removeMissingPhotos(id: string): Promise<number> {
+  const uid = await currentUser();
+  const db = await getDb();
+  const row = await db.getFirstAsync<{ payload: string; kind: OutboxKind }>(
+    "SELECT payload, kind FROM field_outbox WHERE id = ? AND user_id = ? AND status != 'sent'", id, uid);
+  if (!row || row.kind !== 'work_log') return 0;
+  const payload = JSON.parse(row.payload) as Record<string, unknown>;
+  const photos = (payload.photos as string[] | undefined) ?? [];
+  const kept = photos.filter((uri) => fileExists(uri));
+  const removed = photos.length - kept.length;
+  if (removed === 0) return 0;
+  await db.runAsync("UPDATE field_outbox SET payload = ?, status = 'queued', last_error = NULL, attempts = 0, next_attempt_at = 0 WHERE id = ? AND user_id = ?",
+    JSON.stringify({ ...payload, photos: kept }), id, uid);
+  await refreshCount();
+  void flushOutbox();
+  return removed;
 }
 
 async function send(item: OutboxItem, uid: string) {

@@ -12,9 +12,9 @@ import { EmptyState, Notice, SkeletonCard } from '@/components/ui/Feedback';
 import { Screen, Section } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { FIELD_ROLES, myOrganizations, myWorkOrders, pendingInspections, type WorkOrder } from '@/lib/api/field';
-import { errorMessage } from '@/lib/errors';
+import { AppError, errorMessage } from '@/lib/errors';
 import { formatDate } from '@/lib/format';
-import { discard, flushOutbox, listOutbox, useOutbox } from '@/lib/offline/fieldOutbox';
+import { discard, flushOutbox, listOutbox, removeMissingPhotos, useOutbox } from '@/lib/offline/fieldOutbox';
 import { useFieldOrg } from '@/stores/field';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -83,7 +83,8 @@ export default function FieldHome() {
           {(items.data ?? []).filter((i) => i.status === 'failed').map((i) => (
             <View key={i.id} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <Ionicons name="alert-circle" size={16} color="#FFD27A" />
-              <Text variant="caption" style={{ flex: 1, color: '#FFFFFF' }} numberOfLines={2}>{t('field.failed')}: {i.label} · {i.last_error}</Text>
+              <Text variant="caption" style={{ flex: 1, color: '#FFFFFF' }} numberOfLines={2}>{t('field.failed')}: {i.label} · {i.last_error ? errorMessage(new AppError(i.last_error)) : ''}</Text>
+              {i.last_error === 'EVIDENCE_PHOTO_MISSING' ? <Button size="sm" full={false} variant="secondary" label={t('field.removeMissingPhotos')} onPress={() => void removeMissingPhotos(i.id)} /> : null}
               <Button size="sm" full={false} variant="ghost" label={t('field.discard')} onPress={() => void discard(i.id)} />
             </View>
           ))}
