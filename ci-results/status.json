@@ -1,0 +1,5 @@
+{"run": 13, "commit": "38ddb9a0e33b3b59a117ce42f2c92dd5f630b249",
+ "build": "success", "smoke_test": "success",
+ "apk_sha256": "27b7a04a836af4eb7a416a9eb4b881789cfd0002f1b8daef206aff959f88df42", "apk_size": "50851815",
+ "release": "https://github.com/Alaa2134/roadshield-ai/releases/tag/android-preview-13",
+ "logs": "https://github.com/Alaa2134/roadshield-ai/actions/runs/46042921297"}
