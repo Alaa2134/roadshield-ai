@@ -7,7 +7,7 @@
   D20 alligator crack, D40 pothole. Other labels present in some countries (e.g. D43, D44,
   D50, Repair, Block crack) are NOT remapped; they are counted in the report and dropped.
 * Only the official *train* folders carry labels, so the held-out test split is carved from
-  them. Splits are 80/10/10 per country (stratified), deterministic for a seed.
+  them. Splits target 80/10/10 per country with grouped near-duplicates; deterministic for a seed.\n  They are NOT class-stratified, and do not by themselves establish a geography-independent test.
 * Duplicate / near-duplicate images (64-bit difference hash, Hamming ≤ 4) are kept together in
   one split so the test set never contains a near-copy of a training image (no leakage).
 * Output: <out>/{train,val,test}.json, <out>/labels/*.txt (YOLO format, optional),
@@ -69,8 +69,21 @@ def sha256(path: Path) -> str:
 
 
 def group_duplicates(items: list[dict], threshold: int = 4) -> list[list[dict]]:
-    """Union near-duplicate images (Hamming distance ≤ threshold) into groups."""
+    """Transitively group every pair with 64-bit dHash Hamming distance <= threshold.
+
+    Complete multi-index hashing: split the hash into threshold+1 disjoint blocks.
+    By the pigeonhole principle, a pair with <=threshold differing bits must have
+    at least one IDENTICAL block. We compare every candidate that shares any block.
+
+    Unlike bucketing only by the top 16 bits, this cannot overlook near-duplicates
+    merely because their highest hash bits differ. It does not guarantee that every
+    semantically similar road/video frame has a close dHash; source video/site
+    grouping and separate held-out geographical validation still matter.
+    """
+    if not 0 <= threshold < 64:
+        raise ValueError("threshold must be between 0 and 63 bits")
     parent = list(range(len(items)))
+    sizes = [1] * len(items)
 
     def find(i: int) -> int:
         while parent[i] != i:
@@ -78,17 +91,40 @@ def group_duplicates(items: list[dict], threshold: int = 4) -> list[list[dict]]:
             i = parent[i]
         return i
 
-    buckets: dict[int, list[int]] = defaultdict(list)
-    for i, it in enumerate(items):  # bucket by top 16 bits to keep it near-linear
-        buckets[it["dhash"] >> 48].append(i)
-    for idx in buckets.values():
-        for a in range(len(idx)):
-            for b in range(a + 1, len(idx)):
-                if bin(items[idx[a]]["dhash"] ^ items[idx[b]]["dhash"]).count("1") <= threshold:
-                    parent[find(idx[a])] = find(idx[b])
+    def union(i: int, j: int) -> None:
+        ri, rj = find(i), find(j)
+        if ri == rj:
+            return
+        if sizes[ri] < sizes[rj]:
+            ri, rj = rj, ri
+        parent[rj] = ri
+        sizes[ri] += sizes[rj]
+
+    blocks = threshold + 1
+    base_width, extra = divmod(64, blocks)
+    spans = []
+    offset = 0
+    for k in range(blocks):
+        width = base_width + (1 if k < extra else 0)
+        spans.append((offset, (1 << width) - 1))
+        offset += width
+
+    buckets: dict[tuple[int, int], list[int]] = defaultdict(list)
+    for i, item in enumerate(items):
+        h = int(item["dhash"])
+        keys = [(b, (h >> offset) & mask) for b, (offset, mask) in enumerate(spans)]
+        candidate_ids: set[int] = set()
+        for key in keys:
+            candidate_ids.update(buckets[key])
+        for j in candidate_ids:
+            if (h ^ int(items[j]["dhash"])).bit_count() <= threshold:
+                union(i, j)
+        for key in keys:
+            buckets[key].append(i)
+
     groups: dict[int, list[dict]] = defaultdict(list)
-    for i, it in enumerate(items):
-        groups[find(i)].append(it)
+    for i, item in enumerate(items):
+        groups[find(i)].append(item)
     return list(groups.values())
 
 
