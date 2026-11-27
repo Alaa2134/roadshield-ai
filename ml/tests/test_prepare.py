@@ -45,6 +45,37 @@ def test_near_duplicates_never_span_splits():
     assert sum(len(v) for v in s.values()) == 40
 
 
+
+def test_near_duplicate_across_top_16_bit_boundary_is_grouped():
+    # Old code keyed only on the upper 16 bits, so these almost-identical hashes
+    # were assigned different groups and could leak across train / validation.
+    hashes = [0, 1 << 63, (1 << 63) | (1 << 48), (1 << 64) - 1]
+    items = [{"sha256": str(i), "dhash": h} for i, h in enumerate(hashes)]
+    groups = group_duplicates(items, threshold=4)
+    by_sha = {member["sha256"]: group_i for group_i, group in enumerate(groups) for member in group}
+    assert by_sha["0"] == by_sha["1"] == by_sha["2"]
+    assert by_sha["3"] != by_sha["0"]
+
+
+def test_group_duplicates_covers_every_pair_within_hamming_radius():
+    import itertools
+
+    rng = random.Random(173)
+    hashes = [rng.getrandbits(64) for _ in range(150)]
+    # Inject low-Hamming-distance pairs that differ in different hash blocks.
+    hashes.extend([0, 1 << 63, (1 << 63) | (1 << 32), 1 << 32])
+    items = [{"sha256": str(i), "dhash": h} for i, h in enumerate(hashes)]
+    for radius in (0, 1, 2, 4):
+        groups = group_duplicates(items, threshold=radius)
+        group_of = {it["sha256"]: n for n, group in enumerate(groups) for it in group}
+        # Brute-force oracle: every edge within the radius must be in same
+        # transitive component. This is a no-false-negatives check.
+        for i, j in itertools.combinations(range(len(items)), 2):
+            if (hashes[i] ^ hashes[j]).bit_count() <= radius:
+                assert group_of[str(i)] == group_of[str(j)]
+
+
+
 def test_end_to_end_cli(tmp_path):
     raw = tmp_path / "RDD2022"
     for country in ("Japan", "India"):
