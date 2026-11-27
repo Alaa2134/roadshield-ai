@@ -47,6 +47,8 @@ declare
   u_cit uuid := gen_random_uuid();        -- citizen (no org)
   u_unv uuid := gen_random_uuid();        -- unverified e-mail
   u_adm uuid := gen_random_uuid();        -- platform admin
+  u_o2 uuid := gen_random_uuid();         -- second owner (invitation regression tests)
+  u_new uuid := gen_random_uuid();        -- brand-new invitee (invitation regression tests)
   v_org uuid; v_org_b uuid;
   v_inv jsonb; v_res jsonb;
   v_road uuid; v_road2 uuid; v_road_b uuid;
@@ -66,7 +68,8 @@ begin
                (u_eng, 'rs-ent-eng@example.com', 'Engineer A'), (u_insp, 'rs-ent-insp@example.com', 'Inspector A'),
                (u_con, 'rs-ent-con@example.com', 'Contractor A'), (u_exec, 'rs-ent-exec@example.com', 'Exec A'),
                (u_b, 'rs-ent-b@example.com', 'Owner B'), (u_cit, 'rs-ent-cit@example.com', 'Citizen'),
-               (u_unv, 'rs-ent-unverified@example.com', 'Unverified'), (u_adm, 'rs-ent-adm@example.com', 'Admin')) t(id, email, nm);
+               (u_unv, 'rs-ent-unverified@example.com', 'Unverified'), (u_adm, 'rs-ent-adm@example.com', 'Admin'),
+               (u_o2, 'rs-ent-o2@example.com', 'Owner A2'), (u_new, 'rs-ent-new@example.com', 'New Member')) t(id, email, nm);
   update public.user_roles set role = 'admin' where user_id = u_adm;
 
   ---------------------------------------------------------------- organizations
@@ -115,6 +118,48 @@ begin
   perform pg_temp.check('E09 last owner cannot be demoted', v_txt = 'LAST_OWNER', v_txt);
   v_txt := pg_temp.err(format($$select public.invite_member(%L, 'c@example.com', 'contractor')$$, v_org));
   perform pg_temp.check('E10 contractor invitation requires a contractor record', v_txt = 'CONTRACTOR_REQUIRED', v_txt);
+
+  ---------------------------------------------------------------- invitation privilege regressions
+  -- E10a/b: invitation from an inviter who is no longer an owner is rejected.
+  perform pg_temp.act_as(u_owner);
+  v_inv := public.invite_member(v_org, 'rs-ent-o2@example.com', 'owner');
+  perform pg_temp.act_as(u_o2);
+  perform public.accept_invitation(v_inv ->> 'token');
+  perform pg_temp.check('E10x second owner joined via valid invitation', public.my_org_role(v_org) = 'owner');
+  v_inv := public.invite_member(v_org, 'rs-ent-new@example.com', 'owner');   -- issued by u_o2
+  perform pg_temp.act_as(u_owner);
+  perform public.remove_member(v_org, u_o2);
+  perform pg_temp.act_as(u_new);
+  v_txt := pg_temp.err(format('select public.accept_invitation(%L)', v_inv ->> 'token'));
+  perform pg_temp.check('E10a invitation from a removed inviter is rejected', v_txt = 'INVITATION_INVALID', v_txt);
+  perform pg_temp.act_as_owner();
+  perform pg_temp.check('E10b removed inviter''s invitation created no membership',
+    not exists (select 1 from public.org_members where org_id = v_org and user_id = u_new));
+
+  -- E10c/d: sole owner cannot demote themselves by inviting their own e-mail as a lower role.
+  perform pg_temp.act_as(u_owner);
+  v_inv := public.invite_member(v_org, 'rs-ent-owner@example.com', 'executive_viewer');
+  v_txt := pg_temp.err(format('select public.accept_invitation(%L)', v_inv ->> 'token'));
+  perform pg_temp.check('E10c sole owner self-invite as lower role is rejected', v_txt = 'ALREADY_MEMBER', v_txt);
+  perform pg_temp.check('E10d org still has its owner',
+    (select count(*) from public.org_members where org_id = v_org and role = 'owner' and user_id = u_owner) = 1);
+
+  -- E10e/f: an existing member cannot change role through an invitation.
+  v_inv := public.invite_member(v_org, 'rs-ent-fin@example.com', 'owner');
+  perform pg_temp.act_as(u_fin);
+  v_txt := pg_temp.err(format('select public.accept_invitation(%L)', v_inv ->> 'token'));
+  perform pg_temp.check('E10e existing member invited as owner is rejected', v_txt = 'ALREADY_MEMBER', v_txt);
+  perform pg_temp.check('E10f existing member keeps their role', public.my_org_role(v_org) = 'finance_manager');
+
+  -- E10g: a valid invitation from a current owner still works.
+  perform pg_temp.act_as(u_owner);
+  v_inv := public.invite_member(v_org, 'rs-ent-new@example.com', 'executive_viewer');
+  perform pg_temp.act_as(u_new);
+  v_id := public.accept_invitation(v_inv ->> 'token');
+  perform pg_temp.check('E10g valid invitation from a current owner joins with invited role',
+    v_id = v_org and public.my_org_role(v_org) = 'executive_viewer');
+  perform pg_temp.act_as(u_owner);
+  perform public.remove_member(v_org, u_new);   -- keep Org A membership as later tests expect
 
   perform pg_temp.act_as(u_b);
   v_org_b := public.create_organization('Test Org B', 'test-org-b', 'SA', 'SAR', 'Asia/Riyadh');
