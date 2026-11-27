@@ -338,6 +338,32 @@ begin
   perform pg_temp.check('E46 remaining = budget − max(committed, actual); variance vs estimate',
     (v_res ->> 'remaining_available')::numeric = 467500 and (v_res ->> 'variance_vs_estimate')::numeric = 62.34, v_res::text);
 
+  -- Boundary: commitment 30000 + 2500 approved change order = 32500; INV-1 (24839.00) approved → 7661.00 left.
+  -- NOTE: these are SERIAL tests. They prove the sum/boundary logic only; the concurrent-approval race fixed in
+  -- 20261127100900 (contract row lock) is NOT TESTED by this suite (needs two simultaneous connections).
+  perform pg_temp.act_as(u_con);
+  v_id := public.submit_invoice(v_contract, 'INV-OVER', current_date, 7661.01, 0);
+  perform pg_temp.act_as(u_fin);
+  v_txt := pg_temp.err(format($$select public.review_invoice(%L, true)$$, v_id));
+  perform pg_temp.check('E71 invoice one cent over remaining commitment is rejected', v_txt = 'EXCEEDS_COMMITMENT', v_txt);
+  perform public.review_invoice(v_id, false, 'over commitment');
+  perform pg_temp.act_as(u_con);
+  v_id := public.submit_invoice(v_contract, 'INV-EXACT', current_date, 7661.00, 0);
+  perform pg_temp.act_as(u_fin);
+  perform public.review_invoice(v_id, true);
+  perform pg_temp.check('E72 invoice exactly at remaining commitment is approved',
+    (select status::text from public.invoices where id = v_id) = 'approved');
+  perform pg_temp.act_as(u_con);
+  v_id := public.submit_invoice(v_contract, 'INV-ZERO', current_date, 0.01, 0);
+  perform pg_temp.act_as(u_fin);
+  v_txt := pg_temp.err(format($$select public.review_invoice(%L, true)$$, v_id));
+  perform pg_temp.check('E73 no approvals possible once approved invoices equal commitment', v_txt = 'EXCEEDS_COMMITMENT', v_txt);
+  perform pg_temp.check('E74 rejected/failed approvals do not count toward approved sum',
+    (select coalesce(sum(net_amount), 0) from public.invoices where contract_id = v_contract and status = 'approved') = 32500.00);
+  perform pg_temp.check('E75 contract commitment is unchanged by invoice reviews',
+    (select amount from public.contracts where id = v_contract) = 30000);
+  perform public.review_invoice(v_id, false, 'cleanup');
+
   perform pg_temp.act_as(u_eng);
   select count(*) into v_n from public.payments;
   perform pg_temp.check('E47 engineers cannot read payments', v_n = 0);
