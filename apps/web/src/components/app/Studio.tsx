@@ -15,7 +15,7 @@ export function Studio({ org, currency, locale, labels, errors }: { org: string;
     <div className="grid gap-5 xl:grid-cols-[360px_1fr]">
       <form action={action} className="card card-pad h-fit space-y-4" data-testid="studio-form">
         <input type="hidden" name="org" value={org} />
-        <label className="block"><span className="mb-1.5 block text-[13px] font-[560]">{labels.funding} ({currency})</span><input name="funding" className="input tabular" required inputMode="decimal" /></label>
+        <label className="block"><span className="mb-1.5 block text-[13px] font-[560]">{labels.funding} ({currency})</span><input name="funding" className="input tabular" required inputMode="decimal" key={r?.total_funding ?? 'empty'} defaultValue={r?.total_funding ?? ''} /></label>
         <fieldset>
           <legend className="mb-2 text-[13px] font-[560]">{labels.strategy}</legend>
           <div className="grid gap-2">

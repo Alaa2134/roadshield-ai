@@ -1,0 +1,69 @@
+{
+  "dataset": "RDD2022",
+  "classes": [
+    "D00",
+    "D10",
+    "D20",
+    "D40"
+  ],
+  "seed": 42,
+  "version": "7c2c61f9644c0a48",
+  "counts": {
+    "train": 36,
+    "val": 6,
+    "test": 6
+  },
+  "per_country": {
+    "SyntheticA": {
+      "train": {
+        "images": 18,
+        "boxes": {
+          "D00": 12,
+          "D40": 19
+        }
+      },
+      "val": {
+        "images": 3,
+        "boxes": {
+          "D40": 4,
+          "D00": 3
+        }
+      },
+      "test": {
+        "images": 3,
+        "boxes": {
+          "D00": 5
+        }
+      },
+      "exact_duplicates_removed": 0,
+      "near_duplicate_groups": 1
+    },
+    "SyntheticB": {
+      "train": {
+        "images": 18,
+        "boxes": {
+          "D00": 18,
+          "D40": 12
+        }
+      },
+      "val": {
+        "images": 3,
+        "boxes": {
+          "D00": 3,
+          "D40": 2
+        }
+      },
+      "test": {
+        "images": 3,
+        "boxes": {
+          "D40": 4,
+          "D00": 4
+        }
+      },
+      "exact_duplicates_removed": 0,
+      "near_duplicate_groups": 0
+    }
+  },
+  "dropped_labels": {},
+  "leakage_check": "near-duplicate groups never span splits"
+}
