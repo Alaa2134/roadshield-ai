@@ -1,0 +1,3 @@
+2026-11-27 19:05:26.530 Df RoadShieldAI[21619:4b44d] [com.apple.BoardServices:XPCErrors] [C:1] Alloc com.apple.frontboard.systemappservices
+2026-11-27 19:05:26.680 Df RoadShieldAI[21619:4b412] [com.apple.BoardServices:XPCErrors] [C:2] Alloc com.apple.backboard.hid-services.xpc
+2026-11-27 19:05:26.795 Df RoadShieldAI[21619:4b412] [dev.expo.modules:expo-updates] 🟡 {"timestamp":1795806326000,"code":"InitializationError","message":"The expo-updates system is explicitly disabled. To enable it, set the enabled setting to true.","level":"warn"}

@@ -1,0 +1,200 @@
+getpwuid_r did not find a match for uid 501
+Filtering the log data using "process == "RoadShieldAI""
+Timestamp               Ty Process[PID:TID]
+2026-11-27 19:05:26.452 Df RoadShieldAI[21619:4b412] [com.apple.xpc:connection] [0x1035df8e0] activating connection: mach=true listener=false peer=false name=com.apple.cfprefsd.daemon
+2026-11-27 19:05:26.456 Df RoadShieldAI[21619:4b412] [com.apple.UserNotifications:Connections] [com.roadshieldai.app] Creating a user notification center
+2026-11-27 19:05:26.523 A  RoadShieldAI[21619:4b44c] (CoreFoundation) Loading Preferences From User Session CFPrefsD
+2026-11-27 19:05:26.524 Df RoadShieldAI[21619:4b412] (libMobileGestalt.dylib) No persisted cache on this platform.
+2026-11-27 19:05:26.530 Df RoadShieldAI[21619:4b44d] [com.apple.BoardServices:XPCErrors] [C:1] Alloc com.apple.frontboard.systemappservices
+2026-11-27 19:05:26.530 Df RoadShieldAI[21619:4b44a] [com.apple.UIKit:BackgroundTask] Creating new assertion because there is no existing background assertion.
+2026-11-27 19:05:26.530 Df RoadShieldAI[21619:4b44a] [com.apple.UIKit:BackgroundTask] Creating new background assertion
+2026-11-27 19:05:26.530 Df RoadShieldAI[21619:4b44a] [com.apple.UIKit:BackgroundTask] Created new background assertion <BKSProcessAssertion: 0x1035e70e0>
+2026-11-27 19:05:26.531 Df RoadShieldAI[21619:4b44d] [com.apple.xpc:connection] [0x1059ec140] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-11-27 19:05:26.531 Df RoadShieldAI[21619:4b44a] [com.apple.runningboard:connection] Initializing connection
+2026-11-27 19:05:26.532 Df RoadShieldAI[21619:4b44a] [com.apple.runningboard:process] Removing all cached process handles
+2026-11-27 19:05:26.552 Df RoadShieldAI[21619:4b44c] [com.apple.runningboard:connection] Sending handshake request attempt #1 to server
+2026-11-27 19:05:26.552 Df RoadShieldAI[21619:4b44a] [com.apple.runningboard:connection] Creating connection to com.apple.runningboard
+2026-11-27 19:05:26.552 Df RoadShieldAI[21619:4b44a] [com.apple.xpc:connection] [0x1059ec280] activating connection: mach=true listener=false peer=false name=com.apple.runningboard
+2026-11-27 19:05:26.556 A  RoadShieldAI[21619:4b44f] (RunningBoardServices) didChangeInheritances
+2026-11-27 19:05:26.557 Df RoadShieldAI[21619:4b44c] [com.apple.runningboard:connection] Handshake succeeded
+2026-11-27 19:05:26.557 Df RoadShieldAI[21619:4b44c] [com.apple.runningboard:connection] Identity resolved as app<com.roadshieldai.app((null))>
+2026-11-27 19:05:26.558 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:Application] Deactivation reason added: 10; deactivation reasons: 0 -> 1024; animating application lifecycle event: 0
+2026-11-27 19:05:26.559 Df RoadShieldAI[21619:4b44a] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x1035e70e0>
+2026-11-27 19:05:26.559 Df RoadShieldAI[21619:4b412] [com.apple.BoardServices:Injection] activating monitor for service com.apple.frontboard.open
+2026-11-27 19:05:26.559 Df RoadShieldAI[21619:4b44a] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x10587d300>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 3653 (elapsed = 0).
+2026-11-27 19:05:26.559 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UIApplicationSceneKeyboardSettings on FBSSceneSettings
+2026-11-27 19:05:26.560 Df RoadShieldAI[21619:4b412] [com.apple.BoardServices:Injection] activating monitor for service com.apple.frontboard.workspace-service
+2026-11-27 19:05:26.560 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneOcclusionSettings> on FBSSceneSettings
+2026-11-27 19:05:26.561 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneInterfaceProtectionSettings> on FBSSceneSettings
+2026-11-27 19:05:26.561 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneLayoutPreferencesHostSettingsExtension on FBSSceneSettings
+2026-11-27 19:05:26.562 Df RoadShieldAI[21619:4b412] [com.apple.FrontBoard:Common] FBSWorkspace registering source: com.apple.frontboard.systemappservices
+2026-11-27 19:05:26.563 Df RoadShieldAI[21619:4b412] [com.apple.FrontBoard:Common] FBSWorkspace connected to endpoint : <BSServiceConnectionEndpoint: 0x10599cc40; target: com.apple.frontboard.systemappservices; service: com.apple.frontboard.workspace-service>
+2026-11-27 19:05:26.563 Df RoadShieldAI[21619:4b412] [com.apple.FrontBoard:Common] <FBSWorkspaceScenesClient:0x105944be0 com.apple.frontboard.systemappservices> attempting immediate handshake from activate
+2026-11-27 19:05:26.563 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneSafeAreaSettingsExtension on FBSSceneSettings
+2026-11-27 19:05:26.563 Df RoadShieldAI[21619:4b412] [com.apple.FrontBoard:Common] <FBSWorkspaceScenesClient:0x105944be0 com.apple.frontboard.systemappservices> sent handshake
+2026-11-27 19:05:26.564 Df RoadShieldAI[21619:4b412] [com.apple.runningboard:general] Added observer for process assertions expiration warning: <_RBSExpirationWarningClient: 0x10599d420>
+2026-11-27 19:05:26.566 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneLayoutPreferenceClientSettingsExtension on FBSSceneClientSettings
+2026-11-27 19:05:26.567 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UIHomeAffordanceHostSceneSettings> on FBSSceneSettings
+2026-11-27 19:05:26.567 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISystemShellSceneHostingEnvironmentSettings on FBSSceneSettings
+2026-11-27 19:05:26.567 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneRenderingEnvironmentSettings on FBSSceneSettings
+2026-11-27 19:05:26.567 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneRenderingEnvironmentClientSettings> on FBSSceneClientSettings
+2026-11-27 19:05:26.567 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneTransitioningHostSettings> on FBSSceneSettings
+2026-11-27 19:05:26.568 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneFocusSystemSettings> on FBSSceneSettings
+2026-11-27 19:05:26.568 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneOrientationSettingsExtension on FBSSceneSettings
+2026-11-27 19:05:26.568 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneOrientationClientSettingsExtension on FBSSceneClientSettings
+2026-11-27 19:05:26.568 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneWindowingControlClientSettings on FBSSceneClientSettings
+2026-11-27 19:05:26.568 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingContentSizePreferenceClientSettings> on FBSSceneClientSettings
+2026-11-27 19:05:26.568 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneHostingTraitCollectionPropagationSettings on FBSSceneSettings
+2026-11-27 19:05:26.569 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingSheetPresentationSettings> on FBSSceneSettings
+2026-11-27 19:05:26.569 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingSheetPresentationClientSettings> on FBSSceneClientSettings
+2026-11-27 19:05:26.570 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingEventDeferringSettings> on FBSSceneSettings
+2026-11-27 19:05:26.570 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <UIKit__UITypedKeyValueSceneSettings> on FBSSceneSettings
+2026-11-27 19:05:26.571 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <UIKit__UITypedKeyValueSceneSettings> on FBSSceneClientSettings
+2026-11-27 19:05:26.571 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingViewControllerPreferencePropagationClientSettings> on FBSSceneClientSettings
+2026-11-27 19:05:26.571 Df RoadShieldAI[21619:4b44a] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneZoomTransitionSettings> on FBSSceneSettings
+2026-11-27 19:05:26.572 Df RoadShieldAI[21619:4b44c] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneSettingsCore on FBSSceneSettings
+2026-11-27 19:05:26.573 Df RoadShieldAI[21619:4b44c] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneClientSettingsCore on FBSSceneClientSettings
+2026-11-27 19:05:26.582 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:UIScreen] Evaluated capturing state as 0 on <UIScreen: 0x1059ec500> for initial
+2026-11-27 19:05:26.582 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:UIScreen] Evaluated capturing state as 0 on <UIScreen: 0x1059ec500> for CADisplay KVO
+2026-11-27 19:05:26.584 Df RoadShieldAI[21619:4b412] [com.apple.Accessibility:AXSupportCommon] Read CategoryName: per-app = 1, category name = (null)
+2026-11-27 19:05:26.586 Df RoadShieldAI[21619:4b412] [com.apple.Accessibility:AXSupportCommon] Read CategoryName: per-app = 0, category name = (null)
+2026-11-27 19:05:26.588 Df RoadShieldAI[21619:4b44c] [com.apple.FrontBoard:SceneExtension] UIMutableApplicationSceneSettings setting counterpart class: UIApplicationSceneSettings
+2026-11-27 19:05:26.590 Df RoadShieldAI[21619:4b44c] [com.apple.FrontBoard:SceneExtension] UIMutableApplicationSceneClientSettings setting counterpart class: UIApplicationSceneClientSettings
+2026-11-27 19:05:26.590 Df RoadShieldAI[21619:4b44c] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneTransitionContextCore on FBSSceneTransitionContext
+2026-11-27 19:05:26.597 Df RoadShieldAI[21619:4b412] [com.apple.dt.xctest:Default] Registering for test daemon availability notify post.
+2026-11-27 19:05:26.598 Df RoadShieldAI[21619:4b412] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-27 19:05:26.598 Df RoadShieldAI[21619:4b412] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-27 19:05:26.599 Df RoadShieldAI[21619:4b412] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-27 19:05:26.602 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:Application] Deactivation reason added: 11; deactivation reasons: 1024 -> 3072; animating application lifecycle event: 0
+2026-11-27 19:05:26.607 Df RoadShieldAI[21619:4b412] (React) _setUpFeatureFlags called with release level 2
+2026-11-27 19:05:26.611 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:Application] Deactivation reason removed: 10; deactivation reasons: 3072 -> 2048; animating application lifecycle event: 0
+2026-11-27 19:05:26.613 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:EventBus] Event Timing Profile for Touch: not found, path="/System/Library/EventTimingProfiles/Sim.Touch.plist"
+2026-11-27 19:05:26.614 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:EventBus] Event Timing Profile for Pencil: not found, path="/System/Library/EventTimingProfiles/Sim.Pencil.plist"
+2026-11-27 19:05:26.614 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:UpdateScheduler] Selected display: name=LCD (PurpleMain), id=1
+2026-11-27 19:05:26.625 Df RoadShieldAI[21619:4b412] [com.apple.xpc:connection] [0x1059eca00] activating connection: mach=true listener=false peer=false name=com.apple.lsd.mapdb
+2026-11-27 19:05:26.680 Df RoadShieldAI[21619:4b412] [com.apple.BoardServices:XPCErrors] [C:2] Alloc com.apple.backboard.hid-services.xpc
+2026-11-27 19:05:26.680 Df RoadShieldAI[21619:4b412] [com.apple.xpc:connection] [0x1059ecc80] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-11-27 19:05:26.686 Df RoadShieldAI[21619:4b44d] [com.apple.BackBoard:EventDelivery] BKSHIDEventDeliveryManager - connection activation
+2026-11-27 19:05:26.687 Df RoadShieldAI[21619:4b412] [com.apple.app_launch_measurement:ApplicationLaunch] alm_acquire_pageins_recording_assertion: acquired pageins recording assertion!
+2026-11-27 19:05:26.691 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: Persistent SceneSession Map Update, expirationHandler: <__NSGlobalBlock__: 0x1e78c84e8>
+2026-11-27 19:05:26.691 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:BackgroundTask] Reusing background assertion <BKSProcessAssertion: 0x1035e70e0>
+2026-11-27 19:05:26.692 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x1035e70e0>
+2026-11-27 19:05:26.692 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x105a81bc0>: taskID = 2, taskName = Persistent SceneSession Map Update, creationTime = 3653 (elapsed = 0).
+2026-11-27 19:05:26.693 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:Application] Deactivation reason added: 5; deactivation reasons: 2048 -> 2080; animating application lifecycle event: 1
+2026-11-27 19:05:26.694 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:InterfaceStyle] Should send trait collection or coordinate space update, interface style 1 -> 1, <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0)
+2026-11-27 19:05:26.696 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0)
+2026-11-27 19:05:26.696 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:HomeAffordanceObservation] Initializing: <_UIHomeAffordanceSceneNotifier: 0x105a95960>; with scene: <UIWindowScene: 0x1035e1510>
+2026-11-27 19:05:26.697 Df RoadShieldAI[21619:4b412] [com.apple.BacklightServices:scenes] 0x105876ca0 setDelegate:<0x105876a60 _UIBacklightEnvironment> hasDelegate:YES for environment:sceneID:com.roadshieldai.app-default
+2026-11-27 19:05:26.698 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0)
+2026-11-27 19:05:26.698 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:EventDeferring] [0x105a959d0] Initialized with scene: <UIWindowScene: 0x1035e1510>; behavior: <_UIEventDeferringBehavior_iOS: 0x105bb10c0>; availableForProcess: 1, systemShellManagesKeyboardFocus: 1
+2026-11-27 19:05:26.702 Df RoadShieldAI[21619:4b412] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x1058849c0; process scope; status: target> was:none
+2026-11-27 19:05:26.702 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyWindow] Setting default evaluation strategy for UIUserInterfaceIdiomPhone to LastOneWins
+2026-11-27 19:05:26.702 Df RoadShieldAI[21619:4b44a] [com.apple.BackBoard:EventDelivery] BKSHIDEventObserver - connection activation
+2026-11-27 19:05:26.702 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyWindow] Scene target of keyboard event deferring environment did change: 1; scene: UIWindowScene: 0x1035e1510; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Acom.roadshieldai.app-default
+2026-11-27 19:05:26.702 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:EventDeferring] [0x105a959d0] Scene target of event deferring environments did update: scene: 0x1035e1510; current systemShellManagesKeyboardFocus: 1; systemShellManagesKeyboardFocusForScene: 1; eligibleForRecordRemoval: 1;
+2026-11-27 19:05:26.702 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyWindow] Scene became target of keyboard event deferring environment: UIWindowScene: 0x1035e1510; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Acom.roadshieldai.app-default
+2026-11-27 19:05:26.703 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyWindow] Stack[KeyWindow] 0x105876a90: Taking no further action for migration from LastOneWins -> SystemShellManaged as there are no scenes
+2026-11-27 19:05:26.703 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyWindow] Setting default evaluation strategy for UIUserInterfaceIdiomPhone to SystemShellManaged
+2026-11-27 19:05:26.703 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyWindow] Key window needs update: 0; currentKeyWindowScene: 0x0; evaluatedKeyWindowScene: 0x1035e1510; currentApplicationKeyWindow: 0x0; evaluatedApplicationKeyWindow: 0x0; reason: UIWindowScene: 0x1035e1510: Window scene became target of keyboard environment
+2026-11-27 19:05:26.704 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0)
+2026-11-27 19:05:26.704 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0)
+2026-11-27 19:05:26.708 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0)
+2026-11-27 19:05:26.795 Df RoadShieldAI[21619:4b412] [dev.expo.modules:expo-updates] 🟡 {"timestamp":1795806326000,"code":"InitializationError","message":"The expo-updates system is explicitly disabled. To enable it, set the enabled setting to true.","level":"warn"}
+2026-11-27 19:05:26.833 Df RoadShieldAI[21619:4b412] [com.apple.network:] networkd_settings_read_from_file_locked initialized networkd settings by reading plist directly
+2026-11-27 19:05:26.833 Df RoadShieldAI[21619:4b412] [com.apple.network:] networkd_settings_read_from_file_locked initialized networkd settings by reading plist directly
+2026-11-27 19:05:27.069 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:Orientation] <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0) Scene updated orientation preferences: none -> ( Pu )
+2026-11-27 19:05:27.079 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyWindow] Key window API is scene-level: YES
+2026-11-27 19:05:27.079 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyWindow] UIWindowScene: 0x1035e1510: Window became key in scene: UIWindow: 0x105a28000; contextId: 0x96F5E283: reason: UIWindowScene: 0x1035e1510: Window requested to become key in scene: 0x105a28000
+2026-11-27 19:05:27.079 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyWindow] Key window needs update: 1; currentKeyWindowScene: 0x0; evaluatedKeyWindowScene: 0x1035e1510; currentApplicationKeyWindow: 0x0; evaluatedApplicationKeyWindow: 0x105a28000; reason: UIWindowScene: 0x1035e1510: Window requested to become key in scene: 0x105a28000
+2026-11-27 19:05:27.079 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyWindow] Window did become application key: UIWindow: 0x105a28000; contextId: 0x96F5E283; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Acom.roadshieldai.app-default
+2026-11-27 19:05:27.079 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:EventDeferring] [0x105a959d0] Begin local event deferring requested for token: 0x105884540; environments: 1; reason: UIWindowScene: 0x1035e1510: Begin event deferring in keyboardFocus for window: 0x105a28000
+2026-11-27 19:05:27.082 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0)
+2026-11-27 19:05:27.084 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:com.roadshieldai.app-default  persistentID: 2507274F-CC47-4045-8620-0BA8239F02F0
+2026-11-27 19:05:27.085 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:Application] Ignoring already applied deactivation reason: 5; deactivation reasons: 2080
+2026-11-27 19:05:27.085 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:Application] Deactivation reason added: 12; deactivation reasons: 2080 -> 6176; animating application lifecycle event: 1
+2026-11-27 19:05:27.096 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:Application] Deactivation reason removed: 11; deactivation reasons: 6176 -> 4128; animating application lifecycle event: 1
+2026-11-27 19:05:27.096 Df RoadShieldAI[21619:4b412] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneIntelligenceSupportSettings> on FBSSceneSettings
+2026-11-27 19:05:27.101 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0)
+2026-11-27 19:05:27.106 Df RoadShieldAI[21619:4b412] [com.apple.xpc:connection] [0x1084d1180] activating connection: mach=true listener=false peer=false name=com.apple.IOSurface.Remote
+2026-11-27 19:05:27.125 Df RoadShieldAI[21619:4b412] [com.apple.network:activity] Create activity from XPC object <nw_activity 50:1 [4C77108C-ACF5-4A95-B746-73C15725D4E7] (reporting strategy default)>
+2026-11-27 19:05:27.125 Df RoadShieldAI[21619:4b412] [com.apple.network:activity] Create activity from XPC object <nw_activity 50:2 [DB0E2006-7F5A-4053-BB78-C399B0AA2F7B] (reporting strategy default)>
+2026-11-27 19:05:27.125 Df RoadShieldAI[21619:4b412] [com.apple.network:activity] Set activity <nw_activity 50:1 [4C77108C-ACF5-4A95-B746-73C15725D4E7] (reporting strategy default)> as the global parent
+2026-11-27 19:05:27.125 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 1
+2026-11-27 19:05:27.125 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:BackgroundTask] Ending task with identifier 1 and description: <_UIBackgroundTaskInfo: 0x10587d300>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 3653 (elapsed = 0), _expireHandler: (null)
+2026-11-27 19:05:27.125 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x1035e70e0> (used by background task with identifier 1: <_UIBackgroundTaskInfo: 0x10587d300>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 3653 (elapsed = 0))
+2026-11-27 19:05:27.126 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:UpdateScheduler] Target list changed: <CADisplay:LCD PurpleMain>
+2026-11-27 19:05:27.127 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:com.roadshieldai.app-default  persistentID: 2507274F-CC47-4045-8620-0BA8239F02F0
+2026-11-27 19:05:27.128 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0)
+2026-11-27 19:05:27.129 Df RoadShieldAI[21619:4b412] [com.apple.Accessibility:AXCommon] Read Per-App on Init: Smart invert = (null)
+2026-11-27 19:05:27.130 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0)
+2026-11-27 19:05:27.131 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:com.roadshieldai.app-default  persistentID: 2507274F-CC47-4045-8620-0BA8239F02F0
+2026-11-27 19:05:27.131 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:Application] Deactivation reason removed: 12; deactivation reasons: 4128 -> 32; animating application lifecycle event: 1
+2026-11-27 19:05:27.132 Df RoadShieldAI[21619:4b412] [com.apple.KeyboardArbiter:Client] Send setDeactivating: N (-DeactivationReason:SuspendedEventsOnly)
+2026-11-27 19:05:27.132 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:Application] Deactivation reason removed: 5; deactivation reasons: 32 -> 0; animating application lifecycle event: 0
+2026-11-27 19:05:27.134 Df RoadShieldAI[21619:4b412] [com.apple.KeyboardArbiter:Client] startConnection
+2026-11-27 19:05:27.137 Df RoadShieldAI[21619:4b412] [com.apple.xpc:connection] [0x1084d0000] activating connection: mach=true listener=false peer=false name=com.apple.UIKit.KeyboardManagement.hosted
+2026-11-27 19:05:27.139 Df RoadShieldAI[21619:4b412] [com.apple.FrontBoard:SceneExtension] Realizing settings extension SBUISecureRenderingSettingsExtension on FBSSceneSettings
+2026-11-27 19:05:27.143 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x1035e1510> (2507274F-CC47-4045-8620-0BA8239F02F0)
+2026-11-27 19:05:27.144 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:com.roadshieldai.app-default  persistentID: 2507274F-CC47-4045-8620-0BA8239F02F0
+2026-11-27 19:05:27.144 Df RoadShieldAI[21619:4b412] [com.apple.KeyboardArbiter:Client] handleKeyboardChange: set currentKeyboard:N (wasKeyboard:N)
+2026-11-27 19:05:27.155 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyboardSceneDelegate] forceReloadInputViews
+2026-11-27 19:05:27.155 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyboardSceneDelegate] Reloading input views for key-window scene responder: <(null): 0x0; > force:Y
+2026-11-27 19:05:27.157 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyboardArbiterClientLog] isWritingToolsHandlingKeyboardTracking:Y (WT ready:Y, Arbiter ready:Y)
+2026-11-27 19:05:27.171 Df RoadShieldAI[21619:4b44f] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x1058849c0; token: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Acom.roadshieldai.app-default; status: ancestor> was:target
+2026-11-27 19:05:27.183 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:EventDeferring] [0x105a959d0] Scene target of event deferring environments did update: scene: 0x1035e1510; current systemShellManagesKeyboardFocus: 1; systemShellManagesKeyboardFocusForScene: 1; eligibleForRecordRemoval: 1;
+2026-11-27 19:05:27.184 Df RoadShieldAI[21619:4b412] [com.apple.UIKit:KeyWindow] Scene became target of keyboard event deferring environment: UIWindowScene: 0x1035e1510; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Acom.roadshieldai.app-default
+2026-11-27 19:05:27.163 Df RoadShieldAI[21619:4b44a] [com.apple.UIIntelligenceSupport:xpc] establishing connection to agent
+2026-11-27 19:05:27.186 Df RoadShieldAI[21619:4b44a] [com.apple.xpc:session] [0x108525040] Session created.
+2026-11-27 19:05:27.188 Df RoadShieldAI[21619:4b44a] [com.apple.xpc:session] [0x108525040] Session created from connection [0x1084d0dc0]
+2026-11-27 19:05:27.189 Df RoadShieldAI[21619:4b44a] [com.apple.xpc:connection] [0x1084d0dc0] activating connection: mach=true listener=false peer=false name=com.apple.uiintelligencesupport.agent
+2026-11-27 19:05:27.201 Df RoadShieldAI[21619:4b412] [com.apple.network:activity] <nw_activity 50:1 [4C77108C-ACF5-4A95-B746-73C15725D4E7] (global parent) (reporting strategy default) complete (reason success)> complete with reason 2 (success), duration 3016ms
+2026-11-27 19:05:27.201 Df RoadShieldAI[21619:4b412] [com.apple.network:activity] <nw_activity 50:2 [DB0E2006-7F5A-4053-BB78-C399B0AA2F7B] (reporting strategy default) complete (reason success)> complete with reason 2 (success), duration 3016ms
+2026-11-27 19:05:27.201 Df RoadShieldAI[21619:4b412] [com.apple.network:activity] Unsetting the global parent activity <nw_activity 50:1 [4C77108C-ACF5-4A95-B746-73C15725D4E7] (global parent) (reporting strategy default) complete (reason success)>
+2026-11-27 19:05:27.201 Df RoadShieldAI[21619:4b412] [com.apple.network:activity] Unset the global parent activity
+2026-11-27 19:05:27.201 Df RoadShieldAI[21619:4b412] [com.apple.app_launch_measurement:ApplicationLaunch] alm_release_pageins_recording_assertion: releasing pageins recording assertion
+2026-11-27 19:05:27.193 Df RoadShieldAI[21619:4b44a] [com.apple.xpc:session] [0x108525040] Session activated
+2026-11-27 19:05:27.209 Df RoadShieldAI[21619:4b44d] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 2
+2026-11-27 19:05:27.219 Df RoadShieldAI[21619:4b44d] [com.apple.UIKit:BackgroundTask] Ending task with identifier 2 and description: <_UIBackgroundTaskInfo: 0x105a81bc0>: taskID = 2, taskName = Persistent SceneSession Map Update, creationTime = 3653 (elapsed = 0), _expireHandler: <__NSGlobalBlock__: 0x1e78c84e8>
+2026-11-27 19:05:27.220 Df RoadShieldAI[21619:4b44d] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x1035e70e0> (used by background task with identifier 2: <_UIBackgroundTaskInfo: 0x105a81bc0>: taskID = 2, taskName = Persistent SceneSession Map Update, creationTime = 3653 (elapsed = 0))
+2026-11-27 19:05:27.220 Df RoadShieldAI[21619:4b44d] [com.apple.UIKit:BackgroundTask] Will invalidate assertion: <BKSProcessAssertion: 0x1035e70e0> for task identifier: 2
+2026-11-27 19:05:27.242 A  RoadShieldAI[21619:4b44d] (RunningBoardServices) didChangeInheritances
+2026-11-27 19:05:27.341 Df RoadShieldAI[21619:4b44f] [com.apple.xpc:connection] [0x1084d0280] activating connection: mach=true listener=false peer=false name=com.apple.fontservicesd
+2026-11-27 19:05:27.703 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.703 Df RoadShieldAI[21619:4b44d] [com.apple.securityd:secitemratelimit] Not internal release, disabling SIRL
+2026-11-27 19:05:27.706 Df RoadShieldAI[21619:4b44d] [com.apple.securityd:thread-local-client-debug] SecSecurityClientGet new thread!
+2026-11-27 19:05:27.707 Df RoadShieldAI[21619:4b44d] [com.apple.securityd:keychain] System Keychain Always Supported set via feature flag to disabled
+2026-11-27 19:05:27.707 Df RoadShieldAI[21619:4b44d] [com.apple.xpc:connection] [0x1084d0640] activating connection: mach=true listener=false peer=false name=com.apple.securityd
+2026-11-27 19:05:27.709 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.711 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.733 A  RoadShieldAI[21619:4b44a] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.739 Df RoadShieldAI[21619:4b44a] [com.apple.securityd:thread-local-client-debug] SecSecurityClientGet new thread!
+2026-11-27 19:05:27.844 Df RoadShieldAI[21619:4b44a] [com.apple.FileURL:default] kExcludedFromBackupXattrName set on path: /Users/runner/Library/Developer/CoreSimulator/Devices/8EBAA496-5654-45BF-897F-3C4FD73935F1/data/Containers/Data/Application/B7996C73-9B60-4F66-B85C-56E3FCED4711/Library/Application Support/com.roadshieldai.app/RCTAsyncLocalStorage_V1
+2026-11-27 19:05:27.845 Df RoadShieldAI[21619:4b44a] [com.apple.network:path] nw_path_evaluator_start [2EC29B60-B002-4456-8F21-F5BE8127BAEF <NULL> generic, multipath service: handover, attribution: developer]
+	path: satisfied (Path is satisfied), interface: en0
+2026-11-27 19:05:27.851 Df RoadShieldAI[21619:4b44a] [com.apple.network:path] nw_path_evaluator_start [BBE654CC-7CA5-4558-BA72-3814144091E4 <NULL> generic, multipath service: handover, attribution: developer]
+	path: satisfied (Path is satisfied), interface: en0
+2026-11-27 19:05:27.852 Df RoadShieldAI[21619:4b44a] [com.apple.network:path] nw_path_evaluator_cancel [BBE654CC-7CA5-4558-BA72-3814144091E4] cancel
+2026-11-27 19:05:27.899 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.899 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.900 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.901 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.901 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.901 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.902 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.903 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.903 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.935 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.936 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.937 A  RoadShieldAI[21619:4b44d] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:27.990 Df RoadShieldAI[21619:4b412] [PrototypeTools:domain] Not observing PTDefaults on customer install.
+2026-11-27 19:05:28.157 E  RoadShieldAI[21619:4b412] [com.apple.UIKit:UIFocus] RCTScrollViewComponentView implements focusItemsInRect: - caching for linear focus movement is limited as long as this view is on screen.
+2026-11-27 19:05:57.917 A  RoadShieldAI[21619:4b44c] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:57.918 Df RoadShieldAI[21619:4b44c] [com.apple.securityd:thread-local-client-debug] SecSecurityClientGet new thread!
+2026-11-27 19:05:57.919 A  RoadShieldAI[21619:4b44c] (Security) SecItemCopyMatching_ios
+2026-11-27 19:05:57.919 A  RoadShieldAI[21619:4b44c] (Security) SecItemCopyMatching_ios
+2026-11-27 19:06:27.936 A  RoadShieldAI[21619:4b44f] (Security) SecItemCopyMatching_ios
+2026-11-27 19:06:27.936 Df RoadShieldAI[21619:4b44f] [com.apple.securityd:thread-local-client-debug] SecSecurityClientGet new thread!
+2026-11-27 19:06:27.939 A  RoadShieldAI[21619:4b44f] (Security) SecItemCopyMatching_ios
+2026-11-27 19:06:27.939 A  RoadShieldAI[21619:4b44f] (Security) SecItemCopyMatching_ios
+2026-11-27 19:06:28.763 A  RoadShieldAI[21619:4b44a] (RunningBoardServices) didChangeInheritances
+Child process terminated with signal 15: Terminated
