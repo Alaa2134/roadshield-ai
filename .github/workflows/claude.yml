@@ -4,9 +4,11 @@
 # Official documentation: https://code.claude.com/docs/en/github-actions
 #
 # Before merging, install the official Claude GitHub App for this repository,
-# then add ANTHROPIC_API_KEY under Settings > Secrets and variables > Actions.
+# then add CLAUDE_CODE_OAUTH_TOKEN under Settings > Secrets and variables > Actions.
 # Never commit an API key or token.
 #
+# Generate the subscription token on your own machine using: claude setup-token
+# Never paste the token into an issue, PR, or chat; save it only as a GitHub Actions secret.
 # Only repository owner Alaa2134 can trigger this workflow by mentioning @claude.
 # No production deployment or database credentials are provided to the job.
 
@@ -47,4 +49,4 @@ jobs:
       - name: Ask Claude Code
         uses: anthropics/claude-code-action@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
