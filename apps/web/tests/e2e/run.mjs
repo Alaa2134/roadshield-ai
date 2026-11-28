@@ -63,7 +63,7 @@ try {
   // ---------------------------------------------------------------- public site
   const anon = await newUser('anon');
   await anon.page.goto(BASE);
-  check('Public homepage renders hero', (await anon.page.locator('h1').innerText()).includes('Intelligence for Every Road'));
+  check('Public homepage renders hero', (await anon.page.locator('h1').innerText()).toLowerCase().includes('pothole'));
   await anon.page.goto(`${BASE}/app`);
   check('Unauthenticated /app redirects to sign-in', anon.page.url().includes('/sign-in'));
   await anon.page.goto(`${BASE}/contact`);

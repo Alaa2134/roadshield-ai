@@ -12,7 +12,7 @@ export function MarketingFooter({ locale }: { locale: Locale }) {
     { title: n.legal, links: [['/security', n.security], ['/credits', m.footer.credits]] },
   ];
   return (
-    <footer className="border-t border-white/8 bg-navy text-[#A9B6C9]">
+    <footer className="border-t border-white/8 bg-[#141922] text-[#bdb7a9]">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.4fr_repeat(4,1fr)] lg:px-8">
         <div>
           <Logo dark />

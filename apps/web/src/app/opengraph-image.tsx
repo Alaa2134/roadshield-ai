@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-export const alt = 'RoadShield AI — Intelligence for Every Road';
+export const alt = 'RoadShield — from the pothole to the paid repair';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -14,7 +14,7 @@ export default function OG() {
           <div style={{ fontSize: 34, fontWeight: 700, letterSpacing: -1 }}>RoadShield AI</div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-          <div style={{ fontSize: 76, fontWeight: 700, letterSpacing: -3, lineHeight: 1.02 }}>Intelligence for Every Road.</div>
+          <div style={{ fontSize: 76, fontWeight: 700, letterSpacing: -3, lineHeight: 1.02 }}>From the pothole to the paid repair.</div>
           <div style={{ fontSize: 30, color: '#A9B6C9' }}>Detect. Predict. Budget. Repair. Optimize.</div>
         </div>
         <div style={{ display: 'flex', gap: 14 }}>

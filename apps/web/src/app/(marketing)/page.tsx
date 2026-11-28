@@ -1,263 +1,179 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Check, ScanLine, TrendingUp, Wallet, Wrench, Sparkles, Languages, Coins, Globe2, Map, Lock, Users, ShieldCheck, ScrollText, TriangleAlert } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { getLocale } from '@/lib/i18n/server';
-import { marketing } from '@/lib/i18n/marketing';
-import { ScanHud } from '@/components/marketing/ScanHud';
-import { DetectedPhoto, PlainPhoto, BrowserFrame, PhoneFrame, sample, FillPhoto, photoRatio } from '@/components/marketing/Photos';
-import { CompareSlider } from '@/components/interactive/CompareSlider';
-import { Lightbox } from '@/components/interactive/Lightbox';
-import { Reveal } from '@/components/interactive/Reveal';
-import { RoadLayersLazy } from '@/components/three/RoadLayersLazy';
-import { FinanceVisual, PredictVisual } from '@/components/marketing/visuals';
-import { CtaBand } from '@/components/marketing/FeaturePageView';
+import { homeCopy } from '@/lib/i18n/home';
+import { Boxes } from '@/components/marketing/ScanHud';
+import { DetectedPhoto, sample } from '@/components/marketing/Photos';
 
-const pillarIcons = [ScanLine, TrendingUp, Wallet, Wrench, Sparkles];
-const globalIcons = [Languages, Coins, Globe2, Map];
-const trustIcons = [Lock, Users, ShieldCheck, ScrollText];
-
-function Eyebrow({ children, dark = false }: { children: React.ReactNode; dark?: boolean }) {
+/** Real photo + the real detector output, square-cornered like a printed figure. */
+function Figure({ k, caption, note, locale, priority = false }: { k: string; caption: string; note?: string; locale: 'en' | 'ar'; priority?: boolean }) {
+  const s = sample(k);
   return (
-    <p className={`t-eyebrow flex items-center gap-2.5 ${dark ? 'text-[#F5C542]' : 'text-accent-text'}`}>
-      <span className={`h-[3px] w-6 rounded-full ${dark ? 'bg-[#F5C542]' : 'bg-accent'}`} />{children}
-    </p>
+    <figure>
+      <div className="relative w-full overflow-hidden bg-[#1b2029]" style={{ aspectRatio: `${s.width}/${s.height}` }} dir="ltr">
+        <Image src={s.src} alt={caption} fill priority={priority} sizes="(min-width: 1024px) 46vw, 100vw" className="object-cover" />
+        <div className="absolute inset-0"><Boxes dets={s.detections} locale={locale} size="sm" /></div>
+      </div>
+      <figcaption className="mt-3 grid gap-1 text-[13px] leading-relaxed text-[color:var(--ink-2)]">
+        <span className="font-[600] text-[color:var(--ink)]">{caption}</span>
+        {note ? <span>{note}</span> : null}
+        <a href={s.credit.source} target="_blank" rel="noreferrer" className="font-mono text-[11px] text-[color:var(--ink-3)] hover:underline">
+          {s.credit.author.split(/[(,]/)[0]!.trim()} · {s.credit.licence}
+        </a>
+      </figcaption>
+    </figure>
   );
 }
 
 export default async function Home() {
   const locale = await getLocale();
-  const m = marketing[locale];
-  const h = m.home;
-  const ov = locale === 'ar' ? '/product/overview-ar.webp' : '/product/overview.webp';
+  const c = homeCopy[locale];
   return (
-    <>
-      {/* 1. Hero — real photo, real model output */}
-      <section className="asphalt relative overflow-hidden text-white">
-        <div className="contours absolute inset-0 opacity-70" aria-hidden />
-        <div className="relative mx-auto max-w-7xl px-4 pt-16 pb-14 sm:px-6 lg:px-8 lg:pt-24">
-          <div className="grid items-end gap-8 lg:grid-cols-[1.25fr_1fr]">
-            <div className="fade-up">
-              <Eyebrow dark>{m.hero.eyebrow}</Eyebrow>
-              <h1 className="t-hero mt-5 max-w-3xl">{m.hero.title}</h1>
-            </div>
-            <div className="fade-up [animation-delay:80ms]">
-              <p className="text-lg leading-relaxed text-[#B9C6D8]">{m.hero.lead}</p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Link href="/demo" className="btn btn-lg btn-primary" data-testid="hero-demo">{m.hero.primary}<ArrowRight size={16} className="flip-rtl" /></Link>
-                <Link href="/platform" className="btn btn-lg btn-on-dark">{m.hero.secondary}</Link>
-              </div>
-            </div>
+    <div className="ed">
+      {/* 1. Hero: statement + one real photo with the real model output */}
+      <section className="mx-auto grid max-w-7xl gap-12 px-4 pb-16 pt-14 sm:px-6 lg:grid-cols-[1.08fr_1fr] lg:gap-16 lg:px-8 lg:pb-20 lg:pt-20">
+        <div className="flex flex-col justify-center">
+          <p className="ed-kicker">{c.kicker}</p>
+          <h1 className="ed-h1 mt-6">{c.title}</h1>
+          <p className="ed-lead mt-7">{c.lead}</p>
+          <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+            <Link href="/platform" className="btn-amber" data-testid="hero-demo">{c.primary}<ArrowRight size={17} className="flip-rtl" /></Link>
+            <Link href="/demo" className="ed-link">{c.secondary}</Link>
           </div>
-          <div className="mt-12 fade-up [animation-delay:140ms]"><ScanHud locale={locale} /></div>
         </div>
-        <div className="lane-divider" aria-hidden />
+        <Figure k="pothole" caption={c.photoCaption} note={c.photoNote} locale={locale} priority />
       </section>
 
-      {/* 2. Five stages */}
+      {/* Facts, not statistics */}
+      <section className="ed-rule border-y">
+        <dl className="mx-auto grid max-w-7xl px-4 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
+          {c.facts.map((f, i) => (
+            <div key={f.term} className={`ed-rule py-6 md:px-6 ${i ? 'border-t md:border-t-0 md:border-s' : ''} ${i === 2 ? 'md:border-s-0 lg:border-s' : ''} first:md:ps-0`}>
+              <dt className="ed-kicker">{f.term}</dt>
+              <dd className="mt-2 text-[15px] leading-snug">{f.meaning}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      {/* 2. The job as a road: five kilometre markers */}
       <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[1fr_2fr]">
-          <div>
-            <Eyebrow>RoadShield OS</Eyebrow>
-            <h2 className="t-display mt-4">{h.showcaseTitle}</h2>
-            <p className="mt-4 text-[17px] leading-relaxed text-ink-2">{h.showcaseLead}</p>
-          </div>
-          <ol className="relative grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-            {h.pillars.map((p, i) => {
-              const Icon = pillarIcons[i]!;
-              return (
-                <li key={p.title} className={`relative bg-surface p-6 ${i === 0 ? 'lg:row-span-2' : ''}`}>
-                  <div className="flex items-center justify-between">
-                    <Icon size={22} strokeWidth={1.6} className="text-accent" />
-                    <span className="font-mono text-[12px] text-ink-3">0{i + 1}</span>
-                  </div>
-                  <h3 className="mt-6 text-[19px] font-[640] tracking-[-0.01em]">{p.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-2">{p.body}</p>
-                  {i === 0 ? <div className="mt-6 hidden lg:block"><PlainPhoto k="crack-star" alt="" ratio="4/5" /></div> : null}
-                </li>
-              );
-            })}
-          </ol>
+        <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
+          <div><p className="ed-kicker">{c.stagesKicker}</p><h2 className="ed-h2 mt-4">{c.stagesTitle}</h2></div>
+          <p className="ed-lead">{c.stagesLead}</p>
         </div>
+        <ol className="relative mt-14 grid gap-10 lg:grid-cols-5 lg:gap-6">
+          <div className="ed-centerline absolute inset-x-0 top-[1.05rem] hidden lg:block" aria-hidden />
+          {c.stages.map((s) => (
+            <li key={s.code} className="relative">
+              <span className="relative inline-block bg-[color:var(--asphalt)] px-2.5 py-1.5 font-mono text-[12px] tracking-wider text-[color:var(--amber)]">{s.code}</span>
+              <h3 className="mt-5 font-display text-[1.65rem] font-[700] uppercase leading-none rtl:font-arabic rtl:normal-case rtl:text-[1.35rem]">{s.title}</h3>
+              <p className="mt-2 font-mono text-[11.5px] uppercase tracking-wide text-[color:var(--ink-3)] rtl:font-arabic rtl:normal-case rtl:tracking-normal rtl:text-[12.5px]">{s.who}</p>
+              <p className="mt-3 text-[15px] leading-relaxed text-[color:var(--ink-2)]">{s.body}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
-      {/* 3. From the street — real photos, real detections */}
-      <section className="asphalt relative overflow-hidden text-white">
-        <div className="contours absolute inset-0 opacity-50" aria-hidden />
-        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <Eyebrow dark>{h.streetEyebrow}</Eyebrow>
-            <h2 className="t-display mt-4">{h.streetTitle}</h2>
-            <p className="mt-4 text-[17px] leading-relaxed text-[#A9B6C9]">{h.streetLead}</p>
+      {/* 3. Real photos, real output, including a known mistake */}
+      <section className="ed-dark">
+        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+          <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
+            <div><p className="ed-kicker">{c.streetKicker}</p><h2 className="ed-h2 mt-4">{c.streetTitle}</h2></div>
+            <p className="ed-lead">{c.streetLead}</p>
           </div>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <Lightbox label={h.shots[0]!.caption} ratio="4/3"><DetectedPhoto k={h.shots[0]!.key} locale={locale} caption={h.shots[0]!.caption} /></Lightbox>
-            <Lightbox label={h.shots[1]!.caption} ratio="4/3"><DetectedPhoto k={h.shots[1]!.key} locale={locale} caption={h.shots[1]!.caption} /></Lightbox>
-            <Lightbox label={h.shots[2]!.caption} ratio="4/3"><DetectedPhoto k={h.shots[2]!.key} locale={locale} caption={h.shots[2]!.caption} /></Lightbox>
-            <div className="grid gap-4 sm:col-span-2 lg:col-span-3 lg:grid-cols-3">
-              <Lightbox label={h.limitTitle} ratio="16/9"><DetectedPhoto k="cracks-closeup" locale={locale} frame={16 / 9} /></Lightbox>
-              <div className="flex flex-col justify-center rounded-2xl border border-[#F5A524]/30 bg-[#F5A524]/[0.07] p-6 lg:col-span-2">
-                <div className="flex items-center gap-2.5"><TriangleAlert size={20} className="text-[#F5A524]" /><h3 className="text-[18px] font-[620]">{h.limitTitle}</h3></div>
-                <p className="mt-3 max-w-2xl text-[14.5px] leading-relaxed text-[#C9D3E0]">{h.limitBody}</p>
+          <div className="mt-12 grid items-start gap-5 md:grid-cols-3">
+            {c.shots.map((s) => <DetectedPhoto key={s.key} k={s.key} locale={locale} caption={s.caption} className="!rounded-none" />)}
+            <div className="grid content-start gap-4">
+              <DetectedPhoto k="cracks-closeup" locale={locale} className="!rounded-none" frame={3 / 2} />
+              <div className="border-s-4 border-[color:var(--amber)] ps-4">
+                <p className="font-[650]">{c.wrongTitle}</p>
+                <p className="mt-1.5 text-[14px] leading-relaxed text-[#bdb7a9]">{c.wrongBody}</p>
               </div>
             </div>
           </div>
-          <ul className="mt-10 grid gap-x-8 gap-y-3 text-[14.5px] text-[#C9D3E0] sm:grid-cols-2">
-            {h.detectPoints.map((p) => <li key={p} className="flex gap-3"><Check size={17} className="mt-0.5 shrink-0 text-[#3fd6c8]" />{p}</li>)}
-          </ul>
         </div>
       </section>
 
-      {/* 3b. Compare: photo vs real model output */}
-      <section className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[1fr_1.4fr] lg:px-8">
-        <Reveal>
-          <Eyebrow>{h.compareEyebrow}</Eyebrow>
-          <h2 className="t-display mt-4">{h.compareTitle}</h2>
-          <p className="mt-4 text-[17px] leading-relaxed text-ink-2">{h.compareLead}</p>
-        </Reveal>
-        <Reveal delay={80}>
-          <CompareSlider ratio={photoRatio('pothole')} leftLabel={h.comparePhoto} rightLabel={h.compareAi}
-            left={<FillPhoto k="pothole" locale={locale} />} right={<FillPhoto k="pothole" locale={locale} boxes />} />
-        </Reveal>
-      </section>
-
-      {/* 4. Product — real screenshots */}
-      <section className="relative overflow-hidden bg-bg">
+      {/* 4. The software, as it is */}
+      <section className="bg-[color:var(--paper-2)]">
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <Eyebrow>{h.productEyebrow}</Eyebrow>
-            <h2 className="t-display mt-4">{h.productTitle}</h2>
-            <p className="mt-4 text-[17px] leading-relaxed text-ink-2">{h.productLead}</p>
+          <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
+            <div><p className="ed-kicker">{c.productKicker}</p><h2 className="ed-h2 mt-4">{c.productTitle}</h2></div>
+            <p className="ed-lead">{c.productLead}</p>
           </div>
-          <div className="relative mt-14 pb-10 lg:pe-40">
-            <div className="absolute -inset-x-20 top-10 bottom-0 -z-0 rounded-[48px] bg-navy" aria-hidden>
-              <div className="contours absolute inset-0 rounded-[48px] opacity-80" />
-            </div>
-            <div className="relative px-4 pt-10 sm:px-10">
-              <BrowserFrame src={ov} alt={h.productTitle} />
-            </div>
-            <PhoneFrame src="/product/mobile.webp" alt="" className="absolute -bottom-2 end-2 hidden w-[230px] lg:block" />
+          <div className="mt-12 grid items-end gap-8 lg:grid-cols-[1fr_auto]">
+            <figure>
+              <p className="ed-kicker mb-3">{c.officeLabel}</p>
+              <Image src={locale === 'ar' ? '/product/overview-ar.webp' : '/product/overview.webp'} alt="" width={1920} height={1200}
+                sizes="(min-width: 1024px) 70vw, 100vw" className="ed-rule block h-auto w-full border bg-white" />
+            </figure>
+            <figure className="mx-auto w-[220px] lg:mx-0">
+              <p className="ed-kicker mb-3">{c.fieldLabel}</p>
+              <Image src="/product/mobile.webp" alt="" width={780} height={1688} sizes="220px" className="ed-rule block h-auto w-full rounded-[1.6rem] border-[6px] border-[color:var(--asphalt)] bg-white" />
+            </figure>
           </div>
-          <p className="mt-6 text-center text-xs text-ink-3">{h.productNote}</p>
+          <p className="mt-4 font-mono text-[11px] text-[color:var(--ink-3)]">{c.productNote}</p>
         </div>
       </section>
 
-      {/* 5. Finance */}
-      <section className="border-y border-line bg-surface">
-        <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:px-8">
+      {/* 5. Five kinds of money */}
+      <section className="mx-auto grid max-w-7xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[1fr_1.15fr] lg:px-8">
+        <div>
+          <p className="ed-kicker">{c.moneyKicker}</p>
+          <h2 className="ed-h2 mt-4">{c.moneyTitle}</h2>
+          <p className="ed-lead mt-6">{c.moneyLead}</p>
+          <p className="mt-8 border-s-4 border-[color:var(--amber)] ps-4 text-[15px] leading-relaxed">{c.moneyRule}</p>
+        </div>
+        <dl className="ed-rule border-t">
+          {c.money.map((m, i) => (
+            <div key={m.term} className="ed-rule grid grid-cols-[2.5rem_1fr] gap-x-4 border-b py-5 sm:grid-cols-[2.5rem_11rem_1fr]">
+              <span className="font-mono text-[12px] text-[color:var(--ink-3)]">0{i + 1}</span>
+              <dt className="font-[650]">{m.term}</dt>
+              <dd className="col-start-2 text-[15px] text-[color:var(--ink-2)] sm:col-start-3">{m.meaning}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      {/* 6. Limits and access */}
+      <section className="ed-rule border-t">
+        <div className="mx-auto grid max-w-7xl gap-14 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div>
-            <Eyebrow>{m.nav.finance}</Eyebrow>
-            <h2 className="t-display mt-4">{h.financeTitle}</h2>
-            <p className="mt-4 text-[17px] leading-relaxed text-ink-2">{h.financeLead}</p>
-            <Link href="/finance" className="btn btn-secondary mt-8">{m.nav.finance}<ArrowRight size={15} className="flip-rtl" /></Link>
-          </div>
-          <div className="relative">
-            <BrowserFrame src="/product/project.webp" alt={h.financeTitle} className="rotate-[-1.2deg]" />
-            <div className="absolute -bottom-8 start-6 w-[78%] max-w-md rotate-[1.5deg]"><FinanceVisual labels={h.financePoints} /></div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Prediction */}
-      <section className="mx-auto grid max-w-7xl items-center gap-14 px-4 py-28 sm:px-6 lg:grid-cols-2 lg:px-8">
-        <div className="order-2 lg:order-1"><PredictVisual /></div>
-        <div className="order-1 lg:order-2">
-          <Eyebrow>{m.nav.predictive}</Eyebrow>
-          <h2 className="t-display mt-4">{h.predictTitle}</h2>
-          <p className="mt-4 text-[17px] leading-relaxed text-ink-2">{h.predictLead}</p>
-          <div className="mt-8 grid gap-2 sm:grid-cols-2">
-            {h.predictPoints.map((p) => <div key={p} className="flex items-center gap-2.5 rounded-xl border border-line bg-surface px-3.5 py-3 text-sm"><Check size={16} className="text-accent" />{p}</div>)}
-          </div>
-        </div>
-      </section>
-
-      {/* 6b. Inside the road — interactive 3D (illustrative) */}
-      <section className="asphalt relative overflow-hidden text-white">
-        <div className="contours absolute inset-0 opacity-50" aria-hidden />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[1fr_1.6fr] lg:px-8">
-          <Reveal>
-            <Eyebrow dark>{h.layersEyebrow}</Eyebrow>
-            <h2 className="t-display mt-4">{h.layersTitle}</h2>
-            <p className="mt-4 text-[17px] leading-relaxed text-[#A9B6C9]">{h.layersLead}</p>
-          </Reveal>
-          <RoadLayersLazy labels={h.layers} />
-        </div>
-      </section>
-
-      {/* 7. Repair — field crews */}
-      <section className="relative overflow-hidden bg-navy text-white">
-        <div className="grid lg:grid-cols-2">
-          <div className="relative min-h-[320px]">
-            <Image src={sample('repair-crew').src} alt={h.repairTitle} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-navy/70 to-transparent lg:bg-gradient-to-l rtl:lg:bg-gradient-to-r" />
-            <a href={sample('repair-crew').credit.source} target="_blank" rel="noreferrer" className="absolute bottom-3 start-3 rounded bg-black/50 px-1.5 py-0.5 text-[10px] text-white/70">{sample('repair-crew').credit.author} · {sample('repair-crew').credit.licence}</a>
-          </div>
-          <div className="contours relative px-6 py-20 sm:px-12 lg:py-28">
-            <Eyebrow dark>{m.nav.contractors}</Eyebrow>
-            <h2 className="t-display mt-4">{h.repairTitle}</h2>
-            <p className="mt-4 max-w-lg text-[17px] leading-relaxed text-[#A9B6C9]">{h.repairBody}</p>
-            <ol className="mt-10 space-y-5">
-              {h.workSteps.map((s, i) => (
-                <li key={s.title} className="flex gap-4">
-                  <span className="grid size-9 shrink-0 place-items-center rounded-full border border-[#F5C542]/50 font-mono text-[13px] text-[#F5C542]">{i + 1}</span>
-                  <div><p className="font-[600]">{s.title}</p><p className="mt-0.5 text-sm leading-relaxed text-[#A9B6C9]">{s.body}</p></div>
+            <p className="ed-kicker">{c.notKicker}</p>
+            <h2 className="ed-h2 mt-4">{c.notTitle}</h2>
+            <ul className="mt-8 grid gap-4">
+              {c.notItems.map((t) => (
+                <li key={t} className="flex gap-3 text-[15.5px] leading-relaxed">
+                  <span className="mt-[0.6em] h-[3px] w-4 shrink-0 bg-[color:var(--ink)]" aria-hidden />{t}
                 </li>
               ))}
-            </ol>
+            </ul>
           </div>
-        </div>
-        <div className="lane-divider" aria-hidden />
-      </section>
-
-      {/* 8. Global */}
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr]">
           <div>
-            <Eyebrow>{m.nav.technology}</Eyebrow>
-            <h2 className="t-display mt-4">{h.globalTitle}</h2>
-            <p className="mt-4 text-[17px] leading-relaxed text-ink-2">{h.globalLead}</p>
-            <div className="mt-8"><BrowserFrame src="/product/map.webp" alt="" /></div>
-          </div>
-          <div className="grid content-center gap-x-10 gap-y-9 sm:grid-cols-2">
-            {h.globalPoints.map((g, i) => {
-              const Icon = globalIcons[i]!;
-              return (
-                <div key={g.title} className="border-t-2 border-ink pt-5">
-                  <Icon size={20} strokeWidth={1.6} className="text-accent" />
-                  <h3 className="mt-4 text-[17px] font-[620]">{g.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-ink-2">{g.body}</p>
-                </div>
-              );
-            })}
+            <p className="ed-kicker">{c.accessKicker}</p>
+            <h2 className="ed-h2 mt-4">{c.accessTitle}</h2>
+            <dl className="mt-8 grid gap-6">
+              {c.accessItems.map((a) => (
+                <div key={a.term}><dt className="font-[650]">{a.term}</dt><dd className="mt-1 text-[15px] leading-relaxed text-[color:var(--ink-2)]">{a.meaning}</dd></div>
+              ))}
+            </dl>
+            <Link href="/security" className="ed-link mt-8">{c.ctaSecondary}<ArrowRight size={15} className="flip-rtl" /></Link>
           </div>
         </div>
       </section>
 
-      {/* 9. Security */}
-      <section className="border-t border-line bg-surface">
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr]">
-            <div>
-              <Eyebrow>{m.nav.security}</Eyebrow>
-              <h2 className="t-display mt-4">{h.trustTitle}</h2>
-              <p className="mt-4 text-[17px] leading-relaxed text-ink-2">{h.trustLead}</p>
-              <Link href="/security" className="btn btn-secondary mt-8">{m.nav.security}<ArrowRight size={15} className="flip-rtl" /></Link>
-            </div>
-            <div className="divide-y divide-line rounded-2xl border border-line">
-              {h.trustPoints.map((t, i) => {
-                const Icon = trustIcons[i]!;
-                return (
-                  <div key={t.title} className="flex gap-5 p-6">
-                    <Icon size={22} strokeWidth={1.6} className="mt-0.5 shrink-0 text-accent" />
-                    <div><h3 className="t-card">{t.title}</h3><p className="mt-1 text-sm leading-relaxed text-ink-2">{t.body}</p></div>
-                  </div>
-                );
-              })}
-            </div>
+      {/* 7. One clear ask */}
+      <section className="ed-dark">
+        <div className="ed-centerline" aria-hidden />
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-20 sm:px-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:px-8">
+          <div><h2 className="ed-h2">{c.ctaTitle}</h2><p className="ed-lead mt-5">{c.ctaLead}</p></div>
+          <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
+            <Link href="/demo" className="btn-amber">{c.ctaPrimary}<ArrowRight size={17} className="flip-rtl" /></Link>
           </div>
         </div>
       </section>
-
-      <div className="pt-20"><CtaBand locale={locale} /></div>
-    </>
+    </div>
   );
 }

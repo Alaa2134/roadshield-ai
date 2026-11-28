@@ -119,6 +119,8 @@
   --color-crit-text: var(--rs-critical-text);
   --font-sans: var(--font-inter), var(--font-plex-arabic), ui-sans-serif, system-ui, sans-serif;
   --font-arabic: var(--font-plex-arabic), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-barlow), var(--font-plex-arabic), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --shadow-card: var(--rs-shadow);
   --shadow-soft: var(--rs-shadow-sm);
   --shadow-float: var(--rs-shadow-lg);
@@ -155,6 +157,30 @@ html[lang='ar'] * {
 }
 
 @layer components {
+/* ---------------------------------------------------------------- editorial homepage
+   Paper, asphalt ink and road-marking amber. Fixed palette: the homepage reads like a printed
+   engineering brief in both themes. */
+.ed { --paper: #f6f4ee; --paper-2: #ece8de; --ink: #141922; --ink-2: #4b5260; --ink-3: #727885; --rule: #d6d0c2; --amber: #f3b33d; --amber-ink: #6b4a00; --asphalt: #151a22;
+  background: var(--paper); color: var(--ink); }
+.ed-dark { background: var(--asphalt); color: #e9e6de; }
+.ed-kicker { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+.ed-dark .ed-kicker { color: #a8a294; }
+html[lang='ar'] .ed-kicker { font-family: var(--font-arabic); letter-spacing: 0; text-transform: none; font-size: 0.8125rem; }
+.ed-h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.9rem, 6.6vw, 6rem); line-height: 0.93; letter-spacing: -0.01em; text-transform: uppercase; text-wrap: balance; }
+html[lang='ar'] .ed-h1 { font-family: var(--font-arabic); text-transform: none; font-size: clamp(2.2rem, 4.8vw, 4.1rem); line-height: 1.22; letter-spacing: 0; }
+.ed-h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2rem, 3.9vw, 3.4rem); line-height: 0.98; text-transform: uppercase; text-wrap: balance; }
+html[lang='ar'] .ed-h2 { font-family: var(--font-arabic); text-transform: none; font-size: clamp(1.6rem, 3vw, 2.5rem); line-height: 1.3; }
+.ed-lead { font-size: 1.125rem; line-height: 1.65; color: var(--ink-2); max-width: 40rem; }
+.ed-dark .ed-lead { color: #bdb7a9; }
+.ed-rule { border-color: var(--rule); }
+.ed-dark .ed-rule { border-color: rgba(255,255,255,0.12); }
+.btn-amber { display: inline-flex; align-items: center; gap: 0.5rem; height: 3rem; padding: 0 1.4rem; border-radius: 4px; background: var(--amber, #f3b33d); color: #141922; font-weight: 650; font-size: 0.95rem; transition: background-color .15s ease; }
+.btn-amber:hover { background: #e7a52a; }
+.btn-amber:focus-visible, .ed-link:focus-visible { outline: 2px solid #141922; outline-offset: 3px; }
+.ed-link { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; text-decoration-color: var(--amber, #f3b33d); }
+.ed-centerline { height: 4px; background: repeating-linear-gradient(90deg, var(--amber) 0 38px, transparent 38px 64px); }
+html[dir='rtl'] .ed-centerline { background: repeating-linear-gradient(-90deg, var(--amber) 0 38px, transparent 38px 64px); }
+
 /* Grid items must be allowed to shrink so wide tables scroll inside their card. */
 #main .grid > * {
   min-width: 0;
