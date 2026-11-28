@@ -20,6 +20,7 @@ import { applyDirection, initI18n, reloadApp, resolveLanguage } from '@/lib/i18n
 import { registerForPush } from '@/lib/notifications';
 import { recoverInterruptedUploads } from '@/lib/offline/drafts';
 import { processQueue } from '@/lib/offline/sync';
+import { flushOutbox } from '@/lib/offline/fieldOutbox';
 import { queryClient } from '@/lib/query';
 import { startNetworkMonitor } from '@/stores/network';
 import { startSessionListener, useSession } from '@/stores/session';
@@ -32,6 +33,7 @@ SplashScreen.setOptions({ duration: 350, fade: true });
 startSessionListener();
 startNetworkMonitor(() => {
   void processQueue();
+  void flushOutbox();
   void queryClient.invalidateQueries();
 });
 

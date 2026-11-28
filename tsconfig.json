@@ -25,6 +25,9 @@
     "node_modules",
     "services",
     "supabase/functions",
-    "dist-check"
+    "dist-check",
+    "apps",
+    "supabase/local",
+    "scripts"
   ]
 }

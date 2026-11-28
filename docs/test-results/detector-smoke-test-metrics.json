@@ -1,0 +1,123 @@
+{
+  "model": "fasterrcnn_mobilenet_v3_large_fpn",
+  "framework": "torchvision 0.29.2+cu132 / torch 2.15.0+cu132",
+  "licence": "BSD-3-Clause (torchvision)",
+  "pretrained_coco": false,
+  "dataset_version": "7c2c61f9644c0a48",
+  "split_sizes": {
+    "train": 36,
+    "val": 6,
+    "test": 6
+  },
+  "epochs": 3,
+  "smoke_test": true,
+  "test": {
+    "mAP50": 0.0,
+    "mAP50-95": 0.0,
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "per_class": {
+      "D00": {
+        "AP50": 0.0,
+        "AP50-95": 0.0,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "support": 9
+      },
+      "D10": {
+        "AP50": null,
+        "AP50-95": null,
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "support": 0
+      },
+      "D20": {
+        "AP50": null,
+        "AP50-95": null,
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "support": 0
+      },
+      "D40": {
+        "AP50": 0.0,
+        "AP50-95": 0.0,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "support": 4
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "D00",
+        "D10",
+        "D20",
+        "D40",
+        "background"
+      ],
+      "rows_are": "ground truth",
+      "matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          9
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  "per_country": {
+    "SyntheticA": {
+      "images": 3,
+      "mAP50": 0.0,
+      "mAP50-95": 0.0,
+      "f1": null
+    },
+    "SyntheticB": {
+      "images": 3,
+      "mAP50": 0.0,
+      "mAP50-95": 0.0,
+      "f1": null
+    }
+  },
+  "latency_ms": {
+    "median": 401.5,
+    "p95": 428.1,
+    "device": "cpu",
+    "cpu": "x86_64"
+  },
+  "created_at": "2026-11-27T13:48:20.734529+00:00"
+}

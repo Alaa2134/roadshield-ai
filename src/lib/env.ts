@@ -8,7 +8,9 @@ const trimSlash = (value: string | undefined) => (value ?? '').trim().replace(/\
 export const env = {
   supabaseUrl: trimSlash(process.env.EXPO_PUBLIC_SUPABASE_URL),
   supabaseKey: (process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '').trim(),
-  aiApiUrl: trimSlash(process.env.EXPO_PUBLIC_AI_API_URL),
+  // Public owner-hosted demo endpoint: no secret is embedded in the app.
+  // Explicit EXPO_PUBLIC_AI_API_URL still overrides this for other deployments.
+  aiApiUrl: trimSlash(process.env.EXPO_PUBLIC_AI_API_URL) || 'https://roadshield-vision-api.vercel.app',
   routingUrl: trimSlash(process.env.EXPO_PUBLIC_ROUTING_URL) || 'https://router.project-osrm.org',
   supportEmail: (process.env.EXPO_PUBLIC_SUPPORT_EMAIL ?? '').trim(),
 } as const;

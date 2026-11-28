@@ -36,3 +36,6 @@ jobs:
           python-version: '3.12'
       - run: pip install -r requirements-dev.txt
       - run: python -m pytest -q
+      - name: Real dataset preparation and ML metrics tests (no GPU, synthetic fixtures only)
+        working-directory: .
+        run: python -m pytest -q ml/tests

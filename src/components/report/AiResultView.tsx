@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import { Lightbox } from '@/components/media/ZoomableImage';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 import { Text } from '@/components/ui/Text';
 import { LOW_CONFIDENCE } from '@/lib/ai';
@@ -15,22 +16,13 @@ const BOX_COLORS: Record<Detection['category'], string> = {
   surface_damage: '#00D6FF',
 };
 
-/**
- * Photo with the model's bounding boxes drawn on top (the annotated image). Boxes use the
- * model's normalised coordinates, so they line up at any display size. The overlay is forced
- * to LTR so boxes stay at their physical positions in Arabic/RTL layouts.
- */
-export function AnnotatedImage({ uri, aspect, detections }: { uri: string; aspect: number; detections: Detection[] }) {
+/** The model's boxes as an overlay filling its parent; normalised coordinates line up at any size. */
+export function DetectionOverlay({ detections, animate = true }: { detections: Detection[]; animate?: boolean }) {
   const { t } = useTranslation();
   const [size, setSize] = useState({ w: 0, h: 0 });
   return (
-    <View
-      onLayout={(e) => setSize({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height })}
-      style={{ width: '100%', aspectRatio: aspect || 4 / 3, borderRadius: 20, overflow: 'hidden', direction: 'ltr' }}
-      accessible
-      accessibilityLabel={detections.map((d) => `${t(`categories.${d.category}`)} ${Math.round(d.confidence * 100)}%`).join(', ')}
-    >
-      <Image source={{ uri }} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={200} />
+    <View pointerEvents="none" onLayout={(e) => setSize({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height })}
+      style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0, direction: 'ltr' }}>
       {size.w > 0
         ? detections.map((d, i) => {
             const [x1, y1, x2, y2] = d.box;
@@ -38,7 +30,7 @@ export function AnnotatedImage({ uri, aspect, detections }: { uri: string; aspec
             return (
               <Animated.View
                 key={i}
-                entering={ZoomIn.delay(150 + i * 80)}
+                entering={animate ? ZoomIn.delay(150 + i * 80) : undefined}
                 style={{
                   position: 'absolute',
                   left: x1 * size.w,
@@ -50,7 +42,7 @@ export function AnnotatedImage({ uri, aspect, detections }: { uri: string; aspec
                   borderRadius: 6,
                 }}
               >
-                <View style={{ position: 'absolute', top: -22, left: -2, backgroundColor: color, borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 }}>
+                <View style={{ position: 'absolute', top: y1 * size.h < 24 ? 2 : -22, left: -2, backgroundColor: color, borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 }}>
                   <Text variant="label" style={{ color: '#fff', fontSize: 10, lineHeight: 14 }}>
                     {t(`categories.${d.category}`)} {Math.round(d.confidence * 100)}%
                   </Text>
@@ -60,6 +52,31 @@ export function AnnotatedImage({ uri, aspect, detections }: { uri: string; aspec
           })
         : null}
     </View>
+  );
+}
+
+/**
+ * Photo with the model's bounding boxes drawn on top (the annotated image). Tap to open a
+ * full-screen viewer with pinch-to-zoom; the boxes stay locked to the photo while zooming.
+ * The overlay is forced to LTR so boxes stay at their physical positions in Arabic layouts.
+ */
+export function AnnotatedImage({ uri, aspect, detections }: { uri: string; aspect: number; detections: Detection[] }) {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const a = aspect || 4 / 3;
+  return (
+    <>
+      <Pressable
+        onPress={() => setOpen(true)}
+        accessibilityRole="imagebutton"
+        accessibilityLabel={detections.map((d) => `${t(`categories.${d.category}`)} ${Math.round(d.confidence * 100)}%`).join(', ')}
+        style={{ width: '100%', aspectRatio: a, borderRadius: 20, overflow: 'hidden', direction: 'ltr' }}
+      >
+        <Image source={{ uri }} style={{ width: '100%', height: '100%' }} contentFit="cover" transition={200} cachePolicy="memory-disk" />
+        <DetectionOverlay detections={detections} />
+      </Pressable>
+      <Lightbox uri={uri} aspect={a} visible={open} onClose={() => setOpen(false)} overlay={<DetectionOverlay detections={detections} animate={false} />} />
+    </>
   );
 }
 

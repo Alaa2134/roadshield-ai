@@ -1,0 +1,8 @@
+# ml/ — dataset preparation, detector training/evaluation (CPU or CUDA)
+torch>=2.4
+torchvision>=0.19
+numpy>=2.0
+pillow>=10.4
+onnx>=1.16
+onnxscript>=0.1
+pytest>=8.0

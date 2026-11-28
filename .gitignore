@@ -20,3 +20,4 @@ services/ai/datasets/
 __pycache__/
 google-services.json
 GoogleService-Info.plist
+apps/web/tsconfig.tsbuildinfo

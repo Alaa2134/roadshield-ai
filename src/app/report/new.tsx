@@ -9,12 +9,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Platform, Pressable, ScrollView, View } from 'react-native';
 import MapView, { PROVIDER_DEFAULT, PROVIDER_GOOGLE, type Region } from 'react-native-maps';
-import Animated, { FadeIn, FadeInDown, FadeInRight, FadeOutLeft } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeInDown, FadeInRight, FadeOutLeft, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AnnotatedImage, ConfidenceMeter } from '@/components/report/AiResultView';
 import { CategoryIcon, Pill, StatusBadge, categoryIcon } from '@/components/ui/Badges';
 import { Button, IconButton } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { GlassButton, GlassSurface } from '@/components/ui/Glass';
 import { Notice, toast } from '@/components/ui/Feedback';
 import { Input } from '@/components/ui/Input';
 import { Text } from '@/components/ui/Text';
@@ -544,20 +545,32 @@ function PhotoStep({
   const [permission, requestPermission] = useCameraPermissions();
   const camera = useRef<CameraView>(null);
   const [ready, setReady] = useState(false);
+  const [torch, setTorch] = useState(false);
+  const { reduceMotion } = useTheme();
   const full = data.photos.length >= MAX_PHOTOS;
+  // Real GPS status for the overlay (from the device fix, never simulated).
+  const gps = useLocationStore((s) => s.position);
+  useEffect(() => {
+    void getCurrentPosition({ precise: true, maxAgeMs: 20_000 }).catch(() => undefined);
+  }, []);
+  const flash = useSharedValue(0);
+  const flashStyle = useAnimatedStyle(() => ({ opacity: flash.value }));
 
   const capture = async () => {
     if (!camera.current || busy) return;
     haptic.medium();
+    if (!reduceMotion) flash.value = withSequence(withTiming(0.85, { duration: 60 }), withTiming(0, { duration: 260 }));
     const pic = await camera.current.takePictureAsync({ quality: 0.85, exif: false });
     if (pic) await onCapture([{ uri: pic.uri, width: pic.width, height: pic.height }]);
   };
+
+  const corner = (pos: object, b: object) => <View style={[{ position: 'absolute', width: 34, height: 34, borderColor: 'rgba(255,255,255,0.9)' }, pos, b]} />;
 
   return (
     <View style={{ flex: 1, padding: 16, gap: 14, paddingBottom: insets.bottom + 16 }}>
       <View style={{ flex: 1, borderRadius: 26, overflow: 'hidden', backgroundColor: '#000' }}>
         {permission?.granted && !full ? (
-          <CameraView ref={camera} style={{ flex: 1 }} facing="back" onCameraReady={() => setReady(true)} />
+          <CameraView ref={camera} style={{ flex: 1 }} facing="back" enableTorch={torch} onCameraReady={() => setReady(true)} />
         ) : (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 14 }}>
             <Ionicons name={full ? 'images' : 'camera-outline'} size={46} color="#9DB0D0" />
@@ -574,24 +587,45 @@ function PhotoStep({
           </View>
         )}
         {permission?.granted && !full ? (
-          <View style={{ position: 'absolute', bottom: 18, left: 0, right: 0, alignItems: 'center' }}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t('report.takePhoto')}
-              disabled={!ready || busy}
-              onPress={capture}
-              style={{ width: 76, height: 76, borderRadius: 38, borderWidth: 5, borderColor: '#fff', alignItems: 'center', justifyContent: 'center' }}
-            >
-              {busy ? <ActivityIndicator color="#fff" /> : <View style={{ width: 58, height: 58, borderRadius: 29, backgroundColor: '#fff' }} />}
-            </Pressable>
-          </View>
+          <>
+            {/* framing guide (composition aid only — not a detection) */}
+            <View pointerEvents="none" style={{ position: 'absolute', top: '22%', bottom: '24%', left: '10%', right: '10%' }}>
+              {corner({ top: 0, left: 0 }, { borderTopWidth: 3, borderLeftWidth: 3, borderTopLeftRadius: 14 })}
+              {corner({ top: 0, right: 0 }, { borderTopWidth: 3, borderRightWidth: 3, borderTopRightRadius: 14 })}
+              {corner({ bottom: 0, left: 0 }, { borderBottomWidth: 3, borderLeftWidth: 3, borderBottomLeftRadius: 14 })}
+              {corner({ bottom: 0, right: 0 }, { borderBottomWidth: 3, borderRightWidth: 3, borderBottomRightRadius: 14 })}
+            </View>
+            <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: '#fff' }, flashStyle]} />
+            <View style={{ position: 'absolute', bottom: 18, left: 18, right: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <GlassButton label={t('report.chooseLibrary')} onPress={() => void onLibrary()}>
+                <Ionicons name="images-outline" size={21} color="#fff" />
+              </GlassButton>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('report.takePhoto')}
+                disabled={!ready || busy}
+                onPress={capture}
+                testID="camera-capture"
+                style={({ pressed }) => ({ width: 78, height: 78, borderRadius: 39, borderWidth: 5, borderColor: '#fff', alignItems: 'center', justifyContent: 'center', transform: [{ scale: pressed ? 0.94 : 1 }] })}
+              >
+                {busy ? <ActivityIndicator color="#fff" /> : <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: '#fff' }} />}
+              </Pressable>
+              <GlassButton label={t('report.torch')} onPress={() => setTorch((v) => !v)} tint={torch ? '#F5A524' : undefined}>
+                <Ionicons name={torch ? 'flashlight' : 'flashlight-outline'} size={21} color="#fff" />
+              </GlassButton>
+            </View>
+          </>
         ) : null}
-        <View style={{ position: 'absolute', top: 12, left: 12, right: 12 }}>
-          <View style={{ backgroundColor: 'rgba(7,15,30,0.6)', borderRadius: 14, padding: 10 }}>
+        <View style={{ position: 'absolute', top: 12, left: 12, right: 12, flexDirection: 'row', justifyContent: 'space-between', gap: 8 }}>
+          <GlassSurface radius={14} tint="rgba(7,15,30,0.55)" style={{ paddingHorizontal: 10, paddingVertical: 7, flexShrink: 1 }}>
+            <Text variant="caption" style={{ color: '#EAF1FF' }} numberOfLines={2}>{t('report.photoTip')}</Text>
+          </GlassSurface>
+          <GlassSurface radius={14} tint="rgba(7,15,30,0.55)" style={{ paddingHorizontal: 10, paddingVertical: 7, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: gps ? (gps.accuracy != null && gps.accuracy <= 25 ? '#12A879' : '#F5A524') : '#8D99AB' }} />
             <Text variant="caption" style={{ color: '#EAF1FF' }}>
-              {t('report.photoTip')}
+              {gps ? (gps.accuracy != null ? t('report.gpsAccuracy', { value: Math.round(gps.accuracy) }) : 'GPS') : t('report.gpsSearching')}
             </Text>
-          </View>
+          </GlassSurface>
         </View>
       </View>
 
