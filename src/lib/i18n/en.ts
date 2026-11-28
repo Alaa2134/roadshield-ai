@@ -44,6 +44,7 @@ const en = {
     INVALID_LOCATION: 'The location is not valid.',
     IMAGES_REQUIRED: 'Add at least one photo of the hazard.',
     IMAGE_NOT_UPLOADED: 'A photo did not finish uploading. Please retry.',
+    ORG_NOT_VERIFIED: 'Your organization is not verified yet, so field records cannot be sent. The organization owner must finish verification on the RoadShield website.',
     EVIDENCE_PHOTO_MISSING: 'A photo attached to this work log is no longer on this phone, so it was not sent. Restore it and retry, or remove the missing photo(s) and send the rest.',
     INVALID_IMAGE_PATH: 'A photo could not be attached.',
     VALIDATION_ERROR: 'Some details are not valid. Please check the form.',

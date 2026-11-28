@@ -5,6 +5,7 @@ import { getAppDict } from '@/lib/i18n/server';
 import { Card, CardHeader, Field, PageHeader } from '@/components/ui';
 import { SubmitButton } from '@/components/ui/client';
 import { RpcForm } from '@/components/app/RpcForm';
+import { supabaseServer } from '@/lib/supabase/server';
 
 export const metadata = { title: 'Set up' };
 
@@ -13,6 +14,8 @@ export default async function Onboarding() {
   if (!s) redirect('/sign-in');
   const { t, locale } = await getAppDict();
   const o = t.onboarding;
+  const sb = await supabaseServer();
+  const { data: govs } = await sb.from('admin_areas').select('id, code, name_en, name_ar').eq('level', 'governorate').eq('status', 'active').eq('country_code', 'EG').order(locale === 'ar' ? 'name_ar' : 'name_en');
   return (
     <div className="mx-auto max-w-5xl">
       <PageHeader title={o.title} subtitle={o.body} />
@@ -32,9 +35,15 @@ export default async function Onboarding() {
               <Field label={o.country} name="p_country_code" required><input id="p_country_code" name="p_country_code" className="input uppercase" required defaultValue="EG" maxLength={2} pattern="[A-Za-z]{2}" /></Field>
               <Field label={o.currency} name="p_currency" required><input id="p_currency" name="p_currency" className="input uppercase" required defaultValue="EGP" maxLength={3} pattern="[A-Za-z]{3}" /></Field>
               <Field label={o.timezone} name="p_timezone"><input id="p_timezone" name="p_timezone" className="input" defaultValue="Africa/Cairo" /></Field>
-              <Field label={o.region} name="p_region"><input id="p_region" name="p_region" className="input" placeholder="Damietta" /></Field>
+              <Field label={o.governorate} name="p_governorate" hint={o.governorateHint}>
+                <select id="p_governorate" name="p_governorate" className="select" defaultValue="">
+                  <option value="">{o.otherCountry}</option>
+                  {((govs ?? []) as { id: string; code: string; name_en: string; name_ar: string }[]).map((g) => <option key={g.id} value={g.id}>{locale === 'ar' ? g.name_ar : g.name_en}</option>)}
+                </select>
+              </Field>
               <Field label={o.city} name="p_city"><input id="p_city" name="p_city" className="input" placeholder="New Damietta" /></Field>
             </div>
+            <p className="text-xs text-ink-3">{o.verifyNote}</p>
             <div className="flex justify-end"><SubmitButton testId="create-org-submit">{o.create}</SubmitButton></div>
           </RpcForm>
         </Card>

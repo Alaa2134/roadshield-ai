@@ -4,13 +4,13 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { LayoutDashboard, Route, Map, ScanLine, TriangleAlert, Box, FolderKanban, ClipboardList, HardHat, Wallet, FileText, TrendingUp,
-  SlidersHorizontal, Activity, BarChart3, Download, Cpu, Building2, Users, Settings, Menu, X } from 'lucide-react';
+  SlidersHorizontal, Activity, BarChart3, Download, Cpu, Building2, Users, Settings, Menu, X , ShieldCheck } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
 import type { NavGroup } from './nav';
 
 const ICONS = { layout: LayoutDashboard, route: Route, map: Map, scan: ScanLine, alert: TriangleAlert, box: Box, folder: FolderKanban,
   clipboard: ClipboardList, hardhat: HardHat, wallet: Wallet, file: FileText, trending: TrendingUp, sliders: SlidersHorizontal,
-  activity: Activity, chart: BarChart3, download: Download, cpu: Cpu, building: Building2, users: Users, settings: Settings };
+  activity: Activity, chart: BarChart3, download: Download, cpu: Cpu, building: Building2, users: Users, settings: Settings, shield: ShieldCheck };
 
 export function Sidebar({ groups, labels, groupLabels, orgName, planLabel }: {
   groups: NavGroup[]; labels: Record<string, string>; groupLabels: Record<string, string>; orgName: string; planLabel: string;

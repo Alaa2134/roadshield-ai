@@ -35,6 +35,8 @@ export const NAV: NavGroup[] = [
     { href: '/app/model-center', key: 'modelCenter', icon: 'cpu' },
   ] },
   { key: 'admin', items: [
+    { href: '/app/organization/verification', key: 'verification', icon: 'shield', roles: ['owner'] },
+    { href: '/app/admin/verifications', key: 'verifications', icon: 'shield', adminOnly: true },
     { href: '/app/organization', key: 'organization', icon: 'building', roles: ['owner', 'executive_viewer', 'finance_manager', 'road_engineer'] },
     { href: '/app/organization/members', key: 'users', icon: 'users', roles: ['owner'] },
     { href: '/app/settings', key: 'settings', icon: 'settings' },

@@ -9,6 +9,9 @@
 import http from 'node:http';
 import crypto from 'node:crypto';
 import pg from 'pg';
+import fs from 'node:fs';
+import os from 'node:os';
+import nodePath from 'node:path';
 
 const PORT = Number(process.env.PORT ?? 54321);
 const SECRET = process.env.JWT_SECRET ?? 'roadshield-local-dev-secret-not-for-production';
@@ -169,10 +172,68 @@ async function table(req, res, url, name) {
   return send(res, 200, req.method === 'HEAD' ? undefined : rows, headers);
 }
 
+// ---------------------------------------------------------------- storage (local subset)
+// Objects live under the OS temp dir; metadata rows go into storage.objects as the calling user,
+// so the storage RLS policies from the migrations decide what may be written and read.
+const STORE = nodePath.join(os.tmpdir(), 'roadshield-local-storage');
+const readRaw = (req) => new Promise((r) => { const chunks = []; req.on('data', (c) => chunks.push(c)); req.on('end', () => r(Buffer.concat(chunks))); });
+const objPath = (bucket, name) => {
+  const p = nodePath.join(STORE, bucket, name);
+  if (!p.startsWith(nodePath.join(STORE, bucket) + nodePath.sep)) throw Object.assign(new Error('invalid path'), { code: '22023' });
+  return p;
+};
+const signToken = (bucket, name, exp) => crypto.createHmac('sha256', SECRET).update(`${bucket}/${name}:${exp}`).digest('base64url');
+async function storageApi(req, res, url) {
+  const rest = decodeURIComponent(url.pathname.replace(/^\/storage\/v1\/object\//, ''));
+  if (req.method === 'GET' && rest.startsWith('sign/')) {
+    const [bucket, ...parts] = rest.slice(5).split('/'); const name = parts.join('/');
+    const exp = Number(url.searchParams.get('exp')); const token = url.searchParams.get('token') ?? '';
+    if (!exp || exp < Date.now() / 1000 || token !== signToken(bucket, name, exp)) return send(res, 400, { message: 'invalid signature' });
+    const meta = (await pool.query('select metadata from storage.objects where bucket_id = $1 and name = $2', [bucket, name])).rows[0];
+    if (!meta) return send(res, 404, { message: 'not found' });
+    res.writeHead(200, { 'content-type': meta.metadata?.mimetype ?? 'application/octet-stream' });
+    return res.end(fs.readFileSync(objPath(bucket, name)));
+  }
+  if (req.method === 'POST' && rest.startsWith('sign/')) {
+    const body = await readBody(req);
+    const [bucket, ...parts] = rest.slice(5).split('/'); const name = parts.join('/');
+    const found = await withRole(req, async (c) => (await c.query('select 1 from storage.objects where bucket_id = $1 and name = $2', [bucket, name])).rowCount);
+    if (!found) return send(res, 400, { statusCode: '404', error: 'not_found', message: 'Object not found' });
+    const exp = Math.floor(Date.now() / 1000) + Math.min(Number(body.expiresIn ?? 60), 3600);
+    return send(res, 200, { signedURL: `/object/sign/${bucket}/${encodeURI(name)}?token=${signToken(bucket, name, exp)}&exp=${exp}` });
+  }
+  if (req.method === 'POST' || req.method === 'PUT') {
+    const [bucket, ...parts] = rest.split('/'); const name = parts.join('/');
+    const data = await readRaw(req);
+    const mime = (req.headers['content-type'] ?? 'application/octet-stream').split(';')[0];
+    const b = (await pool.query('select file_size_limit, allowed_mime_types from storage.buckets where id = $1', [bucket])).rows[0];
+    if (!b) return send(res, 400, { statusCode: '404', error: 'Bucket not found', message: 'Bucket not found' });
+    if ((b.file_size_limit && data.length > Number(b.file_size_limit)) || (b.allowed_mime_types && !b.allowed_mime_types.includes(mime))) {
+      return send(res, 400, { statusCode: '413', error: 'invalid', message: 'size or mime type not allowed' });
+    }
+    const id = await withRole(req, async (c) => (await c.query(
+      `insert into storage.objects (bucket_id, name, owner, metadata) values ($1, $2, auth.uid(), jsonb_build_object('mimetype', $3::text, 'size', $4::int)) returning id`,
+      [bucket, name, mime, data.length])).rows[0].id);
+    fs.mkdirSync(nodePath.dirname(objPath(bucket, name)), { recursive: true });
+    fs.writeFileSync(objPath(bucket, name), data);
+    return send(res, 200, { Key: `${bucket}/${name}`, Id: id });
+  }
+  if (req.method === 'DELETE') {
+    const body = await readBody(req);
+    const bucket = rest.split('/')[0];
+    const deleted = await withRole(req, async (c) => (await c.query(
+      'delete from storage.objects where bucket_id = $1 and name = any($2::text[]) returning name', [bucket, body.prefixes ?? []])).rows);
+    deleted.forEach((r) => fs.rmSync(objPath(bucket, r.name), { force: true }));
+    return send(res, 200, deleted.map((r) => ({ name: r.name })));
+  }
+  return send(res, 405, { message: 'method not allowed' });
+}
+
 http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
   if (req.method === 'OPTIONS') return send(res, 204);
   try {
+    if (url.pathname.startsWith('/storage/v1/object/')) return await storageApi(req, res, url);
     const body = ['POST', 'PUT', 'PATCH'].includes(req.method) ? await readBody(req) : {};
     if (url.pathname.startsWith('/auth/v1')) return await auth(req, res, url, body);
     const m = url.pathname.match(/^\/rest\/v1\/(rpc\/)?([a-z_][a-z0-9_]*)$/);

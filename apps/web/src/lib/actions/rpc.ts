@@ -9,7 +9,11 @@ type T = 'uuid' | 'uuid?' | 'text' | 'text?' | 'int' | 'int?' | 'numeric' | 'num
 // Allow-list of RPCs the web app may call, with parameter types. Every function re-checks the
 // caller's organization role and record state inside Postgres; this list only shapes input.
 const SPEC: Record<string, Record<string, T>> = {
-  create_organization: { p_name: 'text', p_slug: 'text', p_country_code: 'text', p_currency: 'text', p_timezone: 'text', p_org_type: 'text', p_city: 'text?', p_region: 'text?', p_name_ar: 'text?', p_locale: 'text' },
+  create_organization: { p_name: 'text', p_slug: 'text', p_country_code: 'text', p_currency: 'text', p_timezone: 'text', p_org_type: 'text', p_city: 'text?', p_region: 'text?', p_name_ar: 'text?', p_locale: 'text', p_governorate: 'uuid?' },
+  set_org_jurisdiction: { p_org: 'uuid', p_governorate: 'uuid', p_city: 'uuid?', p_new_area_en: 'text?', p_new_area_ar: 'text?', p_new_area_level: 'text?' },
+  submit_org_verification: { p_org: 'uuid' },
+  review_org_verification: { p_org: 'uuid', p_approve: 'bool', p_note: 'text?' },
+  set_org_suspended: { p_org: 'uuid', p_suspended: 'bool', p_note: 'text' },
   update_organization: { p_org: 'uuid', p_patch: 'json' },
   set_service_area: { p_org: 'uuid', p_geojson: 'json' },
   invite_member: { p_org: 'uuid', p_email: 'text', p_role: 'text', p_contractor_id: 'uuid?' },

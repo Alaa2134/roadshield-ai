@@ -22,8 +22,8 @@ values
 ('$S','00000000-0000-0000-0000-000000000000','authenticated','authenticated','finance-submitter@roadshield.invalid','{"full_name":"Finance Submitter"}',now(),now(),now()),
 ('$A','00000000-0000-0000-0000-000000000000','authenticated','authenticated','finance-reviewer-a@roadshield.invalid','{"full_name":"Finance Reviewer A"}',now(),now(),now()),
 ('$B','00000000-0000-0000-0000-000000000000','authenticated','authenticated','finance-reviewer-b@roadshield.invalid','{"full_name":"Finance Reviewer B"}',now(),now(),now());
-insert into public.organizations (id, slug, name, country_code, default_currency, created_by)
-values ('$ORG','roadshield-finance-concurrency','Finance concurrency fixture','EG','EGP','$S');
+insert into public.organizations (id, slug, name, country_code, default_currency, created_by, verification_status)
+values ('$ORG','roadshield-finance-concurrency','Finance concurrency fixture','EG','EGP','$S','verified');
 insert into public.org_members (org_id, user_id, role) values
 ('$ORG','$S','owner'),('$ORG','$A','finance_manager'),('$ORG','$B','finance_manager');
 insert into public.contractors (id, org_id, name) values ('$C','$ORG','Test Contractor');

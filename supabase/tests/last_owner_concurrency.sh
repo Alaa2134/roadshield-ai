@@ -19,8 +19,8 @@ insert into auth.users (id, instance_id, aud, role, email, raw_user_meta_data, e
 values
 ('$A','00000000-0000-0000-0000-000000000000','authenticated','authenticated','owner-a-concurrency@roadshield.invalid','{"full_name":"Owner A"}',now(),now(),now()),
 ('$B','00000000-0000-0000-0000-000000000000','authenticated','authenticated','owner-b-concurrency@roadshield.invalid','{"full_name":"Owner B"}',now(),now(),now());
-insert into public.organizations (id, slug, name, country_code, default_currency, created_by)
-values ('$ORG','roadshield-concurrency-test','Local concurrency test','EG','EGP','$A');
+insert into public.organizations (id, slug, name, country_code, default_currency, created_by, verification_status)
+values ('$ORG','roadshield-concurrency-test','Local concurrency test','EG','EGP','$A','verified');
 insert into public.org_members (org_id, user_id, role) values
 ('$ORG','$A','owner'),('$ORG','$B','owner');
 SQL

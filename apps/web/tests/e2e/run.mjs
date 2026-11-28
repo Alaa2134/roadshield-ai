@@ -6,6 +6,7 @@
 import { createRequire } from 'node:module';
 import { mkdirSync } from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const require = createRequire(import.meta.url);
 let chromium;
@@ -14,6 +15,10 @@ try { ({ chromium } = require('playwright')); } catch { ({ chromium } = require(
 const BASE = process.env.BASE_URL ?? 'http://localhost:3000';
 const SHOTS = process.env.SHOTS ?? '';
 const run = Date.now().toString(36);
+const DB_URL = process.env.DATABASE_URL ?? 'postgres://postgres:postgres@localhost/roadshield_local';
+// Test-only: promote a freshly signed-up e2e user to platform admin in the throwaway local DB.
+const makeAdmin = (email) => execFileSync('psql', [DB_URL, '-v', 'ON_ERROR_STOP=1', '-qc',
+  `update public.user_roles set role = 'admin' where user_id = (select id from auth.users where email = '${email.replace(/'/g, "''")}')`]);
 const fixture = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../fixtures/test-roads.geojson');
 const results = [];
 const check = (name, ok, detail = '') => { results.push({ name, ok: !!ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${ok || !detail ? '' : ' :: ' + detail}`); };
@@ -73,10 +78,48 @@ try {
   const owner = await newUser('owner');
   await signUp(owner, 'E2E Owner');
   check('Sign-up lands on organization onboarding', owner.page.url().includes('/app/onboarding'));
-  await rpcForm(owner.page, 'create-org', { p_name: `E2E Test Municipality ${run}`, p_slug: `e2e-${run}`, p_city: 'Test City', p_region: 'Test Region' }, 'create-org-submit');
+  await rpcForm(owner.page, 'create-org', { p_name: `E2E Test Municipality ${run}`, p_slug: `e2e-${run}`, p_city: 'Test City', p_governorate: 'Damietta' }, 'create-org-submit');
   await owner.page.waitForURL(`${BASE}/app`);
   check('Organization created; owner lands on overview', await owner.page.locator('h1').count() > 0);
   await shot(owner.page, '01-overview-empty');
+
+  // ---------------------------------------------------------------- Journey: organization verification
+  check('New organization starts in limited mode (verification banner shown)', await owner.page.locator('[data-testid=verification-banner]').count() === 1);
+  await owner.page.goto(`${BASE}/app/contractors`);
+  await rpcForm(owner.page, 'contractor-form', { p_name: `E2E Too Early ${run}` });
+  check('Unverified organization cannot add records', (await formMsg(owner.page, 'contractor-form')).startsWith('ERR:'));
+  await owner.page.goto(`${BASE}/app/organization/verification`);
+  await owner.page.selectOption('#p_governorate', { label: 'Damietta' });
+  await owner.page.selectOption('#p_city', { label: 'New Damietta' });
+  await owner.page.click('[data-testid=jurisdiction-submit]');
+  await owner.page.waitForLoadState('networkidle');
+  check('Owner sets jurisdiction to a governorate and city', (await formMsg(owner.page, 'jurisdiction-form')) === 'OK');
+  for (const [kind, file] of [['official_letter', 'official-letter.pdf'], ['authorization', 'authorization.pdf']]) {
+    await owner.page.selectOption('#p_doc_kind', kind);
+    await owner.page.setInputFiles('#file', { name: file, mimeType: 'application/pdf', buffer: Buffer.from(`%PDF-1.4\n% RoadShield E2E TEST FIXTURE ${kind}\n%%EOF\n`) });
+    await owner.page.click('[data-testid=verification-upload-submit]');
+    await owner.page.waitForFunction((n) => document.querySelectorAll('[data-testid=verification-docs] li').length >= n, kind === 'official_letter' ? 1 : 2);
+  }
+  check('Owner uploads two verification documents to private storage', await owner.page.locator('[data-testid=verification-docs] li').count() === 2);
+  await owner.page.click('[data-testid=verification-submit]');
+  await owner.page.waitForLoadState('networkidle');
+  await owner.page.reload();
+  check('Verification request submitted for review', await owner.page.locator('[data-testid=verification-submit]').count() === 0);
+  await shot(owner.page, '01b-verification-submitted');
+
+  const admin = await newUser('admin');
+  await signUp(admin, 'E2E Platform Admin');
+  makeAdmin(admin.email);
+  await admin.page.goto(`${BASE}/app/admin/verifications`);
+  const card = admin.page.locator('[data-testid=verification-queue] > *', { hasText: `e2e-${run}` });
+  check('Platform admin sees the request with its documents', await card.count() === 1 && await card.locator('a[href*="/storage/v1/object/sign/"]').count() === 2);
+  const docRes = await admin.page.request.get(await card.locator('a[href*="/storage/v1/object/sign/"]').first().getAttribute('href'));
+  check('Admin can open a verification document via a signed link', docRes.ok() && (await docRes.text()).includes('RoadShield E2E TEST FIXTURE'));
+  await shot(admin.page, '01c-admin-verification-queue');
+  await admin.page.locator(`form[data-testid=approve-e2e-${run}] button[type=submit]`).click();
+  await admin.page.waitForLoadState('networkidle');
+  await owner.page.goto(`${BASE}/app`);
+  check('After admin approval the organization is verified (banner gone)', await owner.page.locator('[data-testid=verification-banner]').count() === 0);
 
   await owner.page.goto(`${BASE}/app/roads/import`);
   await owner.page.setInputFiles('[data-testid=geojson-file]', fixture);
@@ -261,7 +304,7 @@ try {
   check('390px mobile: no horizontal page scroll on overview', overflow <= 1, `overflow ${overflow}px`);
   await shot(mp, '16-overview-mobile-ar');
 
-  const pageErrors = [owner, fin, con, other, anon].flatMap((u) => u.errors);
+  const pageErrors = [owner, fin, con, other, anon, admin].flatMap((u) => u.errors);
   check('No uncaught browser errors during journeys', pageErrors.length === 0, pageErrors.slice(0, 3).join(' | '));
 } catch (e) {
   check('Journey completed without exceptions', false, e.message.split('\n')[0]);

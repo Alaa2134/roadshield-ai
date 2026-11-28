@@ -43,3 +43,27 @@ describes what is implemented and tested, and what still needs doing before prod
 * Face/plate redaction is best-effort, which is why staff approval stays mandatory.
 * Platform admins can manage organisations but cannot read tenant finance. Support access needs an
   explicit, audited temporary membership.
+
+## Organization verification (migration `20261127101100`)
+
+A new organization is created in **limited mode** (`verification_status = 'pending'`). Every
+role-checked write RPC goes through `app_private.require_org_role`, which now raises
+`ORG_NOT_VERIFIED` unless the organization is `verified`. Only setup actions use
+`require_org_role_any_status`: editing the profile, setting the service area, choosing the
+jurisdiction, uploading verification documents and submitting them.
+
+* **Jurisdiction:** `admin_areas` holds country → governorate → city/district. Egypt's 27
+  governorates are seeded from ISO 3166-2:EG, plus the pilot city New Damietta. An organization
+  picks its governorate and either an existing city/district or requests a new one (EN + AR
+  names); a requested area becomes active only when the organization is approved. Other countries
+  are supported by adding their areas (`admin_add_area` for platform admins).
+* **Documents:** PDF/JPG/PNG files go to the private `org-documents` bucket under
+  `<org>/<uploader>/…` and are registered with `register_verification_document`
+  (`org_documents.entity_type = 'organization'`, with a `doc_kind`). Only the organization's
+  owners and platform admins can read them; admins open them through short-lived signed URLs.
+  Submission requires a governorate, an official letter and an authorization document.
+* **Review:** `review_org_verification` is platform-admin only. The reviewer must not be a member
+  or the creator of the organization, a rejection needs a reason, and approval activates any
+  requested area. `set_org_suspended` suspends or reinstates with a reason. All steps are audited.
+* **Tests:** enterprise SQL E80–E93; web E2E journey covers banner → blocked write → jurisdiction →
+  two uploads → submit → admin queue with signed document links → approval.

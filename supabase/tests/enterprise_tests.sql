@@ -84,6 +84,46 @@ begin
   v_txt := pg_temp.err($$select public.create_organization('Dup','test-org-a','EG','EGP')$$);
   perform pg_temp.check('E03 duplicate slug rejected', v_txt = 'SLUG_TAKEN', v_txt);
 
+  ---------------------------------------------------------------- organization verification (E80–E92)
+  perform pg_temp.check('E80 a new organization starts pending verification',
+    (select verification_status from public.organizations where id = v_org) = 'pending');
+  v_txt := pg_temp.err(format($$select public.upsert_contractor(%L, null, 'Too Early Co')$$, v_org));
+  perform pg_temp.check('E81 an unverified organization cannot write records', v_txt = 'ORG_NOT_VERIFIED', v_txt);
+  v_txt := pg_temp.err(format($$select public.invite_member(%L, 'early@example.com', 'road_engineer')$$, v_org));
+  perform pg_temp.check('E82 an unverified organization cannot invite members', v_txt = 'ORG_NOT_VERIFIED', v_txt);
+  v_txt := pg_temp.err(format('select public.submit_org_verification(%L)', v_org));
+  perform pg_temp.check('E83 submission needs a governorate and documents', v_txt = 'VERIFICATION_INCOMPLETE', v_txt);
+  v_txt := pg_temp.err(format('select public.set_org_jurisdiction(%L, %L)', v_org, gen_random_uuid()));
+  perform pg_temp.check('E84 unknown governorate rejected', v_txt = 'INVALID_AREA', v_txt);
+  perform public.set_org_jurisdiction(v_org, (select id from public.admin_areas where code = 'EG-DT'), null,
+    'Test District', 'حي تجريبي', 'district');
+  perform pg_temp.check('E85 jurisdiction set; requested district recorded as requested',
+    (select a.status = 'requested' and a.level = 'district' and a.requested_by_org = v_org
+            and o.governorate_id = a.parent_id and o.city_area_id = a.id
+     from public.organizations o join public.admin_areas a on a.id = o.city_area_id where o.id = v_org));
+  v_txt := pg_temp.err(format($$select public.register_verification_document(%L, 'official_letter', 'elsewhere/letter.pdf', 'letter.pdf', 'application/pdf', 1000)$$, v_org));
+  perform pg_temp.check('E86 verification document path must be in the uploader''s org folder', v_txt = 'INVALID_PATH', v_txt);
+  perform public.register_verification_document(v_org, 'official_letter', v_org || '/' || u_owner || '/letter.pdf', 'letter.pdf', 'application/pdf', 1000);
+  v_txt := pg_temp.err(format('select public.submit_org_verification(%L)', v_org));
+  perform pg_temp.check('E87 an authorization document is also required', v_txt = 'VERIFICATION_INCOMPLETE', v_txt);
+  perform public.register_verification_document(v_org, 'authorization', v_org || '/' || u_owner || '/authorization.pdf', 'authorization.pdf', 'application/pdf', 1000);
+  perform public.submit_org_verification(v_org);
+  perform pg_temp.check('E88 complete request is submitted', (select verification_status from public.organizations where id = v_org) = 'submitted');
+  v_txt := pg_temp.err(format('select public.set_org_jurisdiction(%L, %L)', v_org, (select id from public.admin_areas where code = 'EG-C')));
+  perform pg_temp.check('E89 jurisdiction is locked while under review', v_txt = 'JURISDICTION_LOCKED', v_txt);
+  v_txt := pg_temp.err(format('select public.review_org_verification(%L, true)', v_org));
+  perform pg_temp.check('E90 the organization''s own owner cannot approve it', v_txt = 'FORBIDDEN', v_txt);
+  perform pg_temp.act_as(u_adm);
+  v_txt := pg_temp.err(format('select public.review_org_verification(%L, false)', v_org));
+  perform pg_temp.check('E91 rejection needs a reason', v_txt = 'NOTE_REQUIRED', v_txt);
+  perform pg_temp.check('E92 platform admin sees the request and its documents in the queue',
+    exists (select 1 from public.org_verification_queue() q where q.org_id = v_org and q.documents = 2));
+  perform public.review_org_verification(v_org, true, 'Official letter and authorization checked');
+  perform pg_temp.check('E93 approval verifies the organization and activates its requested district',
+    (select o.verification_status = 'verified' and o.verified_by = u_adm and a.status = 'active'
+     from public.organizations o join public.admin_areas a on a.id = o.city_area_id where o.id = v_org));
+  perform pg_temp.act_as(u_owner);
+
   v_ctr := public.upsert_contractor(v_org, null, 'Test Paving Co', 'CR-1', 'Ali', 'ali@example.com');
   v_ctr2 := public.upsert_contractor(v_org, null, 'Other Paving Co');
 
@@ -163,6 +203,8 @@ begin
 
   perform pg_temp.act_as(u_b);
   v_org_b := public.create_organization('Test Org B', 'test-org-b', 'SA', 'SAR', 'Asia/Riyadh');
+  perform pg_temp.act_as_owner();
+  update public.organizations set verification_status = 'verified', verified_at = now() where id = v_org_b;  -- fixture: verification flow is covered by E80–E93
 
   ---------------------------------------------------------------- road network
   perform pg_temp.act_as(u_owner);
