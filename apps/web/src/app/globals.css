@@ -170,6 +170,11 @@ html[lang='ar'] .ed-kicker { font-family: var(--font-arabic); letter-spacing: 0;
 html[lang='ar'] .ed-h1 { font-family: var(--font-arabic); text-transform: none; font-size: clamp(2.2rem, 4.8vw, 4.1rem); line-height: 1.22; letter-spacing: 0; }
 .ed-h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2rem, 3.9vw, 3.4rem); line-height: 0.98; text-transform: uppercase; text-wrap: balance; }
 html[lang='ar'] .ed-h2 { font-family: var(--font-arabic); text-transform: none; font-size: clamp(1.6rem, 3vw, 2.5rem); line-height: 1.3; }
+.ed-h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; line-height: 1.15; letter-spacing: 0.005em; text-transform: uppercase; }
+html[lang='ar'] .ed-h3 { font-family: var(--font-arabic); text-transform: none; font-size: 1.2rem; line-height: 1.4; letter-spacing: 0; }
+/* sub-page titles are sentences, not slogans: one step smaller than the homepage statement */
+.ed-dark .ed-h1.max-w-5xl { font-size: clamp(2.3rem, 5vw, 4.2rem); }
+html[lang='ar'] .ed-dark .ed-h1.max-w-5xl { font-size: clamp(2rem, 4vw, 3.2rem); }
 .ed-lead { font-size: 1.125rem; line-height: 1.65; color: var(--ink-2); max-width: 40rem; }
 .ed-dark .ed-lead { color: #bdb7a9; }
 .ed-rule { border-color: var(--rule); }
